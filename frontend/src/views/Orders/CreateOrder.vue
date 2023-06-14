@@ -1,7 +1,7 @@
 <template>
   <div class="card mx-[20%] flex flex-1 flex-col items-stretch justify-center rounded-xl bg-white p-6 shadow-2xl">
     <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
-      Auftrag erstellen
+      1. Auftrag erstellen
     </h1>
     <Divider />
     <div class="my-4">
