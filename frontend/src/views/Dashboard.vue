@@ -48,6 +48,37 @@
         stat-icon-color="bg-emerald-500"
       />
     </div>
+
+    <h1 class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
+      Aufträge
+    </h1>
+
+    <router-link to="/orders/create">
+    <Button
+            icon="pi pi-plus"
+            class="mr-2 mb-2 rounded-lg !border-none !bg-gradient-to-r from-blue-400 to-pink-800 text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="1. Auftrag erstellen"
+            style="margin-right: 20px;"
+    />
+    </router-link>
+
+    <router-link to="/orders/plan">
+    <Button
+            icon="pi pi-map"
+            class="mr-2 mb-2 rounded-lg !border-none !bg-gradient-to-r from-blue-400 to-pink-800 text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="2. Auftrag planen"
+            style="margin-right: 20px;"
+    />
+    </router-link>
+
+    <router-link to="/orders/complete">
+    <Button
+            icon="pi pi-check"
+            class="mr-2 mb-2 rounded-lg !border-none !bg-gradient-to-r from-blue-400 to-pink-800 text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="3. Auftrag erledigen"
+    />
+    </router-link>
+
     <StatCategory
       :key="String(dateRange[0]) + String(dateRange[1])"
       :start-date="dateRange[0]"
