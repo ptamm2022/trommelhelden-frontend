@@ -2,17 +2,13 @@
 
 ![Trommelhelden Schema](trommelhelden.png)
 
-
-
-
 ## Start Application
 
-1. In root folder run in cmd: `docker compose up -d`
+1. In root folder run in cmd: `docker-compose up -d`.
 
+If changes were made run `docker-compose up --build` instead.
 
 !! IMPORTANT !! Check that the files `entrypoint.sh` and `run-initialisiton.sh` in the folder backend/Docker have the end-of-line-sequence LF 
-
-
 
 ## Start Backend Dev Server
 
