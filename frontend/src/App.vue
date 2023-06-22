@@ -32,8 +32,6 @@ onMounted(async () => {
   await store.startUp();
 });
 
-
-
 </script>
 
 <style>

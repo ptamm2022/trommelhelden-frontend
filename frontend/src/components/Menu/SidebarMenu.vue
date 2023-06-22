@@ -56,12 +56,12 @@ const onOpenTab = (key: string) => {
 const menuItems: MenuItem[] = [
   {
     to: "/dashboard",
-    label: "Dashboard",
+    label: "Startseite",
     key: "dashboard",
     command: () => {
       store.sideBarMenuIsOpen = false;
     },
-    icon: "pi pi-chart-line",
+    icon: "pi pi-home",
   },
 
   {
@@ -86,7 +86,7 @@ const menuItems: MenuItem[] = [
           onOpenTab("order");
         },
         to: "/orders",
-        icon: "pi pi-euro",
+        icon: "pi pi-home",
       },
       {
         key: "2_0",

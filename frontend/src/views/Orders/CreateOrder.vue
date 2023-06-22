@@ -24,12 +24,13 @@
         v-if="order.Kunde"
         class="grid flex-1 grid-cols-2"
       >
-        <span>Name: </span><span>{{ order.Kunde.KunName }}</span>
-        <span>Kundennummer: </span><span>{{ order.Kunde.KunNr }}</span>
-        <span>Ort: </span><span>{{ order.Kunde.KunOrt }}</span>
-        <span>PLZ: </span><span>{{ order.Kunde.KunPLZ }}</span>
-        <span>Straße: </span><span>{{ order.Kunde.KunStrasse }}</span>
+        <span>Name: </span>           <span>{{ order.Kunde.KunName }}</span>
+        <span>Kundennummer: </span>   <span>{{ order.Kunde.KunNr }}</span>
+        <span>Ort: </span>            <span>{{ order.Kunde.KunOrt }}</span>
+        <span>PLZ: </span>            <span>{{ order.Kunde.KunPLZ }}</span>
+        <span>Straße: </span>         <span>{{ order.Kunde.KunStrasse }}</span>
       </div>
+
       <Button
         type="button"
         icon="pi pi-search"
@@ -59,8 +60,11 @@
           />
         </OverlayPanel>
       </div>
+
     </div>
+
     <Divider />
+
     <div>
       <span class="p-float-label my-4">
         <Calendar
@@ -71,7 +75,9 @@
         <label for="order-calendar">Auftragsdatum</label>
       </span>
     </div>
+
     <Divider />
+    
     <div class="flex justify-between">
       <Button
         style="background-color: #d92979"

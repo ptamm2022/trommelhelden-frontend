@@ -5,17 +5,15 @@
                 class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-7xl font-extrabold text-transparent">
                 Auftrag {{ order.Aufnr }}
             </h1>
+
             <div class="grid grid-cols-2 mt-8 gap-8">
                 <div class="flex grid grid-cols-2 card rounded-xl bg-white p-6 shadow-xl">
                     <span class="text-xl font-bold"> Auftragsdatum </span><span>{{ order.AufDat }}</span>
                     <span class="text-xl font-bold"> Anfahrt </span><span>{{ order.Anfahrt }}</span>
                     <span class="text-xl font-bold"> Beschreibung </span><span>{{ order.Beschreibung }}</span>
                     <span class="text-xl font-bold"> Dauer </span><span>{{ order.Dauer }}</span>
-
-
-
-
                 </div>
+
                 <div class=" card rounded-xl bg-white p-6 shadow-xl">
                     <Timeline :value="createStatus()">
                         <template #opposite="slotProps">
@@ -26,6 +24,7 @@
                         </template>
                     </Timeline>
                 </div>
+
                 <div class="flex flex-col gap-y-2 col-span-2">
                     <Panel
                         v-if="order.Kunde"
@@ -43,11 +42,13 @@
                         </div>
 
                     </Panel>
+
                     <Panel
                         v-if="order.MitID"
                         header="Mitarbeiter"
                         :toggleable="true"
                     >
+
                         <div
                             v-for="mitarbeiter in Object.keys(order?.Mitarbeiter)"
                             :key="mitarbeiter"
@@ -57,7 +58,9 @@
                             <span>{{ order.Mitarbeiter[mitarbeiter as keyof IMitarbeiter] }}</span>
 
                         </div>
+
                     </Panel>
+
                     <Panel
                         header="Ersatzteile"
                         :toggleable="true"
@@ -68,30 +71,33 @@
                             :key="ersatzteil.EtID"
                             class="flex justify-between"
                         >
+
                             <span class="">{{ ersatzteil.Ersatzteil.EtBezeichnung }}({{
                                 ersatzteil.Ersatzteil.EtPreis
                             }}€)</span>
                             <span>{{ ersatzteil.Anzahl }}x</span>
+
                         </div>
+
                     </Panel>
+
                     <Panel
                         v-if="order.Rechnung"
                         header="Rechnung"
                         :toggleable="true"
                     >
+
                         <div class="flex justify-between">
+
                             <RouterLink :to="`/invoices/${order.Aufnr}/${order.KunNr}`">
                                 <Chip>{{ order.Aufnr }}/{{ order.KunNr }}</Chip>
                             </RouterLink>
+
                             <span>{{ order.Rechnung[0].RechBetrag }} €</span>
+
                         </div>
                     </Panel>
-
-
-
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -108,24 +114,17 @@ import { useRoute, useRouter } from 'vue-router';
 import OrderService from '@/api/services/Order';
 import Chip from 'primevue/chip';
 
-
 const route = useRoute()
 const router = useRouter()
 const order = ref<IAuftrag>({} as IAuftrag)
 const orderService = new GenericService<IAuftrag>('orders')
 
-
-
-
-
 onMounted(async () => {
-
     order.value = await orderService.get(route.params.id as string)
 
     if (order.value === null) {
         return router.push("/404")
     }
-
 })
 
 const createStatus = () => {
@@ -138,7 +137,6 @@ const createStatus = () => {
         ret.push({ status: 'Erledigt', date: useDateFormat(order.value.ErlDat, 'DD.MM.YYYY').value })
 
     return ret
-
 }
 
 </script>

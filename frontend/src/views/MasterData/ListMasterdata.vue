@@ -4,6 +4,7 @@
       <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
         {{ props.label }}
       </h1>
+
       <RouterLink :to="{ name: 'Create' + props.name }">
         <Button
           icon="pi pi-plus"
@@ -12,8 +13,11 @@
           @click="openDialog = true"
         />
       </RouterLink>
+
     </div>
+
     <Divider />
+
     <EntityTable
       :name="props.name"
       :primary-key="props.primaryKey"
@@ -24,21 +28,23 @@
       :allow-delete="true"
       @edit-row="onEditRow"
     />
+
     <ConfirmDialog></ConfirmDialog>
+    
   </div>
 </template>
 
 <script setup lang="ts">
+
 import EntityTable from "@/components/Entity/EntityTable.vue";
-
 import Divider from "primevue/divider";
-
 import { ref } from "vue";
 
 const props = defineProps([
   "resourceName",
   "fields",
   "label",
+  "labelSingular",
   "name",
   "primaryKey",
 ]);
