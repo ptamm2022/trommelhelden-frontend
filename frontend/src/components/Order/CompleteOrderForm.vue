@@ -4,37 +4,41 @@
     ref="el"
   >
     <Divider />
-    <div>Beschreibung:</div>
-    <div>{{ order?.Beschreibung }}</div>
-    <Divider />
+
     <div class="grid grid-cols-2">
-      <span>Auftragsnummer : </span> <span>{{ order?.Aufnr }}</span>
-      <span>Kundennummer : </span> <span>{{ order?.KunNr }}</span>
-      <span>Auftragsdatum : </span>
-      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
+      <span>Auftragsnummer: </span>     <span>{{ order?.Aufnr }}</span>
+      <span>Auftragsdatum: </span>      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
+      <span>Erledigungsdatum: </span>   <span>{{ useDateFormat(order?.ErlDat, "DD.MM.YYYY").value }}</span>
+      <span>Beschreibung: </span> <span>{{ order?.Beschreibung }}</span>
     </div>
+
+    <Divider />
+
+    <div class="grid grid-cols-2">
+      <span>Kundennummer: </span>       <span>{{ order?.KunNr }}</span>
+      <span>Kunden-Vorname: </span>     <span>{{ customer?.KunName }}</span>
+    </div>
+
     <Divider />
 
     <div
       v-if="employee"
       class="grid grid-cols-2"
     >
-      <span>Name : </span> <span>{{ employee.MitName }}</span>
-      <span>Mitarbeiter Vorname :</span>
-      <span>{{ employee.MitVorname }}</span>
-      <span>Mitarbeiter ID : </span><span>{{ employee.MitID }}</span>
-      <span>Mitarbeiter Beruf : </span>
-      <span>{{ employee.MitJob }}</span>
+      <span>Mitarbeiter-ID: </span>      <span>{{ employee.MitID }}</span>
+      <span>Mitarbeiter-Vorname :</span>  <span>{{ employee.MitVorname }}</span>
+      <span>Mitarbeiter-Name: </span>     <span>{{ employee.MitName }}</span>
+      <span>Mitarbeiter-Beruf: </span>   <span>{{ employee.MitJob }}</span>
     </div>
 
     <Divider />
+
     <div class="grid col-span-2 row-span-2 gap-4 mb-4">
       <InputNumber
         v-model="order.Anfahrt"
         class="col-start-1 col-end-1"
         placeholder="Anfahrt in km"
       ></InputNumber>
-
 
       <InputNumber
         v-model="order.Dauer"
@@ -85,6 +89,7 @@
       </MultiSelect>
     
     </div>
+    
     <div />
     <Button
       type="submit"
@@ -96,11 +101,13 @@
   </div>
 </template>
 <script setup lang="ts">
+
+import Calendar from "primevue/calendar";
 import Chip from 'primevue/chip';
 import Listbox from 'primevue/listbox';
 import { useDateFormat } from "@vueuse/core";
 import { inject, onMounted, ref } from "vue";
-import { IAuftrag, IErsatzteil, IMitarbeiter } from "@/types";
+import { IAuftrag, IErsatzteil, IMitarbeiter, IKunde } from "@/types";
 import EmployeesService from "@/api/services/Employees";
 import OrderService from "@/api/services/Order";
 import { useToast } from "primevue/usetoast";
@@ -121,7 +128,7 @@ const orderService = new OrderService();
 const employeesSevice = new EmployeesService();
 const order = ref<IAuftrag>({} as IAuftrag);
 const spareparts = ref<IErsatzteil[]>([] as IErsatzteil[]);
-
+const customer = ref<IKunde>({} as IKunde);
 
 onMounted(async () => {
   console.log(order.value);

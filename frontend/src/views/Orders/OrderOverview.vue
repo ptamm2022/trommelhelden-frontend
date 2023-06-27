@@ -7,14 +7,49 @@
         >
           Aufträge
         </h1>
+        
         <router-link to="/orders/create">
           <Button
             icon="pi pi-plus"
-            class="mr-2 mb-2 rounded-lg !border-none !bg-gradient-to-r from-blue-400 to-pink-800 text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-            label="Auftrag erstellen"
+            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="1. Auftrag erstellen"
           />
         </router-link>
+
+        <router-link to="/orders/plan">
+          <Button
+            icon="pi pi-map"
+            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="2. Auftrag planen"
+            />
+        </router-link>
+        
+        <router-link to="/orders/complete">
+          <Button
+            icon="pi pi-check"
+            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            label="3. Auftrag erledigen"
+          />
+        </router-link>
+  
+        <!-- <template>
+            <TabMenu :model="items" />
+        </template> -->
+
       </div>
+
+      <!-- <template>
+          <div class="card flex justify-content-center">
+              <Breadcrumb :home="home" :model="items">
+                  <template #item="{item}">
+                      <a :class="item.class">
+                          <span :class="item.icon"></span>
+                      </a>
+                  </template>
+              </Breadcrumb>
+          </div>
+      </template> -->
+
       <Divider />
       <EntityTable
         name="Aufträge"
@@ -35,22 +70,43 @@
 import EntityTable from "@/components/Entity/EntityTable.vue";
 import { IMasterDataField } from "@/types";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
+import Breadcrumb from 'primevue/breadcrumb';
 
 const router = useRouter()
+
+const home = ref({ icon: 'pi pi-home', url: 'https://primevue.org/' });
+const items = ref([
+  { icon: 'pi pi-sitemap' }, 
+  { icon: 'pi pi-book' }, 
+  { icon: 'pi pi-wallet' }, 
+  { icon: 'pi pi-shopping-bag' }, 
+  { icon: 'pi pi-calculator' }
+]);
+
+// const items = ref([
+//     {
+//         label: '1. Auftrag erstellen',
+//         icon: 'pi pi-plus',
+//         to: '/orders/create'
+//     },
+//     {
+//         label: '2. Auftrag planen',
+//         icon: 'pi pi-map',
+//         to: '/orders/plan'
+//     },
+//     {
+//         label: '3. Auftrag erledigen',
+//         icon: 'pi pi-check',
+//         to: '/orders/complete'
+//     }
+// ]);
 
 const columns: IMasterDataField[] = [
   {
     name: "Aufnr",
-    label: "Aufnr",
+    label: "AufNr",
     type: "numeric",
-    allowCreate: false,
-    allowUpdate: false,
-
-  },
-  {
-    name: "MitID",
-    label: "MitID",
-    type: "text",
     allowCreate: false,
     allowUpdate: false,
 
@@ -63,27 +119,60 @@ const columns: IMasterDataField[] = [
     allowUpdate: false,
   },
   {
-    name: "AufDat", label: "AufDat", type: "date", allowCreate: false,
+    name: "Kunde.KunName", 
+    label: "Kundenname", 
+    type: "text", 
+    allowCreate: false,
     allowUpdate: false,
   },
   {
-    name: "ErlDat", label: "ErlDat", type: "date", allowCreate: false,
+    name: "MitID",
+    label: "MitID",
+    type: "text",
+    allowCreate: false,
+    allowUpdate: false,
+
+  },
+  {
+    name: "Mitarbeiter.MitName",
+    label: "Mitarbeitername",
+    type: "numeric",
+    allowCreate: false,
     allowUpdate: false,
   },
   {
-    name: "Dauer", label: "Dauer", type: "numeric", allowCreate: false,
+    name: "AufDat", 
+    label: "AufDat", 
+    type: "date", 
+    allowCreate: false,
     allowUpdate: false,
   },
   {
-    name: "Anfahrt", label: "Anfahrt", type: "numeric", allowCreate: false,
+    name: "ErlDat", 
+    label: "ErlDat", 
+    type: "date", 
+    allowCreate: false,
     allowUpdate: false,
   },
   {
-    name: "Beschreibung", label: "Beschreibung", type: "text", allowCreate: false,
+    name: "Dauer", 
+    label: "Dauer", 
+    type: "numeric", 
+    allowCreate: false,
     allowUpdate: false,
   },
   {
-    name: "Kunde.KunName", label: "Kundenname", type: "text", allowCreate: false,
+    name: "Anfahrt", 
+    label: "Anfahrt", 
+    type: "numeric", 
+    allowCreate: false,
+    allowUpdate: false,
+  },
+  {
+    name: "Beschreibung", 
+    label: "Beschreibung", 
+    type: "text", 
+    allowCreate: false,
     allowUpdate: false,
   },
 ];

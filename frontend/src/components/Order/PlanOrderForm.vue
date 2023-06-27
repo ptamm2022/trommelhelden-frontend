@@ -4,8 +4,21 @@
     ref="el"
   >
     <Divider />
-    <div>Beschreibung:</div>
-    <div>{{ order?.Beschreibung }}</div>
+
+    <div class="grid grid-cols-2">
+      
+      <span>Auftragsnummer: </span>   <span>{{ order?.Aufnr }}</span>
+      
+      <span>Auftragsdatum: </span>    <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
+      <span>Beschreibung: </span>     <span>{{ order?.Beschreibung }}</span>
+    </div>
+
+    <Divider />
+
+    <div class="grid grid-cols-2">
+      <span>Kundennummer: </span>     <span>{{ order?.KunNr }}</span>
+    </div>
+
     <Divider />
 
     <div class="my-4 flex items-center justify-between">
@@ -18,15 +31,15 @@
         class="mr-2"
         @click="toggle"
       />
+
       <div
         v-show="employee"
         class="grid w-fit grid-cols-2 gap-x-5"
       >
-        <span>Name : </span> <span>{{ employee?.MitName }}</span>
-        <span>Mitarbeiter Vorname :</span>
-        <span>{{ employee?.MitVorname }}</span> <span>Mitarbeiter ID : </span><span>{{ employee?.MitID }}</span>
-        <span>Mitarbeiter Beruf : </span>
-        <span>{{ employee?.MitJob }}</span>
+        <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
+        <span>Mitarbeiter-Vorname: </span>  <span>{{ employee?.MitVorname }}</span> 
+        <span>Mitarbeiter-Name: </span>     <span>{{ employee?.MitName }}</span>
+        <span>Mitarbeiter-Beruf: </span>    <span>{{ employee?.MitJob }}</span>
       </div>
 
       <OverlayPanel
@@ -49,26 +62,22 @@
           @onRowSelect="onSelectEmployee"
         />
       </OverlayPanel>
-    </div>
-    <Divider />
-    <div class="grid grid-cols-2">
-      <span>Auftragsnummer : </span> <span>{{ order?.Aufnr }}</span>
-      <span>Kundennummer : </span> <span>{{ order?.KunNr }}</span>
-      <span>Auftragsdatum : </span>
-      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
+
     </div>
 
     <Divider />
+
     <Calendar
-      v-model="order.ErlDat"
-      placeholder="Erledigungsdatum"
-    ></Calendar>
+        v-model="order.ErlDat"
+        placeholder="Erledigungsdatum"
+      ></Calendar>
+
     <Divider />
     <Button
       type="submit"
       icon="pi pi-check"
       label="Auftrag planen"
-      :disabled="!order.ErlDat"
+      :disabled="!order.ErlDat || !employee"
       class="w-full"
       @click="planOrder"
     />

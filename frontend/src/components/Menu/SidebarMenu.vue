@@ -56,12 +56,12 @@ const onOpenTab = (key: string) => {
 const menuItems: MenuItem[] = [
   {
     to: "/dashboard",
-    label: "Dashboard",
+    label: "Startseite",
     key: "dashboard",
     command: () => {
       store.sideBarMenuIsOpen = false;
     },
-    icon: "pi pi-chart-bar",
+    icon: "pi pi-home",
   },
 
   {
@@ -86,34 +86,34 @@ const menuItems: MenuItem[] = [
           onOpenTab("order");
         },
         to: "/orders",
-        icon: "pi pi-id-card",
+        icon: "pi pi-home",
       },
       {
         key: "2_0",
-        label: "Erstellen",
+        label: "1. Erstellen",
         command: () => {
           onOpenTab("order");
         },
         to: "/orders/create",
-        icon: "pi pi-id-card",
+        icon: "pi pi-plus",
       },
       {
         key: "2_0",
-        label: "Planen",
+        label: "2. Planen",
         command: () => {
           onOpenTab("order");
         },
         to: "/orders/plan",
-        icon: "pi pi-id-card",
+        icon: "pi pi-map",
       },
       {
         key: "2_0",
-        label: "Erledigen",
+        label: "3. Erledigen",
         command: () => {
           onOpenTab("order");
         },
         to: "/orders/complete",
-        icon: "pi pi-id-card",
+        icon: "pi pi-check",
       },
     ],
   },
@@ -129,7 +129,7 @@ const menuItems: MenuItem[] = [
           onOpenTab("masterData");
         },
         to: "/masterdata/employees",
-        icon: "pi pi-id-card",
+        icon: "pi pi-user",
       },
       {
         key: "2_1",

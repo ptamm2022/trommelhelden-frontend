@@ -6,6 +6,7 @@
     <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
       {{ props.label }} | {{ data[primaryKey] }}
     </h1>
+    
     <div class="col-span-1 grid grid-cols-1 justify-items-center gap-x-4 gap-y-6 py-8">
       <span
         v-for="field in props.fields.filter((x: any) => x.allowUpdate)"
@@ -89,6 +90,7 @@ const props = defineProps([
   "resourceName",
   "fields",
   "label",
+  "labelSingular",
   "name",
   "primaryKey",
 ]);
@@ -114,14 +116,14 @@ const onUpdate = async () => {
   toast.add({
     severity: "success",
     summary: "Success",
-    detail: `Successfully updated ${props.label} with ${props.primaryKey} ${route.params.id}`,
+    detail: `${props.label} mit ${props.primaryKey} ${route.params.id} erfolgreich gelöscht.`,
     life: 5000,
   });
 };
 
 const onDelete = async () => {
   confirm.require({
-    message: `Are you sure you want to delete the item?`,
+    message: `Möchten Sie die Daten wirklich löschen?`,
     header: "Confirmation",
     icon: "pi pi-exclamation-triangle",
     accept: async () => {
@@ -129,7 +131,7 @@ const onDelete = async () => {
       toast.add({
         severity: "success",
         summary: "Success",
-        detail: `Successfully deleted ${props.label} with ${props.primaryKey} ${route.params.id}`,
+        detail: `${props.label} mit ${props.primaryKey} ${route.params.id} erfolgreich gelöscht.`,
         life: 5000,
       });
       router.push({ name: props.name });

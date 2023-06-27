@@ -4,20 +4,21 @@
     {
       "name": "customers",
       "label": "Kunden",
+      "labelSingular": "Kunden",
       "resourceName": "customers",
       "primaryKey": "KunNr",
       "fields": [
+        {
+          "label": "KunNr",
+          "name": "KunNr",
+          "type": "numeric",
+          "allowUpdate": false
+        },
         {
           "label": "Name",
           "name": "KunName",
           "type": "text",
           "allowUpdate": true
-        },
-        {
-          "label": "Kunden Nr.",
-          "name": "KunNr",
-          "type": "numeric",
-          "allowUpdate": false
         },
         {
           "label": "Ort",
@@ -26,7 +27,7 @@
           "allowUpdate": true
         },
         {
-          "label": "Postleitzahl",
+          "label": "PLZ",
           "name": "KunPLZ",
           "type": "text",
           "allowUpdate": true
@@ -41,12 +42,13 @@
     },
     {
       "name": "employees",
-      "label": "Mitarbeiter",
+      "label": "Mitarbeiter*innen",
+      "labelSingular": "Mitarbeiter",
       "resourceName": "employees",
       "primaryKey": "MitID",
       "fields": [
         {
-          "label": "ID",
+          "label": "MitID",
           "name": "MitID",
           "type": "text",
           "allowUpdate": false
@@ -70,7 +72,7 @@
           "allowUpdate": true
         },
         {
-          "label": "Stelle",
+          "label": "Beruf",
           "name": "MitJob",
           "type": "text",
           "allowUpdate": true
@@ -92,11 +94,12 @@
     {
       "name": "spareparts",
       "label": "Ersatzteile",
+      "labelSingular": "Ersatzteil",
       "primaryKey": "EtID",
       "resourceName": "spareparts",
       "fields": [
         {
-          "label": "ID",
+          "label": "EtID",
           "name": "EtID",
           "type": "text",
           "allowUpdate": true
@@ -129,12 +132,13 @@
     },
     {
       "name": "branches",
-      "label": "Niederlassung",
+      "label": "Niederlassungen",
+      "labelSingular": "Niederlassung",
       "resourceName": "branches",
       "primaryKey": "NLNr",
       "fields": [
         {
-          "label": "Nr",
+          "label": "NlNr",
           "name": "NLNr",
           "type": "numeric",
           "allowUpdate": false

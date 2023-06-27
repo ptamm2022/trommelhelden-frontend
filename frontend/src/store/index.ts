@@ -34,8 +34,10 @@ export const useStore = defineStore("main", {
       this.settings = (
         await settingsService._axiosInstance.post("/settings")
       ).data;
+      
       this.settings.calcType =
         window.localStorage.getItem("calc-type") || "database";
+        
       this.showDebugBar =
         window.localStorage.getItem("show-debug-bar") === "true" || false;
     },

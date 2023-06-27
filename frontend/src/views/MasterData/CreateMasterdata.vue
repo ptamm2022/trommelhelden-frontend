@@ -56,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+
 import Calendar from "primevue/calendar";
 import EntityDropdown from "@/components/Entity/EntityDropdown.vue";
 import GenericService from "@/api/services/Generic";
@@ -63,12 +64,14 @@ import { router } from "@/router";
 import { TGenericService } from "@/types";
 import { useToast } from "primevue/usetoast";
 import { computed, ref } from "vue";
+
 const data: any = ref({});
 const toast = useToast();
 const props = defineProps([
   "resourceName",
   "fields",
   "label",
+  "labelSingular",
   "name",
   "primaryKey",
 ]);
@@ -89,17 +92,8 @@ const onCreate = async () => {
 };
 
 const isFilled = computed(() => {
-
-
-
-
   return Object.keys(data.value).filter(x => data.value[x]).length === props.fields.filter((x: any) => x.allowUpdate).length;
-
-
-
 })
-
-
 
 </script>
 

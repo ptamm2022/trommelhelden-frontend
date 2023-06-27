@@ -2,13 +2,24 @@
   <div>
     <Card>
       <template #content>
-        <h1
-          class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent"
-        >
+        <h1 class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
           Settings
         </h1>
-        <div class="flex flex-col">
-          <div>Which method shall be used to create invoices?</div>
+
+        <div class="mb-2 flex flex-col">
+          <div class="mb-2">In welchem Semester befinden Sie sich? In DBS II werden weitere Menüpunkte freigeschaltet.</div>
+          <SelectButton
+            class="flex-1"
+            option-label="name"
+            :options="optionsModule"
+            option-value="value"
+            aria-labelledby="single"
+            @change="onModuleMethodChange"
+          />
+        </div>
+
+        <div class="mb-2 flex flex-col">
+          <div class="mb-2">Which method shall be used to create invoices?</div>
           <SelectButton
             v-model="mode"
             class="flex-1"
@@ -19,8 +30,9 @@
             @change="onInvoiceMethodChange"
           />
         </div>
-        <div class="flex flex-col">
-          <div>Which method shall be used to fetch Business Data?</div>
+
+        <div class="mb-2 flex flex-col">
+          <div class="mb-2">Which method shall be used to fetch Business Data?</div>
           <SelectButton
             v-model="store.settings.calcType"
             class="flex-1"
@@ -31,6 +43,7 @@
             @change="onCalcMethodChange"
           />
         </div>
+
         <div class="field-checkbox">
           <Checkbox
             v-model="store.showDebugBar"
@@ -40,6 +53,7 @@
           />
           <label for="binary">Show debug Bar</label>
         </div>
+
         <!-- <button
           class="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 p-0.5 text-sm font-medium text-gray-900 shadow-lg shadow-purple-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-purple-200 group-hover:from-purple-500 group-hover:to-pink-500"
         >
@@ -69,10 +83,7 @@ const calcMode = ref(store.settings.calcType);
 
 console.log(mode.value);
 
-
 const onChangeShowDebugBar = (e: any) => {
-
-
   window.localStorage.setItem("show-debug-bar", e);
 }
 
@@ -99,6 +110,22 @@ const options2 = [
 
 ];
 
+const optionsModule = [
+  {
+    name: "DBS I",
+    value: "dbs1",
+  },
+  {
+    name: "DBS II",
+    value: "dbs2",
+  },
+
+];
+
+const onModuleMethodChange = async (event: SelectButtonChangeEvent) => {
+  
+};
+
 const onInvoiceMethodChange = async (event: SelectButtonChangeEvent) => {
   await store.updateSettings("useTrigger", event.value === 1);
 };
@@ -106,11 +133,7 @@ const onInvoiceMethodChange = async (event: SelectButtonChangeEvent) => {
 const onCalcMethodChange = async (event: SelectButtonChangeEvent) => {
   // await store.updateSettings("calcType", calcMode.value);
   window.localStorage.setItem("calc-type", event.value);
-
 };
-
-
-
 
 </script>
 
