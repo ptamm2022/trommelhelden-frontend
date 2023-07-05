@@ -26,7 +26,7 @@
                 <ProgressSpinner aria-label="Basic ProgressSpinner" />
                 <h1
                     class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
-                    Daten erstellen
+                    Daten werden erstellt...
                 </h1>
             </div>
         </div>
@@ -61,11 +61,11 @@
     }
 
     const settings = ref({
-        customers: 500,
-        employees: 50,
-        orders: 1000,
-        branches: 10,
-        spareparts: 200,
+        customers: 100,
+        employees: 20,
+        orders: 100,
+        branches: 3,
+        spareparts: 20,
     })
 
     // autonmatisch Daten erstellen
