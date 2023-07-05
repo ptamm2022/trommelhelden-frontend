@@ -7,22 +7,34 @@
       <h1 class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
         Rechnung {{ invoice?.AufNr }}|{{ invoice?.KunNr }}
       </h1>
+
       <div class="addr">AN: {{ invoice?.Auftrag?.Mitarbeiter?.MitName }}
         {{ invoice?.Auftrag?.Mitarbeiter?.MitVorname }} <br> {{ invoice?.Auftrag?.Kunde?.KunStrasse }},
         {{ invoice?.Auftrag?.Kunde?.KunPLZ }}, {{ invoice?.Auftrag?.Kunde?.KunOrt }} </div>
-    </div>
+      </div>
+
     <div class=" big-top-margin">
+      
       <div class="main-content">
-        <div class="customer"><span class="order_column_header">Kunde:</span>{{ invoice?.Auftrag?.Kunde?.KunName }} <br>
-          #{{ invoice?.Auftrag?.Kunde?.KunNr }}</div>
-        <div class="inv"><span class="order_column_header">Auftrag Nr:</span><span>#{{ invoice?.Auftrag?.Aufnr }}</span>
+        <div class="customer">
+          <span class="order_column_header">Kunde:</span>{{ invoice?.Auftrag?.Kunde?.KunName }} <br>
+          #{{ invoice?.Auftrag?.Kunde?.KunNr }}
         </div>
-        <div class="due"><span class="order_column_header">Auftragsdatum:</span><span>{{
-          useDateFormat(invoice?.Auftrag?.AufDat, "DD.MM.YYYY", {
-            locales: "de-DE",
-          }).value
-        }}</span>
+        
+        <div class="inv">
+          <span class="order_column_header">Auftrag Nr:</span>
+          <span>#{{ invoice?.Auftrag?.Aufnr }}</span>
         </div>
+      
+        <div class="due">
+          <span class="order_column_header">Auftragsdatum:</span>
+          <span>{{
+            useDateFormat(invoice?.Auftrag?.AufDat, "DD.MM.YYYY", {
+              locales: "de-DE",
+            }).value
+          }}</span>
+        </div>
+
         <div class="amount"><span class="order_column_header">Gesamtbetrag
             (EUR)</span><span class="big-font bold-font gradient-bg-1">{{
               invoice?.Auftrag?.Rechnung[0].RechBetrag
@@ -46,30 +58,65 @@
           </thead>
           <tbody>
             <tr class="">
-              <td>{{ invoice?.Auftrag?.Mitarbeiter?.MitJob }}</td>
+              <td>Arbeitsleistung {{ invoice?.Auftrag?.Mitarbeiter?.MitJob }}</td>
               <td>{{ invoice?.Auftrag?.Mitarbeiter?.MitStundensatz }} €</td>
               <td>{{ invoice?.Auftrag?.Dauer }} (h.)</td>
               <td>{{ Number(invoice?.Auftrag?.Dauer) * invoice?.Auftrag.Mitarbeiter.MitStundensatz }} €</td>
             </tr>
+            
             <tr>
               <td>Fahrkosten</td>
               <td>2,50 €</td>
               <td>{{ invoice?.Auftrag.Anfahrt }} (km.)</td>
               <td>{{(1 * (invoice?.Auftrag.Anfahrt) * 2.50)}} €</td>
             </tr>
+          
+            <tr v-for="ersatzteil in order.Montage" :key="ersatzteil.EtID">
+              <td>{{ ersatzteil.EtID }}: {{ ersatzteil.Ersatzteil.EtBezeichnung }}</td>
+              <td> {{ ersatzteil.Ersatzteil.EtPreis }} € </td>
+              <td> {{ ersatzteil.Anzahl }} (Stk.) </td>
+              <td> {{ ersatzteil.Ersatzteil.EtPreis * ersatzteil.Anzahl }} € </td>
+            </tr>
           </tbody>
         </table>
         <div>
           <span class="definition"> Beschreibung: {{ invoice?.Auftrag.Beschreibung }}</span>
         </div>
+
         <div class="summary">
-          <div><span>Netto </span><span>
-              {{ ((invoice?.Auftrag?.Rechnung[0].RechBetrag * 1) / 1.19).toFixed(2) }}€</span></div>
-          <div><span>MwSt. </span><span>
-              {{ (invoice?.Auftrag.Rechnung[0].RechBetrag * 0.19).toFixed(2) }}€</span></div>
-          <div class=" sum"><span>Gesamt (EUR)</span><span> {{
-            invoice?.Auftrag.Rechnung[0].RechBetrag
-          }}€</span></div>
+          <div>
+            <span>
+              Netto: 
+            </span>
+            <span>
+              {{ 
+                ((invoice?.Auftrag?.Rechnung[0].RechBetrag * 1) / 1.19).toFixed(2) 
+              }} €
+            </span>
+          </div>
+
+          <div>
+            <span>
+              19 % MwSt.: 
+            </span>
+            <span>
+              {{ 
+                (((invoice?.Auftrag.Rechnung[0].RechBetrag * 1) / 1.19) * 0.19).toFixed(2) 
+              }} €
+            </span>
+          </div>
+
+          <div class=" sum">
+            <span>
+              Gesamt (EUR)
+            </span>
+            <span> 
+              {{
+                invoice?.Auftrag.Rechnung[0].RechBetrag
+              }} €
+            </span>
+          </div>
+
         </div>
         <Button
           label="Drucken"
@@ -88,11 +135,18 @@
 import { useDateFormat } from "@vueuse/core";
 
 import InvoiceService from "@/api/services/Invoices";
-import { IRechnung } from "@/types";
+import { IErsatzteil, IRechnung, IAuftrag } from "@/types";
 import { onBeforeMount, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from 'vue-router';
 
-const route = useRoute();
+import OrderService from '@/api/services/Order';
+import GenericService from '@/api/services/Generic';
+
+const route = useRoute()
+const router = useRouter()
+
+const order = ref<IAuftrag>({} as IAuftrag)
+const orderService = new GenericService<IAuftrag>('orders')
 
 const {
   KunNr,
@@ -108,7 +162,15 @@ const invoice = ref<IRechnung>({} as IRechnung);
 onBeforeMount(async () => {
   invoice.value = await invoiceService.getInvoice(AufNr, KunNr);
   console.log(invoice.value);
+
+  order.value = await orderService.get(AufNr);
+
+  if (order.value === null) {
+    return router.push("/404")
+  }
 });
+
+
 
 function printWindow() {
   window.print();
@@ -230,7 +292,7 @@ a {
 .inv-table {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-align: center;
+  text-align: left;
   color: #2c3e50;
   font-size: 1.3rem;
   margin: 0;
@@ -246,7 +308,7 @@ a {
 .dark-bg-1 {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-align: center;
+  text-align: left;
   border-collapse: collapse;
   margin: 0;
   padding: 0;

@@ -41,6 +41,7 @@ export class InvoicesController {
     });
     return res.status(200).json({ data: allInvoices, count });
   }
+
   async get(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { KunNr, AufNr } = req.query;
 
@@ -105,6 +106,7 @@ export class InvoicesController {
 
     return res.sendStatus(200);
   }
+  
   async create(
     req: Request,
     res: Response,
@@ -114,14 +116,29 @@ export class InvoicesController {
     if (!data) {
       return res.sendStatus(400);
     }
-
     console.log(data);
+
+    // Berechne die Summe aus Montage.Anzahl * Ersatzteil.Preis
+    // const montageItems = await prisma.montage.findMany({
+    //   where: {
+    //     AufNr: data.Aufnr,
+    //   },
+    //   include: {
+    //     Ersatzteil: true,
+    //   },
+    // });
+
+    // let betragErsatzteile = 100;
+    // montageItems.forEach((montageItem) => {
+    //   const { Anzahl, Ersatzteil } = montageItem;
+    //   betragErsatzteile += Anzahl * Ersatzteil.EtPreis;
+    // });
 
     const { AufNr, KunNr } = await prisma.rechnung.create({
       data: {
         RechBetrag:
-          Number(data.Dauer) * Number(data["Mitarbeiter.MitStundensatz"]) +
-          2.5 * Number(data.Anfahrt),
+          Number(data.Dauer) * Number(data["Mitarbeiter.MitStundensatz"]) 
+          + 2.5 * Number(data.Anfahrt),
         AufNr: data.Aufnr,
         KunNr: Number(data.KunNr),
         RechDat: new Date(),

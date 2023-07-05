@@ -8,7 +8,7 @@
 
             <div class="grid grid-cols-2 mt-8 gap-8">
                 <div class="flex grid grid-cols-2 card rounded-xl bg-white p-6 shadow-xl">
-                    <span class="text-xl font-bold"> Auftragsdatum </span><span>{{ order.AufDat }}</span>
+                    <span class="text-xl font-bold"> Auftragsdatum </span><span> {{useDateFormat(order.AufDat, "DD.MM.YYYY", {locales: "de-DE",}).value}}</span>
                     <span class="text-xl font-bold"> Anfahrt </span><span>{{ order.Anfahrt }}</span>
                     <span class="text-xl font-bold"> Beschreibung </span><span>{{ order.Beschreibung }}</span>
                     <span class="text-xl font-bold"> Dauer </span><span>{{ order.Dauer }}</span>
@@ -65,20 +65,18 @@
                         header="Ersatzteile"
                         :toggleable="true"
                     >
-
                         <div
                             v-for="ersatzteil in order.Montage"
                             :key="ersatzteil.EtID"
                             class="flex justify-between"
                         >
-
-                            <span class="">{{ ersatzteil.Ersatzteil.EtBezeichnung }}({{
+                            <span class="">
+                                {{ ersatzteil.Ersatzteil.EtBezeichnung }} ({{
                                 ersatzteil.Ersatzteil.EtPreis
-                            }}€)</span>
+                                }}€)
+                            </span>
                             <span>{{ ersatzteil.Anzahl }}x</span>
-
                         </div>
-
                     </Panel>
 
                     <Panel
@@ -86,7 +84,6 @@
                         header="Rechnung"
                         :toggleable="true"
                     >
-
                         <div class="flex justify-between">
 
                             <RouterLink :to="`/invoices/${order.Aufnr}/${order.KunNr}`">
@@ -94,7 +91,6 @@
                             </RouterLink>
 
                             <span>{{ order.Rechnung[0].RechBetrag }} €</span>
-
                         </div>
                     </Panel>
                 </div>
@@ -104,7 +100,9 @@
 </template>
 
 <script setup lang="ts">
-import { useDateFormat } from '@vueuse/shared';
+// import { useDateFormat } from '@vueuse/shared';
+import { useDateFormat } from "@vueuse/core";
+
 import Panel from 'primevue/panel';
 import Timeline from 'primevue/timeline';
 import GenericService from '@/api/services/Generic';

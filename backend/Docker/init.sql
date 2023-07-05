@@ -1,5 +1,3 @@
-
-
 USE master;
 go
 
@@ -7,13 +5,13 @@ CREATE DATABASE trommelhelden;
 go
 USE trommelhelden;
 
-
-
 /****** Object:  UserDefinedFunction [dbo].[getAnfahrtsPreis]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE FUNCTION [dbo].[getAnfahrtsPreis](@Anfahrtsweg FLOAT ) 
 RETURNS FLOAT 
 AS 
@@ -31,11 +29,14 @@ AS
     RETURN @Anfahrtspreis
 END
 GO
+
 /****** Object:  Table [dbo].[Auftrag]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Auftrag]
 (
     [Aufnr] [int] IDENTITY(5000,1) NOT NULL,
@@ -52,11 +53,14 @@ CREATE TABLE [dbo].[Auftrag]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Ersatzteil]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Ersatzteil]
 (
     [EtID] [char](5) NOT NULL,
@@ -70,11 +74,14 @@ CREATE TABLE [dbo].[Ersatzteil]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Gebiet]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Gebiet]
 (
     [GebietID] [char](2) NOT NULL,
@@ -85,11 +92,14 @@ CREATE TABLE [dbo].[Gebiet]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Kunde]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Kunde]
 (
     [KunNr] [int] IDENTITY(1000,1) NOT NULL,
@@ -103,11 +113,14 @@ CREATE TABLE [dbo].[Kunde]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Mitarbeiter]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Mitarbeiter]
 (
     [MitID] [int] IDENTITY(100,1) NOT NULL,
@@ -123,11 +136,14 @@ CREATE TABLE [dbo].[Mitarbeiter]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Montage]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Montage]
 (
     [EtID] [char](5) NOT NULL,
@@ -140,11 +156,14 @@ CREATE TABLE [dbo].[Montage]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Niederlassung]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Niederlassung]
 (
     [NLNr] [int] IDENTITY(1,1) NOT NULL,
@@ -155,11 +174,14 @@ CREATE TABLE [dbo].[Niederlassung]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Rechnung]    Script Date: 24.11.2022 17:59:47 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE TABLE [dbo].[Rechnung]
 (
     [KunNr] [int] NOT NULL,
@@ -173,106 +195,194 @@ CREATE TABLE [dbo].[Rechnung]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 ALTER TABLE [dbo].[Auftrag] ADD  CONSTRAINT [df_Auftragsdatum]  DEFAULT (CONVERT([date],getdate())) FOR [AufDat]
 GO
+
 ALTER TABLE [dbo].[Mitarbeiter] ADD  CONSTRAINT [df_MitJob]  DEFAULT ('Monteur') FOR [MitJob]
 GO
+
 ALTER TABLE [dbo].[Gebiet]  WITH CHECK ADD  CONSTRAINT [FK__Gebiet__NLNr__08B54D69] FOREIGN KEY([NLNr])
 REFERENCES [dbo].[Niederlassung] ([NLNr])
 GO
+
 ALTER TABLE [dbo].[Gebiet] CHECK CONSTRAINT [FK__Gebiet__NLNr__08B54D69]
 GO
+
 ALTER TABLE [dbo].[Mitarbeiter]  WITH CHECK ADD  CONSTRAINT [FK__Mitarbeite__NLNr__09A971A2] FOREIGN KEY([NLNr])
 REFERENCES [dbo].[Niederlassung] ([NLNr])
 GO
+
 ALTER TABLE [dbo].[Mitarbeiter] CHECK CONSTRAINT [FK__Mitarbeite__NLNr__09A971A2]
 GO
+
 ALTER TABLE [dbo].[Montage]  WITH CHECK ADD  CONSTRAINT [FK__Montage__EtID__32E0915F] FOREIGN KEY([EtID])
 REFERENCES [dbo].[Ersatzteil] ([EtID])
 GO
+
 ALTER TABLE [dbo].[Montage] CHECK CONSTRAINT [FK__Montage__EtID__32E0915F]
 GO
+
 ALTER TABLE [dbo].[Montage]  WITH CHECK ADD  CONSTRAINT [FK_Montage_Auftrag] FOREIGN KEY([AufNr])
 REFERENCES [dbo].[Auftrag] ([Aufnr])
 ON DELETE CASCADE
 GO
+
 ALTER TABLE [dbo].[Montage] CHECK CONSTRAINT [FK_Montage_Auftrag]
 GO
+
 ALTER TABLE [dbo].[Rechnung]  WITH CHECK ADD  CONSTRAINT [FK__Rechnung__KunNr__0C85DE4D] FOREIGN KEY([KunNr])
 REFERENCES [dbo].[Kunde] ([KunNr])
 GO
+
 ALTER TABLE [dbo].[Rechnung] CHECK CONSTRAINT [FK__Rechnung__KunNr__0C85DE4D]
 GO
+
 ALTER TABLE [dbo].[Rechnung]  WITH CHECK ADD  CONSTRAINT [FK_Aufnr] FOREIGN KEY([AufNr])
 REFERENCES [dbo].[Auftrag] ([Aufnr])
 ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[Rechnung] CHECK CONSTRAINT [FK_Aufnr]
 
+ALTER TABLE [dbo].[Rechnung] CHECK CONSTRAINT [FK_Aufnr]
 GO
 
+-- trigger in auftrag
 CREATE OR ALTER TRIGGER create_invoice
 ON auftrag
 FOR UPDATE, INSERT
 AS
-    IF ( (SELECT COUNT(*)
-FROM inserted i
-WHERE i.Erldat IS NOT NULL AND i.Dauer is NOT NULL AND i.Anfahrt is NOT NULL)
-> 0
-) 
-      BEGIN
-    print 'LOL';
-    --  ERSATZTEILE
-    DECLARE @sum_parts FLOAT
-    DECLARE @sum_arrival FLOAT
-    DECLARE @sum_work_hours FLOAT
-    DECLARE @Aufnr FLOAT
-    DECLARE @KunNr FLOAT
-    DECLARE @sum FLOAT
+    IF 
+    ( 
+        (SELECT COUNT(*)
+        FROM inserted i
+        WHERE i.Erldat IS NOT NULL AND i.Dauer is NOT NULL AND i.Anfahrt is NOT NULL
+        )
+        > 0
+    )
 
-    SET @sum_parts=0
-    SET @sum = 0
-    SET @Aufnr = (SELECT DISTINCT i.aufnr
-    FROM inserted i
-        INNER JOIN auftrag a
-        ON i.aufnr = a.aufnr)
-    SET @KunNr = (SELECT DISTINCT i.kunnr
-    FROM inserted i
-        INNER JOIN auftrag a
-        ON i.aufnr = a.aufnr)
-    SET @sum_parts = (SELECT Isnull(Sum (etpreis * anzahl), 0) AS
-                                   Summe_Ersatzteile
-    FROM inserted i
-        INNER JOIN auftrag a
-        ON i.aufnr = a.aufnr
-        INNER JOIN montage M
-        ON M.aufnr = i.aufnr
-        INNER JOIN ersatzteil E
-        ON E.etid = M.etid)
-    --  STUNDENKOSTEN
-    SET @sum_arrival =(SELECT Sum(a.anfahrt * 2.5)
-    FROM inserted i
-        INNER JOIN auftrag a
-        ON i.aufnr = a.aufnr
-        INNER JOIN mitarbeiter M
-        ON M.mitid = i.mitid)
-    -- ANFAHRTSKOSTEN
-    SET @sum_work_hours =(SELECT Sum(a.dauer * M.mitstundensatz)
-    FROM inserted i
-        INNER JOIN auftrag a
-        ON i.aufnr = a.aufnr
-        INNER JOIN mitarbeiter M
-        ON M.mitid = i.mitid)
-    SET @sum = @sum_arrival + @sum_work_hours + @sum_parts
+    BEGIN
+        print 'LOL';
 
-    INSERT INTO rechnung
-        (kunnr,
-        aufnr,
-        rechdat,
-        rechbetrag)
-    VALUES
-        (@KunNr,
+        --  ERSATZTEILE
+        DECLARE @sum_parts FLOAT
+        DECLARE @sum_arrival FLOAT
+        DECLARE @sum_work_hours FLOAT
+        DECLARE @Aufnr FLOAT
+        DECLARE @KunNr FLOAT
+        DECLARE @sum FLOAT
+
+        SET @sum_parts = 0
+
+        SET @sum = 0
+
+        SET @Aufnr = 
+            (
+            SELECT DISTINCT i.aufnr
+            FROM inserted i
+            INNER JOIN auftrag a
+            ON i.aufnr = a.aufnr
+            )
+
+        SET @KunNr = 
+            (
+            SELECT DISTINCT i.kunnr
+            FROM inserted i
+            INNER JOIN auftrag a
+            ON i.aufnr = a.aufnr
+            )
+
+        SET @sum_parts = 
+            (
+            SELECT Isnull(Sum (etpreis * anzahl), 0) AS Summe_Ersatzteile
+            FROM inserted i
+            INNER JOIN auftrag a
+            ON i.aufnr = a.aufnr
+            INNER JOIN montage M
+            ON M.aufnr = i.aufnr
+            INNER JOIN ersatzteil E
+            ON E.etid = M.etid
+            )
+
+        --  STUNDENKOSTEN
+        SET @sum_arrival =
+            (
+            SELECT Sum(a.anfahrt * 2.5)
+            FROM inserted i
+            INNER JOIN auftrag a
+            ON i.aufnr = a.aufnr
+            INNER JOIN mitarbeiter M
+            ON M.mitid = i.mitid
+            )
+
+        -- ANFAHRTSKOSTEN
+        SET @sum_work_hours = 
+            (
+            SELECT Sum(a.dauer * M.mitstundensatz)
+            FROM inserted i
+            INNER JOIN auftrag a
+            ON i.aufnr = a.aufnr
+            INNER JOIN mitarbeiter M
+            ON M.mitid = i.mitid
+            )
+
+        SET @sum = @sum_arrival + @sum_work_hours + @sum_parts
+
+        INSERT INTO rechnung
+        (
+            kunnr,
+            aufnr,
+            rechdat,
+            rechbetrag
+        )
+        VALUES
+        (
+            @KunNr,
             @Aufnr,
             CURRENT_TIMESTAMP,
-            @sum )
-END; 
+            @sum 
+        )
+    END; 
+
+GO
+
+-- trigger in montage
+CREATE OR ALTER TRIGGER add_spareparts_to_invoice
+ON montage
+FOR UPDATE, INSERT
+AS
+    BEGIN
+        -- DECLARE @sum_part FLOAT
+        -- DECLARE @Aufnr FLOAT
+        -- -- DECLARE @Kunr FLOAT
+
+        -- SET @sum_part = 0
+
+        -- SET @Aufnr = 
+        --     (
+        --     SELECT DISTINCT I.AufNr
+        --     FROM inserted I
+        --     INNER JOIN Auftrag A
+        --     ON I.AufNr = A.AufNr
+        --     )
+
+        -- SET @sum_part = 
+        --     (
+        --     SELECT Isnull(Sum (EtPreis * Anzahl), 0) AS Summe_Ersatzteile
+        --     FROM Montage M
+        --     INNER JOIN inserted I 
+        --     ON M.EtID = I.EtID AND M.AufNr = I.AufNr
+        --     INNER JOIN Auftrag A 
+        --     ON M.AufNr = A.AufNr
+        --     INNER JOIN Ersatzteil E 
+        --     ON M.EtID = E.EtID
+        --     )
+
+        UPDATE Rechnung 
+        SET RechBetrag = RechBetrag + 
+        (
+            SELECT ISNULL(SUM(e.EtPreis * m.Anzahl), 0)
+            FROM Montage m, Ersatzteil e, inserted i
+            WHERE i.AufNr = m.AufNr AND i.EtID = m.EtID AND m.EtID = e.etID
+        )
+        WHERE Rechnung.AufNr IN (SELECT AufNr FROM inserted);
+    END; 
