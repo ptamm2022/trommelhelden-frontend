@@ -306,7 +306,7 @@ AS
         --  STUNDENKOSTEN
         SET @sum_arrival =
             (
-            SELECT Sum(a.anfahrt * 2.5)
+            SELECT CASE WHEN SUM(a.anfahrt * 2.5) < 30 THEN 30 ELSE SUM(a.anfahrt * 2.5) END
             FROM inserted i
             INNER JOIN auftrag a
             ON i.aufnr = a.aufnr
