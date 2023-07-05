@@ -8,9 +8,9 @@
 
             <div class="grid grid-cols-2 mt-8 gap-8">
                 <div class="flex grid grid-cols-2 card rounded-xl bg-white p-6 shadow-xl">
-                    <span class="text-xl font-bold"> Auftragsdatum </span><span> {{useDateFormat(order.AufDat, "DD.MM.YYYY", {locales: "de-DE",}).value}}</span>
-                    <span class="text-xl font-bold"> Anfahrt </span><span>{{ order.Anfahrt }}</span>
+                    <!-- <span class="text-xl font-bold"> Auftragsdatum </span><span> {{useDateFormat(order.AufDat, "DD.MM.YYYY", {locales: "de-DE",}).value}}</span> -->
                     <span class="text-xl font-bold"> Beschreibung </span><span>{{ order.Beschreibung }}</span>
+                    <span class="text-xl font-bold"> Anfahrt </span><span>{{ order.Anfahrt }}</span>
                     <span class="text-xl font-bold"> Dauer </span><span>{{ order.Dauer }}</span>
                 </div>
 
@@ -48,7 +48,6 @@
                         header="Mitarbeiter"
                         :toggleable="true"
                     >
-
                         <div
                             v-for="mitarbeiter in Object.keys(order?.Mitarbeiter)"
                             :key="mitarbeiter"
@@ -56,7 +55,6 @@
                         >
                             <span class="">{{ mitarbeiter }}</span>
                             <span>{{ order.Mitarbeiter[mitarbeiter as keyof IMitarbeiter] }}</span>
-
                         </div>
 
                     </Panel>

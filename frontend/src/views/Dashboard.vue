@@ -36,6 +36,21 @@
 
     <div class="w-full flex items-end my-8">  
 
+      <!-- Anzahl Mitarbeiter -->
+      <router-link to="/masterdata/employees">
+      <CardStats
+        class="max-w-sm mr-10 mb-10"
+        stat-subtitle="Anzahl der Mitarbeiter*innen"
+        :stat-title="String(singleStats.employees)"
+        stat-arrow="up"
+        stat-percent="12"
+        stat-percent-color="text-emerald-500"
+        stat-descripiron="Since last month"
+        stat-icon-name="pi pi-users"
+        stat-icon-color="bg-orange-400"
+      />
+      </router-link>
+
       <!-- Anzahl Kunden -->
       <router-link to="/masterdata/customers">
       <CardStats
@@ -51,18 +66,18 @@
       />
       </router-link>
 
-      <!-- Anzahl Mitarbeiter -->
-      <router-link to="/masterdata/employees">
+      <!-- Anzahl Ersatzteile -->
+      <router-link to="/masterdata/spareparts">
       <CardStats
         class="max-w-sm mr-10 mb-10"
-        stat-subtitle="Anzahl der Mitarbeiter*innen"
-        :stat-title="String(singleStats.employees)"
+        stat-subtitle="Anzahl der Ersatzteile"
+        :stat-title="String(singleStats.spareparts)"
         stat-arrow="up"
         stat-percent="12"
         stat-percent-color="text-emerald-500"
         stat-descripiron="Since last month"
-        stat-icon-name="pi pi-users"
-        stat-icon-color="bg-orange-400"
+        stat-icon-name="pi pi-tags"
+        stat-icon-color="bg-purple-600"
       />
       </router-link>
 
@@ -81,20 +96,6 @@
       />
       </router-link>
 
-      <!-- Anzahl Ersatzteile -->
-      <router-link to="/masterdata/spareparts">
-      <CardStats
-        class="max-w-sm mr-10 mb-10"
-        stat-subtitle="Anzahl der Ersatzteile"
-        :stat-title="String(singleStats.spareparts)"
-        stat-arrow="up"
-        stat-percent="12"
-        stat-percent-color="text-emerald-500"
-        stat-descripiron="Since last month"
-        stat-icon-name="pi pi-tags"
-        stat-icon-color="bg-purple-600"
-      />
-      </router-link>
     </div>
 
     <Divider />

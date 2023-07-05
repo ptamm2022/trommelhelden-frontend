@@ -6,9 +6,7 @@
     <Divider />
 
     <div class="grid grid-cols-2">
-      
       <span>Auftragsnummer: </span>   <span>{{ order?.Aufnr }}</span>
-      
       <span>Auftragsdatum: </span>    <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
       <span>Beschreibung: </span>     <span>{{ order?.Beschreibung }}</span>
     </div>
@@ -21,28 +19,27 @@
 
     <Divider />
 
-    <div class="my-4 flex items-center justify-between">
-      <Button
+    <Button
         type="button"
         icon="pi pi-search"
-        :label="'Mitarbeiter wählen'"
+        :label="'Mitarbeiter wählen*'"
         aria-haspopup="true"
         aria-controls="overlay_panel"
-        class="mr-2"
+        style="margin-bottom: 1rem;"
         @click="toggle"
-      />
+    />
 
-      <div
-        v-show="employee"
-        class="grid w-fit grid-cols-2 gap-x-5"
-      >
+    <div
+      v-if="employee"
+      class="grid grid-cols-2"
+    >
         <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
         <span>Mitarbeiter-Vorname: </span>  <span>{{ employee?.MitVorname }}</span> 
         <span>Mitarbeiter-Name: </span>     <span>{{ employee?.MitName }}</span>
         <span>Mitarbeiter-Beruf: </span>    <span>{{ employee?.MitJob }}</span>
-      </div>
+    </div>
 
-      <OverlayPanel
+    <OverlayPanel
         ref="op"
         :show-close-icon="true"
         style="width: 1000px"
@@ -63,136 +60,140 @@
         />
       </OverlayPanel>
 
-    </div>
 
     <Divider />
 
     <Calendar
         v-model="order.ErlDat"
-        placeholder="Erledigungsdatum"
-      ></Calendar>
+        placeholder="Erledigungsdatum*"
+        dateFormat="dd.mm.yy"
+        :show-icon="true"
+    ></Calendar>
 
     <Divider />
+
     <Button
       type="submit"
       icon="pi pi-check"
       label="Auftrag planen"
-      :disabled="!order.ErlDat || !employee"
+      :disabled="!order.ErlDat || !employee.MitJob"
       class="w-full"
       @click="planOrder"
     />
+
   </div>
 </template>
+
 <script setup lang="ts">
-import Calendar from "primevue/calendar";
-import { useDateFormat } from "@vueuse/core";
-import { inject, onMounted, ref } from "vue";
-import EntityTable from "@/components/Entity/EntityTable.vue";
-import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter } from "@/types";
-import OrderService from "@/api/services/Order";
-import { useToast } from "primevue/usetoast";
-import { unflatten } from "flat";
+  import Calendar from "primevue/calendar";
+  import { useDateFormat } from "@vueuse/core";
+  import { inject, onMounted, ref } from "vue";
+  import EntityTable from "@/components/Entity/EntityTable.vue";
+  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter } from "@/types";
+  import OrderService from "@/api/services/Order";
+  import { useToast } from "primevue/usetoast";
+  import { unflatten } from "flat";
 
-const dialogRef: any = inject("dialogRef");
-const employee = ref<IMitarbeiter>({} as IMitarbeiter);
-const orderService = new OrderService();
+  const dialogRef: any = inject("dialogRef");
+  const employee = ref<IMitarbeiter>({} as IMitarbeiter);
+  const orderService = new OrderService();
 
-console.log(useDateFormat(new Date(), "DD.MM.YYYY").value);
+  console.log(useDateFormat(new Date(), "DD.MM.YYYY").value);
 
-const op = ref();
-const toast = useToast();
+  const op = ref();
+  const toast = useToast();
 
-const order = ref<IAuftrag>({} as IAuftrag);
+  const order = ref<IAuftrag>({} as IAuftrag);
 
-const columns: IMasterDataField[] = [
-  {
-    label: "ID",
-    name: "MitID",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
+  const columns: IMasterDataField[] = [
+    {
+      label: "ID",
+      name: "MitID",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
 
-  },
-  {
-    label: "Vorname",
-    name: "MitVorname",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    label: "Nachname",
-    name: "MitName",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    label: "Stelle",
-    name: "MitJob",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    label: "Niederlassung",
-    name: "NLNr",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    label: "Stundensatz",
-    name: "MitStundensatz",
-    type: "numeric",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-];
+    },
+    {
+      label: "Vorname",
+      name: "MitVorname",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      label: "Nachname",
+      name: "MitName",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      label: "Stelle",
+      name: "MitJob",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      label: "Niederlassung",
+      name: "NLNr",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      label: "Stundensatz",
+      name: "MitStundensatz",
+      type: "numeric",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+  ];
 
-const toggle = async (event: Event) => {
-  // customers.value = await customerService.list();
-  op.value.toggle(event);
-};
+  const toggle = async (event: Event) => {
+    // customers.value = await customerService.list();
+    op.value.toggle(event);
+  };
 
-onMounted(() => {
-  order.value = dialogRef.value.data.order;
-});
+  onMounted(() => {
+    order.value = dialogRef.value.data.order;
+  });
 
-const onSelectEmployee = (employeeP: IMitarbeiter) => {
-  op.value.hide();
-  order.value.MitID = employeeP.MitID;
-  employee.value = employeeP;
-};
+  const onSelectEmployee = (employeeP: IMitarbeiter) => {
+    op.value.hide();
+    order.value.MitID = employeeP.MitID;
+    employee.value = employeeP;
+  };
 
-const planOrder = async () => {
-  // TODO IMPLEMENT
-  try {
-    let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = unflatten(
-      order.value,
-    );
-    console.log(x);
+  const planOrder = async () => {
+    // TODO IMPLEMENT
+    try {
+      let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = unflatten(
+        order.value,
+      );
+      console.log(x);
 
-    await orderService.update(String(Aufnr), {
-      ...x,
-      MitID,
-    });
-    toast.add({
-      severity: "success",
-      summary: "Auftrag geplant.",
-      detail: "Der Auftrag wurde erfolgreich geplant.",
-      life: 3000,
-    });
-    dialogRef.value.close();
-  } catch (e) {
-    toast.add({
-      severity: "error",
-      summary: "Fehler!",
-      detail: e,
-      life: 3000,
-    });
-  }
-};
+      await orderService.update(String(Aufnr), {
+        ...x,
+        MitID,
+      });
+      toast.add({
+        severity: "success",
+        summary: "Auftrag geplant.",
+        detail: "Der Auftrag wurde erfolgreich geplant.",
+        life: 3000,
+      });
+      dialogRef.value.close();
+    } catch (e) {
+      toast.add({
+        severity: "error",
+        summary: "Fehler!",
+        detail: e,
+        life: 3000,
+      });
+    }
+  };
 </script>
 
 <style>

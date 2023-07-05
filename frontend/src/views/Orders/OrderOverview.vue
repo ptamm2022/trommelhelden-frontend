@@ -8,10 +8,12 @@
           Aufträge
         </h1>
         
+        <div>
         <router-link to="/orders/create">
           <Button
             icon="pi pi-plus"
-            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            style="margin-right: 5rem;"
             label="1. Auftrag erstellen"
           />
         </router-link>
@@ -19,7 +21,8 @@
         <router-link to="/orders/plan">
           <Button
             icon="pi pi-map"
-            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            style="margin-right: 5rem;"
             label="2. Auftrag planen"
             />
         </router-link>
@@ -27,10 +30,11 @@
         <router-link to="/orders/complete">
           <Button
             icon="pi pi-check"
-            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
             label="3. Auftrag erledigen"
           />
         </router-link>
+        </div>
   
         <!-- <template>
             <TabMenu :model="items" />

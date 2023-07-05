@@ -395,7 +395,7 @@ const fetchData = async (isInitial: boolean) => {
   } catch (e) {
     toast.add({
       severity: "error",
-      summary: "Error Fetching Data ",
+      summary: "Fehler beim Datenabruf",
       detail: e,
       life: 5000,
     });
