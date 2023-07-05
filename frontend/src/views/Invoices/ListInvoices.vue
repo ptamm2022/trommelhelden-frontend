@@ -44,7 +44,7 @@ const reRender = ref(0);
 
 const columns: IMasterDataField[] = [
   {
-    label: "Datum",
+    label: "RechDat",
     name: "RechDat",
     type: "date",
     allowCreate: false,
@@ -54,26 +54,6 @@ const columns: IMasterDataField[] = [
     label: "Betrag",
     name: "RechBetrag",
     type: "money",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    label: "KunNr",
-    name: "KunNr",
-    type: "relation",
-    allowCreate: false,
-    allowUpdate: false,
-    relation: {
-      label: "Kunde",
-      name: "Kunde",
-      resourceName: "masterdata/customers",
-      primaryKey: "KunNr",
-    },
-  },
-  {
-    label: "Kundenname",
-    name: "Kunde.KunName",
-    type: "text",
     allowCreate: false,
     allowUpdate: false,
   },
@@ -91,6 +71,26 @@ const columns: IMasterDataField[] = [
     },
   },
   {
+    label: "Kunde",
+    name: "Auftrag.Kunde.KunName",
+    type: "relation",
+    allowCreate: false,
+    allowUpdate: false,
+    relation: {
+      label: "Kunde",
+      name: "Kunde",
+      resourceName: "masterdata/customers",
+      primaryKey: "KunNr",
+    },
+  },
+  // {
+  //   label: "Kundenname",
+  //   name: "Kunde.KunName",
+  //   type: "text",
+  //   allowCreate: false,
+  //   allowUpdate: false,
+  // },
+  {
     label: "Mitarbeiter",
     name: "Auftrag.Mitarbeiter.MitName",
     type: "relation",
@@ -98,7 +98,7 @@ const columns: IMasterDataField[] = [
     allowUpdate: false,
     relation: {
       label: "Mitarbeiter",
-      name: "Auftrag",
+      name: "Mitarbeiter",
       resourceName: "masterdata/employees",
       primaryKey: "Auftrag.Mitarbeiter.MitID",
     },

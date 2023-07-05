@@ -9,7 +9,7 @@
       <span>Auftragsnummer: </span>     <span>{{ order?.Aufnr }}</span>
       <span>Auftragsdatum: </span>      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
       <span>Erledigungsdatum: </span>   <span>{{ useDateFormat(order?.ErlDat, "DD.MM.YYYY").value }}</span>
-      <span>Beschreibung: </span> <span>{{ order?.Beschreibung }}</span>
+      <span>Beschreibung: </span>       <span>{{ order?.Beschreibung }}</span>
     </div>
 
     <Divider />
@@ -25,25 +25,25 @@
       v-if="employee"
       class="grid grid-cols-2"
     >
-      <span>Mitarbeiter-ID: </span>      <span>{{ employee.MitID }}</span>
+      <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
       <span>Mitarbeiter-Vorname :</span>  <span>{{ employee.MitVorname }}</span>
       <span>Mitarbeiter-Name: </span>     <span>{{ employee.MitName }}</span>
-      <span>Mitarbeiter-Beruf: </span>   <span>{{ employee.MitJob }}</span>
+      <span>Mitarbeiter-Beruf: </span>    <span>{{ employee.MitJob }}</span>
     </div>
 
     <Divider />
 
-    <div class="grid col-span-2 row-span-2 gap-4 mb-4">
+    <div class="grid grid-cols-2 col-span-2 row-span-2 gap-4 mb-4">
       <InputNumber
         v-model="order.Anfahrt"
         class="col-start-1 col-end-1"
-        placeholder="Anfahrt in km"
+        placeholder="Anfahrt in km*"
       ></InputNumber>
 
       <InputNumber
         v-model="order.Dauer"
         class="col-start-2 col-end-2 "
-        placeholder="Dauer in h"
+        placeholder="Dauer in h*"
       ></InputNumber>
 
       <!-- <Dropdown
@@ -70,11 +70,12 @@
 
       <!-- Ersatz für DropDown: -->
       <MultiSelect
+        id="multiselect_ersatzteile"
         filter
         v-model="selectedSpareParts"
         :options="spareparts"
         option-label="EtBezeichnung"
-        placeholder="Ersatzteil(e) auswählen"
+        placeholder="Ersatzteil(e) auswählen (optional)"
       >
         <template #option="slotProps">
 
@@ -96,125 +97,131 @@
       icon="pi pi-check"
       label="Auftrag erledigen"
       class="w-full"
+      :disabled="!order.Anfahrt || !order.Dauer"
       @click="planOrder"
     />
   </div>
 </template>
+
 <script setup lang="ts">
 
-import Calendar from "primevue/calendar";
-import Chip from 'primevue/chip';
-import Listbox from 'primevue/listbox';
-import { useDateFormat } from "@vueuse/core";
-import { inject, onMounted, ref } from "vue";
-import { IAuftrag, IErsatzteil, IMitarbeiter, IKunde } from "@/types";
-import EmployeesService from "@/api/services/Employees";
-import OrderService from "@/api/services/Order";
-import { useToast } from "primevue/usetoast";
-import { unflatten } from "flat";
-import Divider from "primevue/divider";
+  import Calendar from "primevue/calendar";
+  import Chip from 'primevue/chip';
+  import Listbox from 'primevue/listbox';
+  import { useDateFormat } from "@vueuse/core";
+  import { inject, onMounted, ref } from "vue";
+  import { IAuftrag, IErsatzteil, IMitarbeiter, IKunde } from "@/types";
+  import EmployeesService from "@/api/services/Employees";
+  import OrderService from "@/api/services/Order";
+  import { useToast } from "primevue/usetoast";
+  import { unflatten } from "flat";
+  import Divider from "primevue/divider";
+  import disableScroll from "disable-scroll";
 
-import GenericService from '@/api/services/Generic';
+  import GenericService from '@/api/services/Generic';
 
-import MultiSelect from "primevue/multiselect"
+  import MultiSelect from "primevue/multiselect"
 
-const sparepartsService = new GenericService<IErsatzteil>("spareparts");
+  const sparepartsService = new GenericService<IErsatzteil>("spareparts");
 
-const dialogRef: any = inject("dialogRef");
-const selectedSpareParts = ref<IErsatzteil[]>([] as IErsatzteil[]);
-const toast = useToast();
-const employee = ref<IMitarbeiter>({} as IMitarbeiter);
-const orderService = new OrderService();
-const employeesSevice = new EmployeesService();
-const order = ref<IAuftrag>({} as IAuftrag);
-const spareparts = ref<IErsatzteil[]>([] as IErsatzteil[]);
-const customer = ref<IKunde>({} as IKunde);
+  const dialogRef: any = inject("dialogRef");
+  const selectedSpareParts = ref<IErsatzteil[]>([] as IErsatzteil[]);
+  const toast = useToast();
+  const employee = ref<IMitarbeiter>({} as IMitarbeiter);
+  const orderService = new OrderService();
+  const employeesSevice = new EmployeesService();
+  const order = ref<IAuftrag>({} as IAuftrag);
+  const spareparts = ref<IErsatzteil[]>([] as IErsatzteil[]);
+  const customer = ref<IKunde>({} as IKunde);
 
-onMounted(async () => {
-  console.log(order.value);
+  onMounted(async () => {
 
-  spareparts.value = await sparepartsService.list([], {}, 0, 1000);
-  order.value = unflatten(dialogRef.value.data.order);
-  console.log(order.value);
+    disableScroll.off();
 
-  employee.value = await employeesSevice.get(order?.value?.MitID as string);
-});
+    console.log(order.value);
 
-// Ersetzt durch Array (siehe unten)
-// const planOrder = async () => {
-//   try {
-//     let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
+    spareparts.value = await sparepartsService.list([], {}, 0, 1000);
+    order.value = unflatten(dialogRef.value.data.order);
+    console.log(order.value);
 
-//     console.log(x);
-//     if (selectedSpareParts.value.EtID) {
-//       x.Montage = {
-//         create: {
+    employee.value = await employeesSevice.get(order?.value?.MitID as string);
+  });
 
-//           EtID: selectedSpareParts.value.EtID,
-//           Anzahl: 1,
+  // Ersetzt durch Array (siehe unten)
+  // const planOrder = async () => {
+  //   try {
+  //     let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
+
+  //     console.log(x);
+  //     if (selectedSpareParts.value.EtID) {
+  //       x.Montage = {
+  //         create: {
+
+  //           EtID: selectedSpareParts.value.EtID,
+  //           Anzahl: 1,
 
 
-//         }
-//       }
-//     }
-//     await orderService.update(String(Aufnr), {
-//       ...x,
-//     });
-//     toast.add({
-//       severity: "success",
-//       summary: "Auftrag geplant",
-//       detail: "Der Auftrag wurde erfolgreich erledigt",
-//       life: 3000,
-//     });
-//     dialogRef.value.close();
-//   } catch (e) {
-//     toast.add({
-//       severity: "error",
-//       summary: "Fehler",
-//       detail: "Der Auftrag konnte nicht geplant werden",
-//       life: 3000,
-//     });
-//   }
-// };
+  //         }
+  //       }
+  //     }
+  //     await orderService.update(String(Aufnr), {
+  //       ...x,
+  //     });
+  //     toast.add({
+  //       severity: "success",
+  //       summary: "Auftrag geplant",
+  //       detail: "Der Auftrag wurde erfolgreich erledigt",
+  //       life: 3000,
+  //     });
+  //     dialogRef.value.close();
+  //   } catch (e) {
+  //     toast.add({
+  //       severity: "error",
+  //       summary: "Fehler",
+  //       detail: "Der Auftrag konnte nicht geplant werden",
+  //       life: 3000,
+  //     });
+  //   }
+  // };
 
-const planOrder = async () => {
-  try {
-    let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
+  const planOrder = async () => {
+    try {
+      let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
 
-    console.log(x);
+      console.log(x);
 
-    // Überprüfe, ob ausgewählte Ersatzteile vorhanden sind
-    if (selectedSpareParts.value.length > 0) {
-      x.Montage = {
-        create: selectedSpareParts.value.map((sparePart) => {
-          return {
-            EtID: sparePart.EtID,
-            Anzahl: 1,
-          };
-        }),
-      };
+      // Überprüfe, ob ausgewählte Ersatzteile vorhanden sind
+      if (selectedSpareParts.value.length > 0) {
+        x.Montage = {
+          create: selectedSpareParts.value.map((sparePart) => {
+            return {
+              EtID: sparePart.EtID,
+              Anzahl: 1,
+            };
+          }),
+        };
+      }
+
+      await orderService.update(String(Aufnr), {
+        ...x,
+      });
+
+      toast.add({
+        severity: "success",
+        summary: "Auftrag erledigt.",
+        detail: "Der Auftrag wurde erfolgreich erledigt.",
+        life: 3000,
+      });
+
+      dialogRef.value.close();
+    } catch (e) {
+      toast.add({
+        severity: "error",
+        summary: "Fehler!",
+        detail: e,
+        life: 3000,
+      });
     }
-
-    await orderService.update(String(Aufnr), {
-      ...x,
-    });
-
-    toast.add({
-      severity: "success",
-      summary: "Auftrag erledigt.",
-      detail: "Der Auftrag wurde erfolgreich erledigt.",
-      life: 3000,
-    });
-
-    dialogRef.value.close();
-  } catch (e) {
-    toast.add({
-      severity: "error",
-      summary: "Fehler!",
-      detail: e,
-      life: 3000,
-    });
-  }
-};
+  };
 
 </script>

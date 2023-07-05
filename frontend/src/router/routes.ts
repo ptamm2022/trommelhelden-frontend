@@ -70,6 +70,11 @@ export const routes = [
     name: "Settings",
     component: () => import("@/views/Settings.vue"),
   },
+  {
+    path: "/loading",
+    name: "Loading",
+    component: () => import("@/views/Startup/Load.vue"),
+  },
   //------------------------------------------------------------------
   //Masterdata
   //------------------------------------------------------------------

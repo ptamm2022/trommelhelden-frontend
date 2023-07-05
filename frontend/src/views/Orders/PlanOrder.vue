@@ -7,33 +7,38 @@
           2. Auftrag planen
         </h1>
 
-        <router-link to="/orders/create">
-            <Button
-              icon="pi pi-plus"
-              class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-              label="1. Auftrag erstellen"
-            />
-        </router-link>
+        <div>
+          <router-link to="/orders/create">
+              <Button
+                icon="pi pi-plus"
+                class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+                style="margin-right: 5rem;"
+                label="1. Auftrag erstellen"
+              />
+          </router-link>
 
-        <router-link to="/orders">
+          <router-link to="/orders">
+              <Button
+                style="background-color: #d92979; margin-right: 5rem;"
+                icon="pi pi-home"
+                class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+                label="Übersicht"
+              />
+          </router-link>
+
+          <router-link to="/orders/complete">
             <Button
-              style="background-color: #d92979"
-              icon="pi pi-home"
-              class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-              label="Übersicht"
+              icon="pi pi-check"
+              class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+              label="3. Auftrag erledigen"
             />
-        </router-link>
-        
-        <router-link to="/orders/complete">
-          <Button
-            icon="pi pi-check"
-            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-            label="3. Auftrag erledigen"
-          />
-        </router-link>
+          </router-link>
+        </div>
 
       </div>
+
       <Divider />
+      
       <EntityTable
         :key="reRender"
         name="Aufträge"

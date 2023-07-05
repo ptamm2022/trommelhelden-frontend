@@ -42,7 +42,7 @@
     },
     {
       "name": "employees",
-      "label": "Mitarbeiter*innen",
+      "label": "Mitarbeiter",
       "labelSingular": "Mitarbeiter",
       "resourceName": "employees",
       "primaryKey": "MitID",

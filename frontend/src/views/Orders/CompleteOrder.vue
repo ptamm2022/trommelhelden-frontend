@@ -6,30 +6,34 @@
           3. Auftrag erledigen
         </h1>
 
-        <router-link to="/orders/create">
-            <Button
-              icon="pi pi-plus"
-              class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-              label="1. Auftrag erstellen"
-            />
-        </router-link>
+        <div>
+          <router-link to="/orders/create">
+              <Button
+                icon="pi pi-plus"
+                class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+                style="margin-right: 5rem;"
+                label="1. Auftrag erstellen"
+              />
+          </router-link>
 
-        <router-link to="/orders/plan">
-          <Button
-            icon="pi pi-map"
-            class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-            label="2. Auftrag planen"
-            />
-        </router-link>
-
-        <router-link to="/orders">
+          <router-link to="/orders/plan">
             <Button
-              style="background-color: #d92979"
-              icon="pi pi-home"
-              class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-              label="Übersicht"
-            />
-        </router-link>
+              icon="pi pi-map"
+              class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+              style="margin-right: 5rem;"
+              label="2. Auftrag planen"
+              />
+          </router-link>
+
+          <router-link to="/orders">
+              <Button
+                style="background-color: #d92979;"
+                icon="pi pi-home"
+                class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+                label="Übersicht"
+              />
+          </router-link>
+        </div>
 
       </div>
 

@@ -58,7 +58,8 @@ const menuItems: MenuItem[] = [
     to: "/dashboard",
     label: "Startseite",
     key: "dashboard",
-    command: () => {
+    command: () => 
+    {
       store.sideBarMenuIsOpen = false;
     },
     icon: "pi pi-home",
@@ -68,54 +69,60 @@ const menuItems: MenuItem[] = [
     to: "/invoices",
     label: "Rechnungen",
     key: "invoices",
-    command: () => {
+    command: () => 
+    {
       store.sideBarMenuIsOpen = false;
     },
     icon: "pi pi-book",
   },
 
   {
-    label: "Auftrag",
-    icon: "pi pi-fw pi-pencil",
+    to: "/orders",
+    label: "Aufträge",
     key: "order",
-    items: [
-      {
-        key: "2_0",
-        label: "Übersicht",
-        command: () => {
-          onOpenTab("order");
-        },
-        to: "/orders",
-        icon: "pi pi-home",
-      },
-      {
-        key: "2_0",
-        label: "1. Erstellen",
-        command: () => {
-          onOpenTab("order");
-        },
-        to: "/orders/create",
-        icon: "pi pi-plus",
-      },
-      {
-        key: "2_0",
-        label: "2. Planen",
-        command: () => {
-          onOpenTab("order");
-        },
-        to: "/orders/plan",
-        icon: "pi pi-map",
-      },
-      {
-        key: "2_0",
-        label: "3. Erledigen",
-        command: () => {
-          onOpenTab("order");
-        },
-        to: "/orders/complete",
-        icon: "pi pi-check",
-      },
-    ],
+    command: () => 
+    {
+      store.sideBarMenuIsOpen = false;
+    },
+    icon: "pi pi-fw pi-pencil",
+    // items: [
+    //   {
+    //     key: "2_0",
+    //     label: "Übersicht",
+    //     command: () => {
+    //       onOpenTab("order");
+    //     },
+    //     to: "/orders",
+    //     icon: "pi pi-home",
+    //   },
+    //   {
+    //     key: "2_0",
+    //     label: "1. Erstellen",
+    //     command: () => {
+    //       onOpenTab("order");
+    //     },
+    //     to: "/orders/create",
+    //     icon: "pi pi-plus",
+    //   },
+    //   {
+    //     key: "2_0",
+    //     label: "2. Planen",
+    //     command: () => {
+    //       onOpenTab("order");
+    //     },
+    //     to: "/orders/plan",
+    //     icon: "pi pi-map",
+    //   },
+    //   {
+    //     key: "2_0",
+    //     label: "3. Erledigen",
+    //     command: () => {
+    //       onOpenTab("order");
+    //     },
+    //     to: "/orders/complete",
+    //     icon: "pi pi-check",
+    //   },
+    // ],
   },
   {
     label: "Stammdaten",
@@ -125,7 +132,8 @@ const menuItems: MenuItem[] = [
       {
         key: "2_0",
         label: "Mitarbeiter",
-        command: () => {
+        command: () => 
+        {
           onOpenTab("masterData");
         },
         to: "/masterdata/employees",
@@ -134,7 +142,8 @@ const menuItems: MenuItem[] = [
       {
         key: "2_1",
         label: "Kunden",
-        command: () => {
+        command: () => 
+        {
           onOpenTab("masterData");
         },
         to: "/masterdata/customers",
@@ -143,7 +152,8 @@ const menuItems: MenuItem[] = [
 
       {
         key: "2_2",
-        command: () => {
+        command: () => 
+        {
           onOpenTab("masterData");
         },
         label: "Ersatzteile",
@@ -152,7 +162,8 @@ const menuItems: MenuItem[] = [
       },
       {
         key: "2_2",
-        command: () => {
+        command: () => 
+        {
           onOpenTab("masterData");
         },
         label: "Niederlassung",

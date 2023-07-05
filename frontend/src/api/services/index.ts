@@ -43,6 +43,7 @@ export abstract class BaseService<T> implements IWrite<T>, IRead<T> {
       })
     ).data;
   }
+
   async update(id: string, item: T): Promise<boolean> {
     return (
       await this._axiosInstance.patch(`/${this._tableName}/${id}`, {
@@ -50,9 +51,11 @@ export abstract class BaseService<T> implements IWrite<T>, IRead<T> {
       })
     ).data;
   }
+
   async delete(id: string): Promise<boolean> {
     return (await this._axiosInstance.delete(`/${this._tableName}/${id}`)).data;
   }
+
   async list(
     sort: ISort[] | null,
     filter: IFilter | null,
@@ -77,6 +80,7 @@ export abstract class BaseService<T> implements IWrite<T>, IRead<T> {
       )
     ).data.data;
   }
+
   async listAndCount(
     sort: ISort[] | null,
     filter: IFilter | null,
@@ -105,6 +109,7 @@ export abstract class BaseService<T> implements IWrite<T>, IRead<T> {
       )
     ).data;
   }
+  
   async get(id: string): Promise<T> {
     return (await this._axiosInstance.get(`/${this._tableName}/${id}`)).data;
   }

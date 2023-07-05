@@ -9,6 +9,7 @@ const settingsService = new GenericService("settings");
 // the first argument is a unique id of the store across your application
 export const useStore = defineStore("main", {
   state: () => ({
+    // loadingScreen: false,
     firstStartUp: false,
     showHeader: true,
     sideBarMenuIsOpen: false,
@@ -20,11 +21,13 @@ export const useStore = defineStore("main", {
     firstLoadingTimeStamp: 0,
     lastLoadingTimeStamp: 0,
   }),
+
   getters: {
     getDashboardTimeSeconds(): any {
       return this.lastLoadingTimeStamp - this.firstLoadingTimeStamp;
     },
   },
+
   actions: {
     async startUp() {
       this.firstStartUp = (
@@ -34,13 +37,14 @@ export const useStore = defineStore("main", {
       this.settings = (
         await settingsService._axiosInstance.post("/settings")
       ).data;
-      
+
       this.settings.calcType =
         window.localStorage.getItem("calc-type") || "database";
         
       this.showDebugBar =
         window.localStorage.getItem("show-debug-bar") === "true" || false;
     },
+    
     async updateSettings(key: string, value: any) {
       const foo = {} as any;
 
@@ -49,6 +53,7 @@ export const useStore = defineStore("main", {
       await settingsService._axiosInstance.patch("/settings", {
         ...foo,
       });
+
       this.settings[key] = value;
     },
   },
