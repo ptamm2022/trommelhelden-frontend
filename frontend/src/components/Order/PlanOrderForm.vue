@@ -58,17 +58,21 @@
           :allow-delete="false"
           @onRowSelect="onSelectEmployee"
         />
-      </OverlayPanel>
-
+    </OverlayPanel>
 
     <Divider />
 
-    <Calendar
-        v-model="order.ErlDat"
-        placeholder="Erledigungsdatum*"
-        dateFormat="dd.mm.yy"
-        :show-icon="true"
-    ></Calendar>
+    <div>
+      <span class="p-float-label my-8">
+        <Calendar
+            id="plan-order-calendar"
+            v-model="order.ErlDat"
+            dateFormat="dd.mm.yy"
+            :show-icon="true"
+        ></Calendar>
+        <label for="plan-order-calendar">Erledigungsdatum*</label>
+      </span>
+    </div>
 
     <Divider />
 
@@ -94,6 +98,10 @@
   import { useToast } from "primevue/usetoast";
   import { unflatten } from "flat";
 
+  const order = ref<IAuftrag>({
+    ErlDat: new Date() // Setze das aktuelle Datum
+  } as IAuftrag);
+
   const dialogRef: any = inject("dialogRef");
   const employee = ref<IMitarbeiter>({} as IMitarbeiter);
   const orderService = new OrderService();
@@ -102,8 +110,6 @@
 
   const op = ref();
   const toast = useToast();
-
-  const order = ref<IAuftrag>({} as IAuftrag);
 
   const columns: IMasterDataField[] = [
     {
@@ -158,6 +164,8 @@
 
   onMounted(() => {
     order.value = dialogRef.value.data.order;
+    order.value.ErlDat = new Date();
+    order.value.Status = "Geplant";
   });
 
   const onSelectEmployee = (employeeP: IMitarbeiter) => {
