@@ -34,13 +34,13 @@
 
     <Divider />
 
-    <div class="w-full flex items-end my-8">  
+    <div class="flex items-end my-8">  
 
       <!-- Anzahl Mitarbeiter -->
       <router-link to="/masterdata/employees">
       <CardStats
         class="max-w-sm mr-10 mb-10"
-        stat-subtitle="Anzahl der Mitarbeiter*innen"
+        stat-subtitle="Anzahl der Mitarbeiter"
         :stat-title="String(singleStats.employees)"
         stat-arrow="up"
         stat-percent="12"
@@ -100,31 +100,106 @@
 
     <Divider />
     
-    <div class="w-full flex items-end my-8">  
-      <!-- Anzahl Aufträge -->
-      <router-link to="/orders">
-      <CardStats
-        class="max-w-sm mr-10 mb-10"
-        stat-subtitle="Anzahl der Aufträge"
-        :stat-title="String(singleStats.orders)"
-        stat-percent-color="text-emerald-500"
-        stat-icon-name="pi pi-chart-line"
-        stat-icon-color="bg-cyan-500"
-      />
-      </router-link>
+    <div class="w-full items-end my-8">  
+      <div class="flex" style="margin-bottom: 3em;">
+        <!-- Anzahl Aufträge insgesamt -->
+        <router-link to="/orders">
+        <CardStats
+          class="max-w-sm mr-10 mb-10"
+          stat-subtitle="Anzahl der Aufträge"
+          :stat-title="String(singleStats.orders)"
+          stat-percent-color="text-emerald-500"
+          stat-icon-name="pi pi-chart-line"
+          stat-icon-color="bg-cyan-500"
+        />
+        </router-link>
 
-      <!-- Anzahl Umsatz -->
-      <CardStats
-        class="max-w-sm mr-10"
-        stat-subtitle="Gesamter Umsatz"
-        :stat-title="new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(singleStats.revenue)"
-        stat-arrow="up"
-        stat-percent="12"
-        stat-percent-color="text-emerald-500"
-        stat-descripiron="Since last month"
-        stat-icon-name="pi pi-money-bill"
-        stat-icon-color="bg-emerald-500"
-      />
+        <!-- Anzahl Umsatz -->
+        <CardStats
+          class="max-w-sm mr-10 mb-10"
+          stat-subtitle="Gesamter Umsatz"
+          :stat-title="new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(singleStats.revenue)"
+          stat-arrow="up"
+          stat-percent="12"
+          stat-percent-color="text-emerald-500"
+          stat-descripiron="Since last month"
+          stat-icon-name="pi pi-money-bill"
+          stat-icon-color="bg-emerald-500"
+        />
+      </div>
+
+      <div class="flex w-full align-middle" style="align-items: center; margin-bottom: 3em;">
+        
+        <i class="pi pi-angle-right" style="font-size: 2.5rem; margin-left: 2em;"></i>
+
+        <!-- Anzahl Aufträge erstellt -->
+        <router-link to="/orders/plan">
+        <CardStats
+          class="mr-10 mb-10"
+          style="margin-left: 1em;"
+          stat-subtitle="davon erst erstellt"
+          :stat-title="String(singleStats.orders_created)"
+          stat-percent-color="text-emerald-500"
+          stat-icon-name="pi pi-chart-line"
+          stat-icon-color="bg-cyan-200"
+        />
+        </router-link>
+      
+      </div>
+
+      <div class="flex w-full align-middle" style="align-items: center; margin-bottom: 3em;">
+        
+        <i class="pi pi-angle-right" style="font-size: 2.5rem; margin-left: 4em;"></i>
+
+        <!-- Anzahl Aufträge geplant -->
+        <router-link to="/orders/complete">
+        <CardStats
+          class="mr-10 mb-10"
+          style="margin-left: 1em;"
+          stat-subtitle="davon erst geplant"
+          :stat-title="String(singleStats.orders_planned)"
+          stat-percent-color="text-emerald-500"
+          stat-icon-name="pi pi-chart-line"
+          stat-icon-color="bg-cyan-300"
+        />
+        </router-link>
+
+      </div> 
+
+      <div class="flex w-full align-middle" style="align-items: center; margin-bottom: 3em;">
+
+        <i class="pi pi-angle-right" style="font-size: 2.5rem; margin-left: 6em;"></i>
+
+        <div class="flex"> 
+          <!-- Anzahl Aufträge erledigt -->
+          <router-link to="/invoices">
+          <CardStats
+            class="max-w-sm mr-10 mb-10"
+            style="margin-left: 1em;"
+            stat-subtitle="davon schon erledigt"
+            :stat-title="String(singleStats.orders_finished)"
+            stat-percent-color="text-emerald-500"
+            stat-icon-name="pi pi-chart-line"
+            stat-icon-color="bg-cyan-400"
+          />
+          </router-link>
+        
+
+          <!-- Anzahl Rechnungen -->
+          <router-link to="/invoices">
+          <CardStats
+            class="max-w-sm mr-10 mb-10"
+            stat-subtitle="Anzahl der Rechnungen"
+            :stat-title="String(singleStats.invoices)"
+            stat-percent-color="text-emerald-500"
+            stat-icon-name="pi pi-book"
+            stat-icon-color="bg-rose-400"
+          />
+          </router-link>
+        </div>
+
+      </div>
+
     </div>
 
     <Divider />
@@ -200,10 +275,14 @@ const store = useStore();
 const singleStats = ref({
   customers: 0,
   orders: 0,
+  orders_created: 0,
+  orders_planned: 0,
+  orders_finished: 0,
   revenue: 0,
   employees: 0,
   branches: 0,
-  spareparts: 0
+  spareparts: 0,
+  invoices: 0
 });
 
 const onDateRangeChange = async () => {
@@ -213,15 +292,72 @@ const onDateRangeChange = async () => {
 
 const fetchSingleStats = async () => {
   const orderService = new GenericService("orders");
-  let foo = (await orderService.listAndCount([], {
-    ErlDat: {
-      gte: dateRange.value[0],
-      lte: dateRange.value[1]
-    }
-  },));
+  
+  // Anzahl Aufträge insgesamt
 
-  singleStats.value.orders = foo.count;
-  singleStats.value.revenue = foo.sum
+  let orders = 
+  (
+    await orderService.listAndCount(
+      [], 
+      {},
+    )
+  );
+
+  singleStats.value.orders = orders.count;
+  
+  // Anzahl Aufträge erstellt, aber nicht geplant und nicht erledigt
+
+  let orders_created = 
+  (
+    await orderService.listAndCount(
+      [], 
+      {
+        MitID: null
+      },
+    )
+  );
+
+  singleStats.value.orders_created = orders_created.count;
+  
+  // Anzahl Aufträge geplant, aber nicht erledigt
+
+  let orders_planned = 
+  (
+    await orderService.listAndCount(
+      [], 
+      {
+        Dauer: null,
+        MitID: 
+        {
+          gte: 1
+        }
+      },
+    )
+  );
+
+  singleStats.value.orders_planned = orders_planned.count;
+
+  // Anzahl Aufträge erledigt
+
+  let orders_finished = 
+  (
+    await orderService.listAndCount(
+      [], 
+      {
+        Dauer: 
+        { 
+          gte: 1
+        },
+        Anfahrt: 
+        { 
+          gte: 1
+        }
+      },
+    )
+  );
+
+  singleStats.value.orders_finished = orders_finished.count;
+  singleStats.value.revenue = orders_finished.sum
 }
 
 onBeforeMount(async () => {
@@ -236,6 +372,9 @@ onBeforeMount(async () => {
 
   const branchesService = new GenericService("branches");
   singleStats.value.branches = (await branchesService.listAndCount([], {})).count;
+
+  const invoicesService = new GenericService("invoices");
+  singleStats.value.invoices = (await invoicesService.listAndCount([], {})).count;
 
   await fetchSingleStats()
 })
