@@ -47,6 +47,7 @@ CREATE TABLE [dbo].[Auftrag]
     [Dauer] [decimal](5, 1) NULL,
     [Anfahrt] [int] NULL,
     [Beschreibung] [varchar](200) NULL,
+    [Status] [varchar](10) NULL,
     CONSTRAINT [PK__Auftrag__D56A0E13A096AE56] PRIMARY KEY CLUSTERED 
 (
 	[Aufnr] ASC
@@ -348,35 +349,9 @@ GO
 -- trigger in montage
 CREATE OR ALTER TRIGGER add_spareparts_to_invoice
 ON montage
-FOR UPDATE, INSERT
+FOR INSERT
 AS
     BEGIN
-        -- DECLARE @sum_part FLOAT
-        -- DECLARE @Aufnr FLOAT
-        -- -- DECLARE @Kunr FLOAT
-
-        -- SET @sum_part = 0
-
-        -- SET @Aufnr = 
-        --     (
-        --     SELECT DISTINCT I.AufNr
-        --     FROM inserted I
-        --     INNER JOIN Auftrag A
-        --     ON I.AufNr = A.AufNr
-        --     )
-
-        -- SET @sum_part = 
-        --     (
-        --     SELECT Isnull(Sum (EtPreis * Anzahl), 0) AS Summe_Ersatzteile
-        --     FROM Montage M
-        --     INNER JOIN inserted I 
-        --     ON M.EtID = I.EtID AND M.AufNr = I.AufNr
-        --     INNER JOIN Auftrag A 
-        --     ON M.AufNr = A.AufNr
-        --     INNER JOIN Ersatzteil E 
-        --     ON M.EtID = E.EtID
-        --     )
-
         UPDATE Rechnung 
         SET RechBetrag = RechBetrag + 
         (

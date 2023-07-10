@@ -65,7 +65,7 @@
 import EntityTable from "@/components/Entity/EntityTable.vue";
 
 import { IAuftrag, IMasterDataField } from "@/types";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useDialog } from "primevue/usedialog";
 import disableScroll from "disable-scroll";
 import CompleteOrderForm from "@/components/Order/CompleteOrderForm.vue";
@@ -100,6 +100,13 @@ const onButtonClick = (order: IAuftrag) => {
 };
 
 const columns: IMasterDataField[] = [
+  {
+    name: "Status",
+    label: "Status",
+    type: "text",
+    allowCreate: false,
+    allowUpdate: false,
+  },  
   {
     name: "Aufnr",
     label: "AufNr",

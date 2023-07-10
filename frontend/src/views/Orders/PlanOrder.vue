@@ -79,6 +79,7 @@ const onButtonClick = (order: IAuftrag) => {
   console.log(order);
 
   disableScroll.on(document.body);
+  
   dialog.open(PlanOrderForm, {
     props: {
       header: "Auftrag: " + order.Aufnr,
@@ -103,11 +104,18 @@ const onButtonClick = (order: IAuftrag) => {
 
 onMounted(async () => {
   isLoading.value = true;
-
+  
   isLoading.value = false;
 });
 
 const columns: IMasterDataField[] = [
+  {
+    name: "Status",
+    label: "Status",
+    type: "text",
+    allowCreate: false,
+    allowUpdate: false,
+  },
   {
     name: "Aufnr",
     label: "AufNr",

@@ -55,6 +55,7 @@
       </template> -->
 
       <Divider />
+      
       <EntityTable
         name="Aufträge"
         primary-key="Aufnr"
@@ -64,122 +65,112 @@
         :allow-edit="false"
         :allow-delete="false"
         @onRowSelect="(event)=>router.push({name: 'singleOrder', params: {id: event.Aufnr}})"
-        
-      />
+        >
+      </EntityTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import EntityTable from "@/components/Entity/EntityTable.vue";
-import { IMasterDataField } from "@/types";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
-import Breadcrumb from 'primevue/breadcrumb';
+  import EntityTable from "@/components/Entity/EntityTable.vue";
+  import { IMasterDataField } from "@/types";
+  import { useRouter } from "vue-router";
+  import { ref } from "vue";
+  import Breadcrumb from 'primevue/breadcrumb';
 
-const router = useRouter()
+  const router = useRouter()
 
-const home = ref({ icon: 'pi pi-home', url: 'https://primevue.org/' });
-const items = ref([
-  { icon: 'pi pi-sitemap' }, 
-  { icon: 'pi pi-book' }, 
-  { icon: 'pi pi-wallet' }, 
-  { icon: 'pi pi-shopping-bag' }, 
-  { icon: 'pi pi-calculator' }
-]);
+  const home = ref({ icon: 'pi pi-home', url: 'https://primevue.org/' });
+  const items = ref([
+    { icon: 'pi pi-sitemap' }, 
+    { icon: 'pi pi-book' }, 
+    { icon: 'pi pi-wallet' }, 
+    { icon: 'pi pi-shopping-bag' }, 
+    { icon: 'pi pi-calculator' }
+  ]);
 
-// const items = ref([
-//     {
-//         label: '1. Auftrag erstellen',
-//         icon: 'pi pi-plus',
-//         to: '/orders/create'
-//     },
-//     {
-//         label: '2. Auftrag planen',
-//         icon: 'pi pi-map',
-//         to: '/orders/plan'
-//     },
-//     {
-//         label: '3. Auftrag erledigen',
-//         icon: 'pi pi-check',
-//         to: '/orders/complete'
-//     }
-// ]);
+  const columns: IMasterDataField[] = [
+    {
+      name: "Status", 
+      label: "Status", 
+      type: "text", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Aufnr",
+      label: "AufNr",
+      type: "numeric",
+      allowCreate: false,
+      allowUpdate: false,
 
-const columns: IMasterDataField[] = [
-  {
-    name: "Aufnr",
-    label: "AufNr",
-    type: "numeric",
-    allowCreate: false,
-    allowUpdate: false,
+    },
+    {
+      name: "KunNr",
+      label: "KunNr",
+      type: "numeric",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Kunde.KunName", 
+      label: "Kundenname", 
+      type: "text", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "MitID",
+      label: "MitID",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
 
-  },
-  {
-    name: "KunNr",
-    label: "KunNr",
-    type: "numeric",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Kunde.KunName", 
-    label: "Kundenname", 
-    type: "text", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "MitID",
-    label: "MitID",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
+    },
+    {
+      name: "Mitarbeiter.MitName",
+      label: "Mitarbeitername",
+      type: "numeric",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "AufDat", 
+      label: "AufDat", 
+      type: "date", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "ErlDat", 
+      label: "ErlDat", 
+      type: "date", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Dauer", 
+      label: "Dauer", 
+      type: "numeric", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Anfahrt", 
+      label: "Anfahrt", 
+      type: "numeric", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Beschreibung", 
+      label: "Beschreibung", 
+      type: "text", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+  ];
 
-  },
-  {
-    name: "Mitarbeiter.MitName",
-    label: "Mitarbeitername",
-    type: "numeric",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "AufDat", 
-    label: "AufDat", 
-    type: "date", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "ErlDat", 
-    label: "ErlDat", 
-    type: "date", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Dauer", 
-    label: "Dauer", 
-    type: "numeric", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Anfahrt", 
-    label: "Anfahrt", 
-    type: "numeric", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Beschreibung", 
-    label: "Beschreibung", 
-    type: "text", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-];
 </script>
 
 <style>

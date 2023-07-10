@@ -104,7 +104,6 @@
 </template>
 
 <script setup lang="ts">
-
   import Calendar from "primevue/calendar";
   import Chip from 'primevue/chip';
   import Listbox from 'primevue/listbox';
@@ -144,45 +143,10 @@
     order.value = unflatten(dialogRef.value.data.order);
     console.log(order.value);
 
+    order.value.Status = "Erledigt";
+
     employee.value = await employeesSevice.get(order?.value?.MitID as string);
   });
-
-  // Ersetzt durch Array (siehe unten)
-  // const planOrder = async () => {
-  //   try {
-  //     let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
-
-  //     console.log(x);
-  //     if (selectedSpareParts.value.EtID) {
-  //       x.Montage = {
-  //         create: {
-
-  //           EtID: selectedSpareParts.value.EtID,
-  //           Anzahl: 1,
-
-
-  //         }
-  //       }
-  //     }
-  //     await orderService.update(String(Aufnr), {
-  //       ...x,
-  //     });
-  //     toast.add({
-  //       severity: "success",
-  //       summary: "Auftrag geplant",
-  //       detail: "Der Auftrag wurde erfolgreich erledigt",
-  //       life: 3000,
-  //     });
-  //     dialogRef.value.close();
-  //   } catch (e) {
-  //     toast.add({
-  //       severity: "error",
-  //       summary: "Fehler",
-  //       detail: "Der Auftrag konnte nicht geplant werden",
-  //       life: 3000,
-  //     });
-  //   }
-  // };
 
   const planOrder = async () => {
     try {
@@ -223,5 +187,4 @@
       });
     }
   };
-
 </script>
