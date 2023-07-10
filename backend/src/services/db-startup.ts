@@ -11,6 +11,7 @@ import {
   prisma,
 } from "@prisma/client";
 
+// =========== Ersatzteil ===========
 
 function createRandomErsatzteil(): Prisma.ErsatzteilCreateManyInput {
     const EtID = faker.helpers.unique(faker.random.alphaNumeric, [
@@ -70,12 +71,20 @@ function createRandomErsatzteil(): Prisma.ErsatzteilCreateManyInput {
     };
 }
 
+// =========== Niederlassung ===========
+
 function createRandomNiederlassung(i: number): Prisma.NiederlassungCreateManyInput {
-  const Ort = faker.address.cityName();
+  let Ort = faker.address.cityName();
+  if (i==0) Ort = "Dresden"
+  else if (i==1) Ort = "Chemnitz"
+  else if (i==2) Ort = "Radebeul"
+
   return {
     Ort,
   };
 }
+
+// =========== Kunde ===========
 
 function createRandomKunde(i: number): Prisma.KundeCreateManyInput {
   const KunNr = i;
@@ -92,6 +101,8 @@ function createRandomKunde(i: number): Prisma.KundeCreateManyInput {
   };
 }
 
+// =========== Mitarbeiter ===========
+
 function createRandomMitarbeiter(
   i: number,
   ret: Niederlassung[]
@@ -106,7 +117,8 @@ function createRandomMitarbeiter(
     "Einkauf",
     "Lagermitarbeiter",
     "Meister",
-    "Monteur"
+    "Monteur",
+    "Azubi"
   ];
 
   const zufälligerIndexJob = Math.floor(Math.random() * jobNamen.length);
@@ -131,14 +143,19 @@ function createRandomMitarbeiter(
   };
 }
 
+// =========== Auftrag ===========
+
 function createRandomAuftrag(
   mitarbeiter: Mitarbeiter[],
   kunden: Kunde[],
   Ersatzteil: Ersatzteil[]
 ): Prisma.AuftragCreateInput {
-  const MitID = faker.helpers.arrayElement(mitarbeiter).MitID;
+
+  // === 1. Auftrag erstellen ===
+  // > Kunde
   const KunNr = faker.helpers.arrayElement(kunden).KunNr;
   
+  // > Beschreibung
   const beschreibungAuftrag = [
     "Dichtung porös",
     "Feinjustierung Axialmotor",
@@ -164,45 +181,105 @@ function createRandomAuftrag(
     const zufälligerIndexBeschreibung = Math.floor(Math.random() * beschreibungAuftrag.length);
     Beschreibung = beschreibungAuftrag[zufälligerIndexBeschreibung];
   } 
-
-  // const Beschreibung = faker.company.bs();
   
-  const ErlDat = faker.date.between(
+  // > AufDat
+  const AufDat = faker.date.between(
     new Date().setFullYear(2015),
     new Date().setFullYear(2023)
   );
-  const AufDat = faker.date.between(new Date().setFullYear(2015), ErlDat);
-  const Dauer = new Prisma.Decimal(faker.datatype.number({ min: 1, max: 20 }));
-  const Anfahrt = faker.datatype.number({ min: 1, max: 100 });
+  
+  let MitID;
+  let ErlDat;
+  let Dauer;
+  let Anfahrt;
+  let Status = "Erstellt";
 
-  return {
-    Beschreibung,
-    ErlDat,
-    AufDat,
-    Dauer,
-    Anfahrt,
-    Kunde: {
-      connect: {
-        KunNr,
-      },
-    },
-    Mitarbeiter: {
-      connect: {
-        MitID,
-      },
-    },
-    Montage: {
-      create: {
-        Anzahl: faker.datatype.number({ min: 1, max: 3 }),
-        Ersatzteil: {
+  if (Math.random() >= 0.06) {
+    // === 2. Auftrag planen ===
+    MitID = faker.helpers.arrayElement(mitarbeiter).MitID;
+
+    const maxErlDat = new Date(AufDat.getTime() + 50 * 24 * 60 * 60 * 1000);  // 1 Tag in Millisekunden
+    const minErlDat = new Date(AufDat.getTime() + 1 * 24 * 60 * 60 * 1000);   // 50 Tage in Millisekunden
+    Status = "Geplant";
+
+    ErlDat = faker.date.between(
+      minErlDat,
+      maxErlDat
+    );
+
+    if (Math.random() >= 0.06) {
+      // === 3. Auftrag erledigen ===
+      Dauer = new Prisma.Decimal(faker.datatype.number({ min: 1, max: 20 }));
+      Anfahrt = faker.datatype.number({ min: 1, max: 100 });
+      Status = "Erledigt";
+
+      return {
+        Beschreibung,
+        Status,
+        ErlDat,
+        AufDat,
+        Dauer,
+        Anfahrt,
+        Kunde: {
           connect: {
-            EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
+            KunNr,
           },
         },
+        Mitarbeiter: {
+          connect: {
+            MitID,
+          },
+        },
+        Montage: {
+          create: {
+            Anzahl: faker.datatype.number({ min: 1, max: 3 }),
+            Ersatzteil: {
+              connect: {
+                EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
+              },
+            },
+          },
+        },
+      };
+
+    } else {
+      
+      return {
+        Beschreibung,
+        Status,
+        ErlDat,
+        AufDat,
+        Kunde: {
+          connect: {
+            KunNr,
+          },
+        },
+        Mitarbeiter: {
+          connect: {
+            MitID,
+          },
+        },
+      };
+
+    }
+  } else {
+    
+    return {
+      Beschreibung,
+      Status,
+      AufDat,
+      Kunde: {
+        connect: {
+          KunNr,
+        },
       },
-    },
-  };
+    };
+
+  }
+
 }
+
+// ======================
 
 export const createData = async (
   customers: number,
@@ -213,15 +290,21 @@ export const createData = async (
 ) => {
   const prisma = new PrismaClient();
 
+  // =========== Niederlassungen ===========
+
   const niederlassungen: Prisma.NiederlassungCreateManyInput[] = [];
+  
   for (let i = 0; i < branches; i++) {
     niederlassungen.push(createRandomNiederlassung(i));
   }
+  
   await prisma.niederlassung.createMany({
     data: niederlassungen as Prisma.NiederlassungCreateManyInput[],
   });
 
   let baa = await prisma.niederlassung.findMany();
+
+  // =========== Mitarbeiter ===========
 
   for (let i = 100; i < employees + 100; i++) {
     let o = createRandomMitarbeiter(i, baa);
@@ -229,12 +312,17 @@ export const createData = async (
     await prisma.mitarbeiter.create({ data: o });
   }
 
+  // =========== Ersatzteile ===========
+
   const ersatzteile: Prisma.ErsatzteilCreateManyInput[] = [];
+  
   for (let i = 0; i < spareparts; i++) {
     ersatzteile.push(createRandomErsatzteil());
   }
 
   await prisma.ersatzteil.createMany({ data: ersatzteile });
+
+  // =========== Kunde ===========
 
   const kunden: Prisma.KundeCreateInput[] = [];
 
@@ -244,12 +332,24 @@ export const createData = async (
 
   await prisma.kunde.createMany({ data: kunden });
 
-  const mitar = await prisma.mitarbeiter.findMany();
+  // =========== Auftrag ===========
+  
+  const mitar = await prisma.mitarbeiter.findMany({
+    where: {
+      MitJob: {
+        in: ["Azubi", "Monteur", "Meister"]
+      }
+    }
+  });
   const kund = await prisma.kunde.findMany();
   const ersa = await prisma.ersatzteil.findMany();
   console.log(createRandomAuftrag(mitar, kund, ersa));
+  
   for (let i = 0; i < orders; i++) {
     await prisma.auftrag.create({ data: createRandomAuftrag(mitar, kund, ersa) });
   }
+
+  // ======================
+
   await prisma.$disconnect();
 };
