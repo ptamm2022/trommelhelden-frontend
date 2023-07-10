@@ -364,8 +364,6 @@ const onSort = async (event: any) => {
   await fetchData(false);
 };
 
-
-
 const fetchData = async (isInitial: boolean) => {
   try {
     isLoading.value = true;

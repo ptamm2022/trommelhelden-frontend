@@ -61,11 +61,11 @@
     }
 
     const settings = ref({
-        customers: 100,
-        employees: 20,
-        orders: 100,
-        branches: 3,
-        spareparts: 20,
+        customers: 100,         // 500
+        employees: 14,          // 14
+        orders: 100,            // 1000
+        branches: 3,            // 3
+        spareparts: 26          // 26
     })
 
     // autonmatisch Daten erstellen
