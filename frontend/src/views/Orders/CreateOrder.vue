@@ -119,7 +119,9 @@
   const customerService = new CustomerService();
   const orderService = new OrderService();
   const op = ref();
-  const order = ref<IAuftrag>({} as IAuftrag);
+  const order = ref<IAuftrag>({
+    AufDat: new Date() // Setze das aktuelle Datum
+  } as IAuftrag);
 
   const toggle = async (event: Event) => {
     op.value.toggle(event);
