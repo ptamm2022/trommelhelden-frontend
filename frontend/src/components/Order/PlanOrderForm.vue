@@ -30,7 +30,7 @@
     />
 
     <div
-      v-if="employee"
+      v-if="order.MitID"
       class="grid grid-cols-2"
     >
         <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>

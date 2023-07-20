@@ -3,7 +3,7 @@
     <div class="h-full rounded-xl bg-white px-6 py-8 shadow-2xl">
       <div class="flex items-center justify-between">
         <h1
-          class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-6xl font-extrabold text-transparent"
+          class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent"
         >
           Aufträge
         </h1>
@@ -170,7 +170,6 @@
       allowUpdate: false,
     },
   ];
-
 </script>
 
 <style>

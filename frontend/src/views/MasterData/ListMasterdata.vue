@@ -8,7 +8,7 @@
       <RouterLink :to="{ name: 'Create' + props.name }">
         <Button
           icon="pi pi-plus"
-          class="mr-2 mb-2 rounded-lg !border-none !bg-gradient-to-r from-blue-400 to-pink-800 text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+          class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
           :label="`${props.label} erstellen`"
           @click="openDialog = true"
         />
@@ -35,29 +35,28 @@
 </template>
 
 <script setup lang="ts">
+  import EntityTable from "@/components/Entity/EntityTable.vue";
+  import Divider from "primevue/divider";
+  import { ref } from "vue";
 
-import EntityTable from "@/components/Entity/EntityTable.vue";
-import Divider from "primevue/divider";
-import { ref } from "vue";
+  const props = defineProps([
+    "resourceName",
+    "fields",
+    "label",
+    "labelSingular",
+    "name",
+    "primaryKey",
+  ]);
 
-const props = defineProps([
-  "resourceName",
-  "fields",
-  "label",
-  "labelSingular",
-  "name",
-  "primaryKey",
-]);
+  const row = ref();
+  const isUpdate = ref(false);
+  const openDialog = ref(false);
 
-const row = ref();
-const isUpdate = ref(false);
-const openDialog = ref(false);
-
-const onEditRow = (data: any) => {
-  isUpdate.value = true;
-  row.value = data;
-  openDialog.value = true;
-};
+  const onEditRow = (data: any) => {
+    isUpdate.value = true;
+    row.value = data;
+    openDialog.value = true;
+  };
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@
       <div class="flex items-center">
         <Avatar
           label="A"
-          class="mr-2 bg-white bg-gradient-to-r from-blue-500 to-pink-600 text-white shadow-2xl"
+          class="mr-2 bg-white bg-gradient-to-r from-blue-500 to-pink-700 text-white shadow-2xl"
           size="large"
         />
         <div class="text-lg">Admin</div>

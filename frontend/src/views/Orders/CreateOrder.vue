@@ -29,10 +29,11 @@
         :label="'Kunde wählen*'"
         aria-haspopup="true"
         aria-controls="overlay_panel"
-        style="margin-bottom: 1rem;"
+        style="margin-bottom: 1rem; width: fit-content; white-space: nowrap;"
         @click="toggle"
-        class="w-1/5"
       />
+
+      <!-- class="w-1/4" -->
     
     <div
         v-if="order.Kunde"
@@ -93,7 +94,7 @@
       <Button
         type="submit"
         icon="pi pi-check"
-        label="Erstellen"
+        label="Auftrag erstellen"
         class="ml-auto"
         :disabled="!order.Kunde || !order.AufDat"
         @click="createOrder"

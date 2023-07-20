@@ -8,8 +8,9 @@ import { defineStore } from "pinia";
 const settingsService = new GenericService("settings");
 // the first argument is a unique id of the store across your application
 export const useStore = defineStore("main", {
+
   state: () => ({
-    // loadingScreen: false,
+    loadingScreen: true,
     firstStartUp: false,
     showHeader: true,
     sideBarMenuIsOpen: false,

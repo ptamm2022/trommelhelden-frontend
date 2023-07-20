@@ -2,21 +2,9 @@
   <div>
     <Card>
       <template #content>
-        <h1 class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
+        <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
           Settings
         </h1>
-
-        <div class="mb-2 flex flex-col">
-          <div class="mb-2">In welchem Semester befinden Sie sich? In DBS II werden weitere Menüpunkte freigeschaltet.</div>
-          <SelectButton
-            class="flex-1"
-            option-label="name"
-            :options="optionsModule"
-            option-value="value"
-            aria-labelledby="single"
-            @change="onModuleMethodChange"
-          />
-        </div>
 
         <div class="mb-2 flex flex-col">
           <div class="mb-2">Which method shall be used to create invoices?</div>
@@ -44,97 +32,75 @@
           />
         </div>
 
-        <div class="field-checkbox">
+        <div class="card flex flex-wrap justify-content-center align-items-center">
           <Checkbox
             v-model="store.showDebugBar"
+            inputId="debugBar"
             :binary="true"
             :value="store.showDebugBar"
             @input="onChangeShowDebugBar"
           />
-          <label for="binary">Show debug Bar</label>
+          <label for="debugBar" class="ml-2">Show debug Bar</label>
         </div>
-
-        <!-- <button
-          class="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 p-0.5 text-sm font-medium text-gray-900 shadow-lg shadow-purple-400 hover:text-white focus:outline-none focus:ring-4 focus:ring-purple-200 group-hover:from-purple-500 group-hover:to-pink-500"
-        >
-          <span
-            class="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0"
-          >
-            Purple to pink
-          </span>
-        </button> -->
       </template>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import Checkbox from "primevue/checkbox";
-import { useStore } from "@/store";
-import Card from "primevue/card";
-import SelectButton, { SelectButtonChangeEvent } from "primevue/selectbutton";
-import { ref } from "vue";
-import { useLocalStorage, useStorage } from '@vueuse/core'
-
-const store = useStore();
-
-const mode = ref(store.settings.useTrigger ? 1 : 2);
-const calcMode = ref(store.settings.calcType);
-
-console.log(mode.value);
-
-const onChangeShowDebugBar = (e: any) => {
-  window.localStorage.setItem("show-debug-bar", e);
-}
-
-const options = [
-  {
-    name: "use Backend",
-    value: 2,
-  },
-  {
-    name: "use Database trigger",
-    value: 1,
-  },
-];
-
-const options2 = [
-  {
-    name: "use Backend (node)",
-    value: "backend",
-  },
-  {
-    name: "use SQL",
-    value: "database",
-  },
-
-];
-
-const optionsModule = [
-  {
-    name: "DBS I",
-    value: "dbs1",
-  },
-  {
-    name: "DBS II",
-    value: "dbs2",
-  },
-
-];
-
-const onModuleMethodChange = async (event: SelectButtonChangeEvent) => {
+  import Checkbox from "primevue/checkbox";
+  import { useStore } from "@/store";
+  import Card from "primevue/card";
+  import SelectButton, { SelectButtonChangeEvent } from "primevue/selectbutton";
+  import { ref } from "vue";
+  import { useLocalStorage, useStorage } from '@vueuse/core'
   
-};
-
-const onInvoiceMethodChange = async (event: SelectButtonChangeEvent) => {
-  await store.updateSettings("useTrigger", event.value === 1);
-};
-
-const onCalcMethodChange = async (event: SelectButtonChangeEvent) => {
-  // await store.updateSettings("calcType", calcMode.value);
-  window.localStorage.setItem("calc-type", event.value);
-};
-
+  const store = useStore();
+  
+  const mode = ref(store.settings.useTrigger ? 1 : 2);
+  const calcMode = ref(store.settings.calcType);
+  
+  console.log(mode.value);
+  
+  const onChangeShowDebugBar = (e: any) => {
+    window.localStorage.setItem("show-debug-bar", e);
+  }
+  
+  const options = [
+    {
+      name: "use Backend",
+      value: 2,
+    },
+    {
+      name: "use Database trigger",
+      value: 1,
+    },
+  ];
+  
+  const options2 = [
+    {
+      name: "use Backend (node)",
+      value: "backend",
+    },
+    {
+      name: "use SQL",
+      value: "database",
+    },
+  
+  ];
+  
+  const onModuleMethodChange = async (event: SelectButtonChangeEvent) => {
+    
+  };
+  
+  const onInvoiceMethodChange = async (event: SelectButtonChangeEvent) => {
+    await store.updateSettings("useTrigger", event.value === 1);
+  };
+  
+  const onCalcMethodChange = async (event: SelectButtonChangeEvent) => {
+    // await store.updateSettings("calcType", calcMode.value);
+    window.localStorage.setItem("calc-type", event.value);
+  };
 </script>
 
 <style scoped>
