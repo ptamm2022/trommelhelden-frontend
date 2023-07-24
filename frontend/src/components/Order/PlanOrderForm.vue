@@ -15,6 +15,7 @@
 
     <div class="grid grid-cols-2">
       <span>Kundennummer: </span>     <span>{{ order?.KunNr }}</span>
+      <!-- <span>Kunden-Name: </span>      <span>{{ order.Kunde.KunName }}</span> -->
     </div>
 
     <Divider />
@@ -33,10 +34,9 @@
       v-if="order.MitID"
       class="grid grid-cols-2"
     >
-        <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
-        <span>Mitarbeiter-Vorname: </span>  <span>{{ employee?.MitVorname }}</span> 
-        <span>Mitarbeiter-Name: </span>     <span>{{ employee?.MitName }}</span>
-        <span>Mitarbeiter-Beruf: </span>    <span>{{ employee?.MitJob }}</span>
+        <span>Mitarbeiternummer: </span>  <span> {{ employee.MitID }} </span>
+        <span>Mitarbeiter-Name: </span>   <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
+        <span>Mitarbeiter-Beruf: </span>  <span> {{ employee?.MitJob }} </span>
     </div>
 
     <OverlayPanel
@@ -93,7 +93,7 @@
   import { useDateFormat } from "@vueuse/core";
   import { inject, onMounted, ref } from "vue";
   import EntityTable from "@/components/Entity/EntityTable.vue";
-  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter } from "@/types";
+  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter, IKunde } from "@/types";
   import OrderService from "@/api/services/Order";
   import { useToast } from "primevue/usetoast";
   import { unflatten } from "flat";

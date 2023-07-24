@@ -39,11 +39,10 @@
         v-if="order.Kunde"
         class="grid grid-cols-2"
       >
-        <span>Name: </span>           <span>{{ order.Kunde.KunName }}</span>
         <span>Kundennummer: </span>   <span>{{ order.Kunde.KunNr }}</span>
-        <span>Ort: </span>            <span>{{ order.Kunde.KunOrt }}</span>
-        <span>PLZ: </span>            <span>{{ order.Kunde.KunPLZ }}</span>
+        <span>Kunden-Name: </span>    <span>{{ order.Kunde.KunName }}</span>
         <span>Straße: </span>         <span>{{ order.Kunde.KunStrasse }}</span>
+        <span>Ort: </span>            <span>{{ order.Kunde.KunPLZ }} {{ order.Kunde.KunOrt }}</span>
     </div>
 
     <div>
