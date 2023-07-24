@@ -58,20 +58,25 @@
         <template #option="slotProps">
 
           <div class="flex justify-between">
-            <Chip>{{ slotProps.option?.EtPreis }} €</Chip>
+            <Chip>
+              {{ slotProps.option?.EtPreis }} €
+            </Chip>
             
-            <span class="w-3/4">{{
-              slotProps.option?.EtBezeichnung
-            }}</span>
+            <span class="w-3/4">
+              {{ slotProps.option?.EtBezeichnung }}
+            </span>
           </div>
 
         </template>
       </MultiSelect>
 
-      <div v-if="selectedSparePartsData.length > 0">
+      <div v-if="selectedSpareParts.length > 0">
         <ul>
-          <li v-for="sparePartData in selectedSparePartsData" :key="sparePartData.EtID">
-            {{ sparePartData.Anzahl }}x {{ sparePartData.EtBezeichnung }}
+          <li v-for="sparePartData in selectedSpareParts" :key="sparePartData.EtID">
+            <Button class="h-4" style="margin-right: 0.25rem; margin-top: 0.1rem; margin-bottom: 0.1rem;" @click="incrementQuantity(sparePartData.EtID)"> + </Button>
+            <span class="text-center">{{ getQuantity(sparePartData.EtID) }}</span> 
+            <Button class="h-4" style="margin-left: 0.25rem; margin-right: 0.25rem; margin-top: 0.1rem; margin-bottom: 0.1rem;" @click="decrementQuantity(sparePartData.EtID)"> - </Button>
+            {{ sparePartData.EtBezeichnung }}
           </li>
         </ul>
       </div>
@@ -116,31 +121,59 @@
 
   // --------------------
   const selectedSparePartsData = ref<{ EtID: string; EtBezeichnung: string; Anzahl: number }[]>([]);
+  selectedSparePartsData.value = [];
 
   // Funktion, um ausgewählte Ersatzteile und deren Anzahl zu aktualisieren
   const updateSelectedSpareParts = (sparePart: IErsatzteil) => {
     // Prüfen, ob das Ersatzteil bereits ausgewählt wurde
-    const existingSparePart = selectedSparePartsData.value.find(
-      (item) => item.EtID === sparePart.EtID
+    // const existingSparePart = selectedSparePartsData.value.find(
+    //   (item) => item.EtID === sparePart.EtID
+    // );
+    const existingSparePartIndex = selectedSparePartsData.value.findIndex(
+    (item) => item.EtID === sparePart.EtID
     );
 
-    if (existingSparePart) {
-      // Wenn das Ersatzteil bereits ausgewählt wurde, erhöhen Sie die Anzahl um 1
-      existingSparePart.Anzahl += 1;
-    } else {
-      // Wenn das Ersatzteil noch nicht ausgewählt wurde, fügen Sie es mit der Anzahl 1 hinzu
-      selectedSparePartsData.value.push({ EtID: sparePart.EtID, EtBezeichnung: sparePart.EtBezeichnung, Anzahl: 1 });
-    }
+    if (existingSparePartIndex == -1) {
+      selectedSparePartsData.value.push(
+        { 
+          EtID: sparePart.EtID, 
+          EtBezeichnung: sparePart.EtBezeichnung, 
+          Anzahl: 1
+        });
+    } 
   };
 
   const onSparePartsSelectionChange = () => {
     // Entfernen Sie alle vorhandenen Daten aus der Datenstruktur
-    selectedSparePartsData.value = [];
+    // selectedSparePartsData.value = [];
 
     // Aktualisieren Sie die Datenstruktur für jedes ausgewählte Ersatzteil
     selectedSpareParts.value.forEach((sparePart: IErsatzteil) => {
       updateSelectedSpareParts(sparePart);
     });
+  };
+
+  const getQuantity = (index: string) => {
+    const existingSparePart = selectedSparePartsData.value.find(
+      (item) => item.EtID === index
+    );
+    return existingSparePart.Anzahl;
+  }
+
+  // Funktion, um die Anzahl zu erhöhen
+  const incrementQuantity = (index: string) => {
+    const existingSparePart = selectedSparePartsData.value.find(
+      (item) => item.EtID === index
+    );
+    existingSparePart.Anzahl++;
+  };
+
+  // Funktion, um die Anzahl zu verringern
+  const decrementQuantity = (index: string) => {
+    const existingSparePart = selectedSparePartsData.value.find(
+      (item) => item.EtID === index
+    );
+    if (existingSparePart.Anzahl > 1) existingSparePart.Anzahl--;
   };
   // --------------------
 
@@ -152,8 +185,6 @@
     spareparts.value = await sparepartsService.list([], {}, 0, 1000);
     order.value = unflatten(dialogRef.value.data.order);
     console.log(order.value);
-
-    // order.value.Status = "Erledigt";
 
     employee.value = await employeesSevice.get(order?.value?.MitID as string);
   });
@@ -167,8 +198,8 @@
       if (selectedSpareParts.value.length > 0) {
         x.Montage = {
           create: selectedSpareParts.value.map((sparePart) => {
-            const sparePartData = selectedSparePartsData.value.find((item) => item.EtID === sparePart.EtID);
-            const anzahl = sparePartData ? sparePartData.Anzahl : 1;
+            const sparePartData = selectedSpareParts.value.find((item) => item.EtID === sparePart.EtID);
+            const anzahl = getQuantity(sparePartData.EtID);
 
             return {
               EtID: sparePart.EtID,
