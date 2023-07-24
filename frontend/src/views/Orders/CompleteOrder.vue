@@ -2,7 +2,7 @@
   <div class="mx-auto mt-8 flex-1">
     <div class="card flex flex-col items-stretch justify-center rounded-xl bg-white p-6 shadow-2xl">
       <div class="flex items-center justify-between">
-        <h1 class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
+        <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
           3. Auftrag erledigen
         </h1>
 
@@ -65,7 +65,7 @@
 import EntityTable from "@/components/Entity/EntityTable.vue";
 
 import { IAuftrag, IMasterDataField } from "@/types";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useDialog } from "primevue/usedialog";
 import disableScroll from "disable-scroll";
 import CompleteOrderForm from "@/components/Order/CompleteOrderForm.vue";
@@ -100,6 +100,13 @@ const onButtonClick = (order: IAuftrag) => {
 };
 
 const columns: IMasterDataField[] = [
+  {
+    name: "Status",
+    label: "Status",
+    type: "text",
+    allowCreate: false,
+    allowUpdate: false,
+  },  
   {
     name: "Aufnr",
     label: "AufNr",

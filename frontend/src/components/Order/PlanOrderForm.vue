@@ -15,6 +15,7 @@
 
     <div class="grid grid-cols-2">
       <span>Kundennummer: </span>     <span>{{ order?.KunNr }}</span>
+      <!-- <span>Kunden-Name: </span>      <span>{{ order.Kunde.KunName }}</span> -->
     </div>
 
     <Divider />
@@ -30,13 +31,12 @@
     />
 
     <div
-      v-if="employee"
+      v-if="order.MitID"
       class="grid grid-cols-2"
     >
-        <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
-        <span>Mitarbeiter-Vorname: </span>  <span>{{ employee?.MitVorname }}</span> 
-        <span>Mitarbeiter-Name: </span>     <span>{{ employee?.MitName }}</span>
-        <span>Mitarbeiter-Beruf: </span>    <span>{{ employee?.MitJob }}</span>
+        <span>Mitarbeiternummer: </span>  <span> {{ employee.MitID }} </span>
+        <span>Mitarbeiter-Name: </span>   <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
+        <span>Mitarbeiter-Beruf: </span>  <span> {{ employee?.MitJob }} </span>
     </div>
 
     <OverlayPanel
@@ -58,17 +58,21 @@
           :allow-delete="false"
           @onRowSelect="onSelectEmployee"
         />
-      </OverlayPanel>
-
+    </OverlayPanel>
 
     <Divider />
 
-    <Calendar
-        v-model="order.ErlDat"
-        placeholder="Erledigungsdatum*"
-        dateFormat="dd.mm.yy"
-        :show-icon="true"
-    ></Calendar>
+    <div>
+      <span class="p-float-label my-8">
+        <Calendar
+            id="plan-order-calendar"
+            v-model="order.ErlDat"
+            dateFormat="dd.mm.yy"
+            :show-icon="true"
+        ></Calendar>
+        <label for="plan-order-calendar">Erledigungsdatum*</label>
+      </span>
+    </div>
 
     <Divider />
 
@@ -89,10 +93,14 @@
   import { useDateFormat } from "@vueuse/core";
   import { inject, onMounted, ref } from "vue";
   import EntityTable from "@/components/Entity/EntityTable.vue";
-  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter } from "@/types";
+  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter, IKunde } from "@/types";
   import OrderService from "@/api/services/Order";
   import { useToast } from "primevue/usetoast";
   import { unflatten } from "flat";
+
+  const order = ref<IAuftrag>({
+    ErlDat: new Date() // Setze das aktuelle Datum
+  } as IAuftrag);
 
   const dialogRef: any = inject("dialogRef");
   const employee = ref<IMitarbeiter>({} as IMitarbeiter);
@@ -102,8 +110,6 @@
 
   const op = ref();
   const toast = useToast();
-
-  const order = ref<IAuftrag>({} as IAuftrag);
 
   const columns: IMasterDataField[] = [
     {
@@ -158,6 +164,8 @@
 
   onMounted(() => {
     order.value = dialogRef.value.data.order;
+    order.value.ErlDat = new Date();
+    order.value.Status = "Geplant";
   });
 
   const onSelectEmployee = (employeeP: IMitarbeiter) => {

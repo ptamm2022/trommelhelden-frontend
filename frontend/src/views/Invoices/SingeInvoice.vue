@@ -6,7 +6,7 @@
     <div class="main-header">
       
       <h1 
-      class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-7xl font-extrabold text-transparent"
+      class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-7xl font-extrabold text-transparent"
       >
         Rechnung {{ invoice?.Auftrag?.Aufnr }}
       </h1>
@@ -98,7 +98,7 @@
             
             <tr>
               <td>Fahrkosten</td>
-              <td>2,50 €</td>
+              <td>2.50 €</td>
               <td>{{ invoice?.Auftrag.Anfahrt }} (km.)</td>
               <td>{{ (invoice?.Auftrag.Anfahrt * 2.50) < 30 ? 30 : (invoice?.Auftrag.Anfahrt * 2.50) }} €</td>
             </tr>
@@ -107,7 +107,7 @@
               <td>{{ ersatzteil.EtID }}: {{ ersatzteil.Ersatzteil.EtBezeichnung }}</td>
               <td> {{ ersatzteil.Ersatzteil.EtPreis }} € </td>
               <td> {{ ersatzteil.Anzahl }} (Stk.) </td>
-              <td> {{ ersatzteil.Ersatzteil.EtPreis * ersatzteil.Anzahl }} € </td>
+              <td> {{ (ersatzteil.Ersatzteil.EtPreis * ersatzteil.Anzahl).toFixed(2) }} € </td>
             </tr>
           </tbody>
         </table>

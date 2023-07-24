@@ -1,7 +1,7 @@
 <template>
   <header class="sticky top-0 z-[1000]">
     <div
-      class="flex h-10 items-center bg-gradient-to-r from-blue-400 to-pink-600 shadow"
+      class="flex h-10 items-center bg-gradient-to-r from-blue-500 to-pink-700 shadow"
     >
       <div class="m-4 mr-auto flex">
         <Button

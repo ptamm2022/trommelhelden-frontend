@@ -16,7 +16,7 @@
       filter-display="menu"
       paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       :rows-per-page-options="[5, 10, 25, 50]"
-      current-page-report-template="Showing {first} to {last} of {totalRecords} entries"
+      current-page-report-template="Zeige {first} bis {last} von insgesamt {totalRecords} Einträgen"
       responsive-layout="scroll"
       @page="onPage($event)"
       @sort="onSort($event)"
@@ -363,8 +363,6 @@ const onSort = async (event: any) => {
 
   await fetchData(false);
 };
-
-
 
 const fetchData = async (isInitial: boolean) => {
   try {

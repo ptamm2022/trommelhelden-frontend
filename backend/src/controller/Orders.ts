@@ -4,6 +4,9 @@ import { NextFunction, Request, Response } from "express";
 const prisma = new PrismaClient();
 
 export class OrdersController {
+
+  // === LIST ===
+
   async list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { sort, filter, page, rows } = req.body;
     const { getCount, status, getSum, invoice } = req.query;
@@ -109,6 +112,9 @@ export class OrdersController {
 
     return res.status(200).json({ data: allOrders, count });
   }
+
+  // === GET ===
+
   async get(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
 
@@ -129,6 +135,9 @@ export class OrdersController {
     });
     return res.json(order);
   }
+
+  // === DELETE ===
+
   async delete(
     req: Request,
     res: Response,
@@ -155,6 +164,9 @@ export class OrdersController {
     }
     return res.sendStatus(200);
   }
+
+  // === UPDATE ===
+
   async update(
     req: Request,
     res: Response,
@@ -177,6 +189,9 @@ export class OrdersController {
 
     return res.sendStatus(200);
   }
+
+  // === CREATE ===
+
   async create(
     req: Request,
     res: Response,

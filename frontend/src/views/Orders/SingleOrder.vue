@@ -1,17 +1,44 @@
 <template>
     <div class="mx-auto mt-8 flex-1">
-        <div class="card flex flex-col items-stretch justify-center rounded-xl bg-white p-6 shadow-2xl">
+        <div class="card flex flex-col justify-center rounded-xl bg-white p-6 shadow-2xl">
             <h1
-                class="bg-gradient-to-r from-blue-400 to-pink-800 bg-clip-text py-4 text-7xl font-extrabold text-transparent">
+                class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-7xl font-extrabold text-transparent">
                 Auftrag {{ order.Aufnr }}
             </h1>
 
-            <div class="grid grid-cols-2 mt-8 gap-8">
+            <Divider />
+
+            <div class="grid grid-cols-2 items-stretch mt-8 gap-8">
                 <div class="flex grid grid-cols-2 card rounded-xl bg-white p-6 shadow-xl">
                     <!-- <span class="text-xl font-bold"> Auftragsdatum </span><span> {{useDateFormat(order.AufDat, "DD.MM.YYYY", {locales: "de-DE",}).value}}</span> -->
-                    <span class="text-xl font-bold"> Beschreibung </span><span>{{ order.Beschreibung }}</span>
-                    <span class="text-xl font-bold"> Anfahrt </span><span>{{ order.Anfahrt }}</span>
-                    <span class="text-xl font-bold"> Dauer </span><span>{{ order.Dauer }}</span>
+                    
+                    <span class="text-xl font-bold"> 
+                        Status:
+                    </span>
+                    <span>
+                        {{ order.Status }}
+                    </span>
+
+                    <span class="text-xl font-bold"> 
+                        Beschreibung:
+                    </span>
+                    <span>
+                        {{ order.Beschreibung }}
+                    </span>
+
+                    <span class="text-xl font-bold"> 
+                        Anfahrt:
+                    </span>
+                    <span>
+                        {{ order.Anfahrt }} {{ order.Anfahrt ? ' km' : '' }}
+                    </span>
+
+                    <span class="text-xl font-bold">
+                        Dauer:
+                    </span>
+                    <span>
+                        {{ order.Dauer }} {{ order.Dauer ? ' h' : '' }}
+                    </span>
                 </div>
 
                 <div class=" card rounded-xl bg-white p-6 shadow-xl">
@@ -93,49 +120,57 @@
                     </Panel>
                 </div>
             </div>
+
+            <Divider />
+
+            <Button
+            style="background-color: #d92979; width: fit-content;"
+            label="Zurück"
+            icon="pi pi-backward"
+            @click="$router.go(-1)"
+            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-// import { useDateFormat } from '@vueuse/shared';
-import { useDateFormat } from "@vueuse/core";
+    // import { useDateFormat } from '@vueuse/shared';
+    import { useDateFormat } from "@vueuse/core";
 
-import Panel from 'primevue/panel';
-import Timeline from 'primevue/timeline';
-import GenericService from '@/api/services/Generic';
-import { IAuftrag, IKunde, IMitarbeiter } from '@/types';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import OrderService from '@/api/services/Order';
-import Chip from 'primevue/chip';
+    import Panel from 'primevue/panel';
+    import Timeline from 'primevue/timeline';
+    import GenericService from '@/api/services/Generic';
+    import { IAuftrag, IKunde, IMitarbeiter } from '@/types';
+    import { onMounted, ref } from 'vue';
+    import { useRoute, useRouter } from 'vue-router';
+    import OrderService from '@/api/services/Order';
+    import Chip from 'primevue/chip';
 
-const route = useRoute()
-const router = useRouter()
-const order = ref<IAuftrag>({} as IAuftrag)
-const orderService = new GenericService<IAuftrag>('orders')
+    const route = useRoute()
+    const router = useRouter()
+    const order = ref<IAuftrag>({} as IAuftrag)
+    const orderService = new GenericService<IAuftrag>('orders')
 
-onMounted(async () => {
-    order.value = await orderService.get(route.params.id as string)
+    onMounted(async () => {
+        order.value = await orderService.get(route.params.id as string)
 
-    if (order.value === null) {
-        return router.push("/404")
-    }
-})
-
-const createStatus = () => {
-    let ret = []
-
-    ret.push({
-        status: 'Erstellt', date: useDateFormat(order.value.AufDat, 'DD.MM.YYYY').value
+        if (order.value === null) {
+            return router.push("/404")
+        }
     })
-    if (order.value.ErlDat)
-        ret.push({ status: 'Erledigt', date: useDateFormat(order.value.ErlDat, 'DD.MM.YYYY').value })
 
-    return ret
-}
+    const createStatus = () => {
+        let ret = []
 
-</script>
+        ret.push({
+            status: 'Erstellt', date: useDateFormat(order.value.AufDat, 'DD.MM.YYYY').value
+        })
+        if (order.value.ErlDat)
+            ret.push({ status: 'Erledigt', date: useDateFormat(order.value.ErlDat, 'DD.MM.YYYY').value })
+
+        return ret
+    }
+    </script>
 
 <style scoped>
 

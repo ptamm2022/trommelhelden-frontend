@@ -29,20 +29,20 @@
         :label="'Kunde wählen*'"
         aria-haspopup="true"
         aria-controls="overlay_panel"
-        style="margin-bottom: 1rem;"
+        style="margin-bottom: 1rem; width: fit-content; white-space: nowrap;"
         @click="toggle"
-        class="w-1/5"
       />
+
+      <!-- class="w-1/4" -->
     
     <div
         v-if="order.Kunde"
         class="grid grid-cols-2"
       >
-        <span>Name: </span>           <span>{{ order.Kunde.KunName }}</span>
         <span>Kundennummer: </span>   <span>{{ order.Kunde.KunNr }}</span>
-        <span>Ort: </span>            <span>{{ order.Kunde.KunOrt }}</span>
-        <span>PLZ: </span>            <span>{{ order.Kunde.KunPLZ }}</span>
+        <span>Kunden-Name: </span>    <span>{{ order.Kunde.KunName }}</span>
         <span>Straße: </span>         <span>{{ order.Kunde.KunStrasse }}</span>
+        <span>Ort: </span>            <span>{{ order.Kunde.KunPLZ }} {{ order.Kunde.KunOrt }}</span>
     </div>
 
     <div>
@@ -93,7 +93,7 @@
       <Button
         type="submit"
         icon="pi pi-check"
-        label="Erstellen"
+        label="Auftrag erstellen"
         class="ml-auto"
         :disabled="!order.Kunde || !order.AufDat"
         @click="createOrder"
@@ -119,7 +119,9 @@
   const customerService = new CustomerService();
   const orderService = new OrderService();
   const op = ref();
-  const order = ref<IAuftrag>({} as IAuftrag);
+  const order = ref<IAuftrag>({
+    AufDat: new Date() // Setze das aktuelle Datum
+  } as IAuftrag);
 
   const toggle = async (event: Event) => {
     op.value.toggle(event);

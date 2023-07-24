@@ -16,7 +16,7 @@
 
     <div class="grid grid-cols-2">
       <span>Kundennummer: </span>       <span>{{ order?.KunNr }}</span>
-      <span>Kunden-Vorname: </span>     <span>{{ customer?.KunName }}</span>
+      <span>Kunden-Name: </span>        <span>{{ order.Kunde.KunName }}</span>
     </div>
 
     <Divider />
@@ -26,8 +26,7 @@
       class="grid grid-cols-2"
     >
       <span>Mitarbeiter-ID: </span>       <span>{{ employee.MitID }}</span>
-      <span>Mitarbeiter-Vorname :</span>  <span>{{ employee.MitVorname }}</span>
-      <span>Mitarbeiter-Name: </span>     <span>{{ employee.MitName }}</span>
+      <span>Mitarbeiter-Name: </span>     <span>{{ employee.MitVorname }} {{ employee.MitName }}</span>
       <span>Mitarbeiter-Beruf: </span>    <span>{{ employee.MitJob }}</span>
     </div>
 
@@ -46,28 +45,6 @@
         placeholder="Dauer in h*"
       ></InputNumber>
 
-      <!-- <Dropdown
-        v-model="selectedSpareParts"
-        :options="spareparts"
-        option-label="EtBezeichnung"
-        :filter="true"
-        placeholder="Ersatzteile auswählen"
-        :show-clear="true"
-      >
-        <template #option="slotProps">
-
-          <div class="flex justify-between">
-            <Chip>{{ slotProps.option?.EtPreis }} €</Chip>
-            <span>{{
-              slotProps.option?.EtBezeichnung
-            }}</span>
-          </div>
-
-
-        </template>
-
-      </Dropdown> -->
-
       <!-- Ersatz für DropDown: -->
       <MultiSelect
         id="multiselect_ersatzteile"
@@ -76,19 +53,28 @@
         :options="spareparts"
         option-label="EtBezeichnung"
         placeholder="Ersatzteil(e) auswählen (optional)"
+        @change="onSparePartsSelectionChange"
       >
         <template #option="slotProps">
 
           <div class="flex justify-between">
             <Chip>{{ slotProps.option?.EtPreis }} €</Chip>
-            <span>{{
+            
+            <span class="w-3/4">{{
               slotProps.option?.EtBezeichnung
             }}</span>
           </div>
 
         </template>
       </MultiSelect>
-    
+
+      <div v-if="selectedSparePartsData.length > 0">
+        <ul>
+          <li v-for="sparePartData in selectedSparePartsData" :key="sparePartData.EtID">
+            {{ sparePartData.Anzahl }}x {{ sparePartData.EtBezeichnung }}
+          </li>
+        </ul>
+      </div>
     </div>
     
     <div />
@@ -104,10 +90,7 @@
 </template>
 
 <script setup lang="ts">
-
-  import Calendar from "primevue/calendar";
   import Chip from 'primevue/chip';
-  import Listbox from 'primevue/listbox';
   import { useDateFormat } from "@vueuse/core";
   import { inject, onMounted, ref } from "vue";
   import { IAuftrag, IErsatzteil, IMitarbeiter, IKunde } from "@/types";
@@ -117,13 +100,10 @@
   import { unflatten } from "flat";
   import Divider from "primevue/divider";
   import disableScroll from "disable-scroll";
-
   import GenericService from '@/api/services/Generic';
-
-  import MultiSelect from "primevue/multiselect"
+  import MultiSelect from "primevue/multiselect";
 
   const sparepartsService = new GenericService<IErsatzteil>("spareparts");
-
   const dialogRef: any = inject("dialogRef");
   const selectedSpareParts = ref<IErsatzteil[]>([] as IErsatzteil[]);
   const toast = useToast();
@@ -134,8 +114,37 @@
   const spareparts = ref<IErsatzteil[]>([] as IErsatzteil[]);
   const customer = ref<IKunde>({} as IKunde);
 
-  onMounted(async () => {
+  // --------------------
+  const selectedSparePartsData = ref<{ EtID: string; EtBezeichnung: string; Anzahl: number }[]>([]);
 
+  // Funktion, um ausgewählte Ersatzteile und deren Anzahl zu aktualisieren
+  const updateSelectedSpareParts = (sparePart: IErsatzteil) => {
+    // Prüfen, ob das Ersatzteil bereits ausgewählt wurde
+    const existingSparePart = selectedSparePartsData.value.find(
+      (item) => item.EtID === sparePart.EtID
+    );
+
+    if (existingSparePart) {
+      // Wenn das Ersatzteil bereits ausgewählt wurde, erhöhen Sie die Anzahl um 1
+      existingSparePart.Anzahl += 1;
+    } else {
+      // Wenn das Ersatzteil noch nicht ausgewählt wurde, fügen Sie es mit der Anzahl 1 hinzu
+      selectedSparePartsData.value.push({ EtID: sparePart.EtID, EtBezeichnung: sparePart.EtBezeichnung, Anzahl: 1 });
+    }
+  };
+
+  const onSparePartsSelectionChange = () => {
+    // Entfernen Sie alle vorhandenen Daten aus der Datenstruktur
+    selectedSparePartsData.value = [];
+
+    // Aktualisieren Sie die Datenstruktur für jedes ausgewählte Ersatzteil
+    selectedSpareParts.value.forEach((sparePart: IErsatzteil) => {
+      updateSelectedSpareParts(sparePart);
+    });
+  };
+  // --------------------
+
+  onMounted(async () => {
     disableScroll.off();
 
     console.log(order.value);
@@ -144,45 +153,10 @@
     order.value = unflatten(dialogRef.value.data.order);
     console.log(order.value);
 
+    order.value.Status = "Erledigt";
+
     employee.value = await employeesSevice.get(order?.value?.MitID as string);
   });
-
-  // Ersetzt durch Array (siehe unten)
-  // const planOrder = async () => {
-  //   try {
-  //     let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = order.value;
-
-  //     console.log(x);
-  //     if (selectedSpareParts.value.EtID) {
-  //       x.Montage = {
-  //         create: {
-
-  //           EtID: selectedSpareParts.value.EtID,
-  //           Anzahl: 1,
-
-
-  //         }
-  //       }
-  //     }
-  //     await orderService.update(String(Aufnr), {
-  //       ...x,
-  //     });
-  //     toast.add({
-  //       severity: "success",
-  //       summary: "Auftrag geplant",
-  //       detail: "Der Auftrag wurde erfolgreich erledigt",
-  //       life: 3000,
-  //     });
-  //     dialogRef.value.close();
-  //   } catch (e) {
-  //     toast.add({
-  //       severity: "error",
-  //       summary: "Fehler",
-  //       detail: "Der Auftrag konnte nicht geplant werden",
-  //       life: 3000,
-  //     });
-  //   }
-  // };
 
   const planOrder = async () => {
     try {
@@ -190,17 +164,19 @@
 
       console.log(x);
 
-      // Überprüfe, ob ausgewählte Ersatzteile vorhanden sind
       if (selectedSpareParts.value.length > 0) {
         x.Montage = {
           create: selectedSpareParts.value.map((sparePart) => {
+            const sparePartData = selectedSparePartsData.value.find((item) => item.EtID === sparePart.EtID);
+            const anzahl = sparePartData ? sparePartData.Anzahl : 1;
+
             return {
               EtID: sparePart.EtID,
-              Anzahl: 1,
+              Anzahl: anzahl,
             };
           }),
         };
-      }
+      };
 
       await orderService.update(String(Aufnr), {
         ...x,
@@ -223,5 +199,8 @@
       });
     }
   };
-
 </script>
+
+<style>
+
+</style>

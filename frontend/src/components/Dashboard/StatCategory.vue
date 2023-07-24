@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1
-            class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
+            class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
             {{ name }}
         </h1>
         <div class="grid grid-cols-4 gap-x-8">

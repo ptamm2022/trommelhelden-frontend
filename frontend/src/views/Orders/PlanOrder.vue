@@ -2,8 +2,7 @@
   <div class="mx-auto mt-8 flex-1">
     <div class="card flex flex-col items-stretch justify-center rounded-xl bg-white p-6 shadow-2xl">
       <div class="flex items-center justify-between">
-
-        <h1 class="bg-gradient-to-l from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
+        <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
           2. Auftrag planen
         </h1>
 
@@ -34,7 +33,6 @@
             />
           </router-link>
         </div>
-
       </div>
 
       <Divider />
@@ -79,6 +77,7 @@ const onButtonClick = (order: IAuftrag) => {
   console.log(order);
 
   disableScroll.on(document.body);
+  
   dialog.open(PlanOrderForm, {
     props: {
       header: "Auftrag: " + order.Aufnr,
@@ -103,11 +102,18 @@ const onButtonClick = (order: IAuftrag) => {
 
 onMounted(async () => {
   isLoading.value = true;
-
+  
   isLoading.value = false;
 });
 
 const columns: IMasterDataField[] = [
+  {
+    name: "Status",
+    label: "Status",
+    type: "text",
+    allowCreate: false,
+    allowUpdate: false,
+  },
   {
     name: "Aufnr",
     label: "AufNr",
