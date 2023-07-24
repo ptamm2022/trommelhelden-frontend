@@ -153,7 +153,7 @@
     order.value = unflatten(dialogRef.value.data.order);
     console.log(order.value);
 
-    order.value.Status = "Erledigt";
+    // order.value.Status = "Erledigt";
 
     employee.value = await employeesSevice.get(order?.value?.MitID as string);
   });

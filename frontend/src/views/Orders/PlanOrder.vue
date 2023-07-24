@@ -107,13 +107,13 @@ onMounted(async () => {
 });
 
 const columns: IMasterDataField[] = [
-  {
-    name: "Status",
-    label: "Status",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
+  // {
+  //   name: "Status",
+  //   label: "Status",
+  //   type: "text",
+  //   allowCreate: false,
+  //   allowUpdate: false,
+  // },
   {
     name: "Aufnr",
     label: "AufNr",

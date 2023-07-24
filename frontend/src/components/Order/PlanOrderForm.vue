@@ -165,7 +165,7 @@
   onMounted(() => {
     order.value = dialogRef.value.data.order;
     order.value.ErlDat = new Date();
-    order.value.Status = "Geplant";
+    // order.value.Status = "Geplant";
   });
 
   const onSelectEmployee = (employeeP: IMitarbeiter) => {
