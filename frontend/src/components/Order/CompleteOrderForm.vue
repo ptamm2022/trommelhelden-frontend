@@ -48,6 +48,7 @@
       <!-- Ersatz für DropDown: -->
       <MultiSelect
         id="multiselect_ersatzteile"
+        class="h-12"
         filter
         v-model="selectedSpareParts"
         :options="spareparts"
@@ -58,12 +59,15 @@
         <template #option="slotProps">
 
           <div class="flex justify-between">
-            <Chip>
+            <!-- <Chip>
               {{ slotProps.option?.EtPreis }} €
-            </Chip>
-            
-            <span class="w-3/4">
-              {{ slotProps.option?.EtBezeichnung }}
+            </Chip> -->
+            <span>
+               {{ slotProps.option?.EtBezeichnung }}
+            </span>
+             
+            <span>
+              &nbsp;({{ slotProps.option?.EtHersteller }})
             </span>
           </div>
 
@@ -73,9 +77,24 @@
       <div v-if="selectedSpareParts.length > 0">
         <ul>
           <li v-for="sparePartData in selectedSpareParts" :key="sparePartData.EtID">
-            <Button class="h-4" style="margin-right: 0.25rem; margin-top: 0.1rem; margin-bottom: 0.1rem;" @click="incrementQuantity(sparePartData.EtID)"> + </Button>
-            <span class="text-center">{{ getQuantity(sparePartData.EtID) }}</span> 
-            <Button class="h-4" style="margin-left: 0.25rem; margin-right: 0.25rem; margin-top: 0.1rem; margin-bottom: 0.1rem;" @click="decrementQuantity(sparePartData.EtID)"> - </Button>
+            <Button 
+              class="w-3 h-3 text-xs text-center items-center justify-center"
+              style="margin-right: 0.5rem; margin-top: 0.1rem; margin-bottom: 0.1rem; font-size: 0.75rem" 
+              @click="incrementQuantity(sparePartData.EtID)" 
+              
+            >+</Button>
+            
+            <Chip class="w-8 flex items-center justify-center">
+              {{ getQuantity(sparePartData.EtID) }}
+            </Chip> 
+            
+            <Button 
+              class="w-3 h-3 text-xs text-center items-center justify-center" 
+              style="margin-left: 0.5rem; margin-right: 0.5rem; margin-top: 0.1rem; margin-bottom: 0.1rem; font-size: 0.75rem" 
+              @click="decrementQuantity(sparePartData.EtID)" 
+              
+            >-</Button>
+
             {{ sparePartData.EtBezeichnung }}
           </li>
         </ul>
@@ -233,5 +252,13 @@
 </script>
 
 <style>
+  .max-h-40 {
+    max-height: 10rem;
+  }
 
+  .multi-select .selected-text {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden; 
+  }
 </style>
