@@ -59,7 +59,7 @@
       <InputNumber
         v-model="order.Dauer"
         class="col-start-2 col-end-2 "
-        placeholder="Dauer in h*"
+        placeholder="Dauer (Arbeitszeit) in h*"
       ></InputNumber>
 
       <!-- Ersatz für DropDown: -->
