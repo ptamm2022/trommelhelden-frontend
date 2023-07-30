@@ -5,6 +5,23 @@
   >
     <Divider />
 
+    <div class="my-4">
+      <span class="p-float-label flex flex-row">
+        <Textarea
+          id="order-description"
+          v-model="order.Beschreibung"
+          :auto-resize="true"
+          rows="5"
+          class="w-3/4"
+        />
+        <label for="order-description">Auftragsbeschreibung (optional)</label>
+      </span>
+
+      <span class="ml-4 text-sm">{{ order.Beschreibung ? order.Beschreibung.length : 0 }}/500</span>
+    </div>
+
+    <Divider />  
+
     <div class="grid grid-cols-2">
       <span>Auftragsnummer: </span>     <span>{{ order?.Aufnr }}</span>
       <span>Auftragsdatum: </span>      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
