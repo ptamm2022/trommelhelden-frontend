@@ -213,6 +213,20 @@ function createRandomAuftrag(
       Anfahrt = faker.datatype.number({ min: 1, max: 100 });
       // Status = "Erledigt";
 
+      const anzahlErsatzteile = faker.datatype.number({ min: 1, max: 3 });
+
+      const montagen = [];
+      for (let i = 0; i < anzahlErsatzteile; i++) {
+        montagen.push({
+          Anzahl: faker.datatype.number({ min: 1, max: 3 }),
+          Ersatzteil: {
+            connect: {
+              EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
+            },
+          },
+        });
+      }
+
       return {
         Beschreibung,
         ErlDat,
@@ -230,14 +244,7 @@ function createRandomAuftrag(
           },
         },
         Montage: {
-          create: {
-            Anzahl: faker.datatype.number({ min: 1, max: 3 }),
-            Ersatzteil: {
-              connect: {
-                EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
-              },
-            },
-          },
+          create: montagen,
         },
       };
 

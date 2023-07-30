@@ -5,7 +5,7 @@
                 <ProgressSpinner aria-label="Basic ProgressSpinner" />
                 <h1
                     class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
-                    Datenbank fährt hoch...
+                    Datenbank wird geladen...
                 </h1>
                 <!-- Nachdem in der Konsole "trommelhelden-database  | ...  Starting up database 'trommelhelden'. ... Changed database context to 'trommelhelden'." angezeigt wurde oder nach ca. ... Sekunden sollte die Seite neugeladen werden. -->
             </div>
