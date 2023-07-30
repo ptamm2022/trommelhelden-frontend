@@ -179,11 +179,34 @@
     op.value.toggle(event);
   };
 
-  onMounted(() => {
+  onMounted(async () => {
     order.value = dialogRef.value.data.order;
     order.value.ErlDat = new Date();
     // order.value.Status = "Geplant";
+
+    const filteredEmployees = await getFilteredEmployees();
+    if (filteredEmployees.length > 0) {
+      employee.value = filteredEmployees[0]; // Setzen Sie den ersten gefilterten Mitarbeiter als Standardwert
+    }
   });
+
+  const getFilteredEmployees = async () => {
+    try {
+      // Holen Sie sich nur die Mitarbeiter mit dem Beruf "Monteur" oder "Azubi" aus der Datenbank
+      const filteredEmployees = await prisma.mitarbeiter.findMany({
+        where: {
+          OR: [
+            { MitJob: "Monteur" },
+            { MitJob: "Azubi" }
+          ]
+        }
+      });
+      return filteredEmployees;
+    } catch (e) {
+      console.error("Fehler beim Abrufen der Mitarbeiterdaten:", e);
+      return [];
+    }
+  };
 
   const onSelectEmployee = (employeeP: IMitarbeiter) => {
     op.value.hide();

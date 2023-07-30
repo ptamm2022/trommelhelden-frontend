@@ -61,95 +61,95 @@
 </template>
 
 <script setup lang="ts">
-import EntityTable from "@/components/Entity/EntityTable.vue";
-
-import { IAuftrag, IMasterDataField } from "@/types";
-import { onMounted, ref } from "vue";
-import { useDialog } from "primevue/usedialog";
-import PlanOrderForm from "@/components/Order/PlanOrderForm.vue";
-import disableScroll from "disable-scroll";
-
-const reRender = ref(0);
-const dialog = useDialog();
-const isLoading = ref(false);
-
-const onButtonClick = (order: IAuftrag) => {
-  console.log(order);
-
-  disableScroll.on(document.body);
+  import EntityTable from "@/components/Entity/EntityTable.vue";
   
-  dialog.open(PlanOrderForm, {
-    props: {
-      header: "Auftrag: " + order.Aufnr,
-      style: {
-        width: "40vw",
+  import { IAuftrag, IMasterDataField } from "@/types";
+  import { onMounted, ref } from "vue";
+  import { useDialog } from "primevue/usedialog";
+  import PlanOrderForm from "@/components/Order/PlanOrderForm.vue";
+  import disableScroll from "disable-scroll";
+  
+  const reRender = ref(0);
+  const dialog = useDialog();
+  const isLoading = ref(false);
+  
+  const onButtonClick = (order: IAuftrag) => {
+    console.log(order);
+  
+    disableScroll.on(document.body);
+    
+    dialog.open(PlanOrderForm, {
+      props: {
+        header: "Auftrag: " + order.Aufnr,
+        style: {
+          width: "40vw",
+        },
+        breakpoints: {
+          "960px": "75vw",
+          "640px": "90vw",
+        },
+        modal: true,
       },
-      breakpoints: {
-        "960px": "75vw",
-        "640px": "90vw",
+      data: {
+        order,
       },
-      modal: true,
-    },
-    data: {
-      order,
-    },
-    onClose: () => {
-      disableScroll.off();
-      reRender.value++;
-    },
+      onClose: () => {
+        disableScroll.off();
+        reRender.value++;
+      },
+    });
+  };
+  
+  onMounted(async () => {
+    isLoading.value = true;
+    
+    isLoading.value = false;
   });
-};
-
-onMounted(async () => {
-  isLoading.value = true;
   
-  isLoading.value = false;
-});
-
-const columns: IMasterDataField[] = [
-  // {
-  //   name: "Status",
-  //   label: "Status",
-  //   type: "text",
-  //   allowCreate: false,
-  //   allowUpdate: false,
-  // },
-  {
-    name: "Aufnr",
-    label: "AufNr",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "KunNr",
-    label: "KunNr",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Kunde.KunName",
-    label: "Kundenname",
-    type: "text",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "AufDat",
-    label: "AufDat",
-    type: "date",
-    allowCreate: false,
-    allowUpdate: false,
-  },
-  {
-    name: "Beschreibung", 
-    label: "Beschreibung", 
-    type: "text", 
-    allowCreate: false,
-    allowUpdate: false,
-  },
-];
+  const columns: IMasterDataField[] = [
+    // {
+    //   name: "Status",
+    //   label: "Status",
+    //   type: "text",
+    //   allowCreate: false,
+    //   allowUpdate: false,
+    // },
+    {
+      name: "Aufnr",
+      label: "AufNr",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "KunNr",
+      label: "KunNr",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Kunde.KunName",
+      label: "Kundenname",
+      type: "text",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "AufDat",
+      label: "AufDat",
+      type: "date",
+      allowCreate: false,
+      allowUpdate: false,
+    },
+    {
+      name: "Beschreibung", 
+      label: "Beschreibung", 
+      type: "text", 
+      allowCreate: false,
+      allowUpdate: false,
+    },
+  ];
 </script>
 
 <style>
