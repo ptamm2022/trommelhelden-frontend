@@ -4,7 +4,7 @@ export const routes = [
   // ----------------------------------------------------------------
   {
     path: "/orders",
-    component: () => import("@/views/Orders/OrderOverview.vue"),
+    component: () => import("@/views/Orders/ListOrders.vue"),
   },
   {
     path: "/orders/create",
