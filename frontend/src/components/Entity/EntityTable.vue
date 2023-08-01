@@ -90,14 +90,16 @@
           <div v-else-if="!isLoading && data">
             <div v-if="cols.type === 'date'">
               {{
-  data && data[cols.name]
-  ? useDateFormat(data[cols.name], "DD.MM.YYYY", {
-    locales: "de-DE",
-  }).value
-  : ""
+                data && data[cols.name]
+                ? useDateFormat(data[cols.name], "DD.MM.YYYY", {
+                  locales: "de-DE",
+                }).value
+                : ""
               }}
             </div>
-            <div v-if="cols.type === 'money'">{{ data[cols.name] }} €</div>
+            <div v-if="cols.type === 'money'">
+              {{ data[cols.name] }} €
+            </div>
             <div v-if="cols.type === 'numeric'">
               {{ data[cols.name] }}
             </div>
@@ -152,255 +154,255 @@
     <ConfirmDialog></ConfirmDialog>
   </div>
 </template>
+
 <script setup lang="ts">
-import ConfirmDialog from "primevue/confirmdialog";
+  import ConfirmDialog from "primevue/confirmdialog";
+  import Chip from "primevue/chip";
+  import Calendar from "primevue/calendar";
+  import { computed, onMounted, PropType, ref } from "vue";
+  import { FilterMatchMode, FilterOperator } from "primevue/api";
+  import { useDateFormat } from "@vueuse/core";
+  import { IFilter, ISort, TGenericService, IMasterDataField } from "@/types";
+  import { useToast } from "primevue/usetoast";
+  import { convertFilterOperator } from "@/util/FilterOperator";
+  import GenericService from "@/api/services/Generic";
+  import Button from "primevue/button";
+  import Column from "primevue/column";
+  import DataTable from "primevue/datatable";
+  import InputNumber from "primevue/inputnumber";
+  import InputText from "primevue/inputtext";
+  import Skeleton from "primevue/skeleton";
+  import { router } from "@/router";
+  import { flatten } from "flat";
+  import { useConfirm } from "primevue/useconfirm";
 
-import Chip from "primevue/chip";
-import Calendar from "primevue/calendar";
-import { computed, onMounted, PropType, ref } from "vue";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-import { useDateFormat } from "@vueuse/core";
-import { IFilter, ISort, TGenericService, IMasterDataField } from "@/types";
-import { useToast } from "primevue/usetoast";
-import { convertFilterOperator } from "@/util/FilterOperator";
-import GenericService from "@/api/services/Generic";
-import Button from "primevue/button";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
-import InputNumber from "primevue/inputnumber";
-import InputText from "primevue/inputtext";
-import Skeleton from "primevue/skeleton";
-import { router } from "@/router";
-import { flatten } from "flat";
-import { useConfirm } from "primevue/useconfirm";
+  const confirm = useConfirm();
+  const totalCount = ref(0);
+  const isLoading = ref(false);
+  const page = ref(0);
+  const sortOptions = ref<ISort[]>([]);
+  const toast = useToast();
+  const filterOptions = ref<IFilter>({});
+  const filters = ref();
 
-const confirm = useConfirm();
-const totalCount = ref(0);
-const isLoading = ref(false);
-const page = ref(0);
-const sortOptions = ref<ISort[]>([]);
-const toast = useToast();
-const filterOptions = ref<IFilter>({});
-const filters = ref();
+  const emit = defineEmits(["editRow", "onRowSelect"]);
 
-const emit = defineEmits(["editRow", "onRowSelect"]);
+  const onRowSelect = (event: any) => {
+    emit("onRowSelect", event.data);
+  };
 
-const onRowSelect = (event: any) => {
-  emit("onRowSelect", event.data);
-};
-
-const props = defineProps({
-  columns: {
-    type: Object as PropType<IMasterDataField[]>,
-    required: true,
-  },
-  resourceName: {
-    type: String,
-    required: true,
-  },
-  showRows: {
-    type: Number,
-    default: 20,
-  },
-  showMaxActiveFilter: {
-    type: Number,
-    default: 3,
-  },
-  allowEdit: {
-    type: Boolean,
-    default: false,
-  },
-  allowDelete: {
-    type: Boolean,
-    default: false,
-  },
-  primaryKey: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  optParams: {
-    type: Object,
-    required: false,
-    default: null,
-  },
-  emitEditOnly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
-
-const service = new GenericService<TGenericService>(
-  props.resourceName as string,
-);
-
-const values = ref(new Array(props.showRows));
-const rows = ref(props.showRows);
-
-const activeFilters = computed(() => {
-  return Object.keys(filterOptions.value).slice(-props.showMaxActiveFilter);
-});
-
-onMounted(async () => {
-  await fetchData(true);
-  createFilters(props.columns);
-});
-
-const createFilters = (columns: any) => {
-  const ret: any = {};
-
-  columns.forEach((col: any) => {
-    if (col.type === "text") {
-      ret[col.name] = {
-        operator: FilterOperator.AND,
-        constraints: [{ matchMode: FilterMatchMode.CONTAINS, value: null }],
-      };
-    }
-    if (col.type === "numeric") {
-      ret[col.name] = {
-        operator: FilterOperator.AND,
-        constraints: [{ matchMode: FilterMatchMode.EQUALS, value: null }],
-      };
-    }
-    if (col.type === "date") {
-      ret[col.name] = {
-        operator: FilterOperator.AND,
-        constraints: [{ matchMode: FilterMatchMode.DATE_IS, value: null }],
-      };
-    }
-
-    if (!Object.hasOwn(col, "type")) {
-      ret[col.name] = {
-        operator: FilterOperator.AND,
-        constraints: [{ matchMode: FilterMatchMode.CONTAINS, value: null }],
-      };
-    }
-  });
-
-  filters.value = ret;
-};
-
-const removeFilter = (filterKey: string) => {
-  delete filterOptions.value[filterKey];
-  filters.value[filterKey].constraints[0].value = null;
-  fetchData(true);
-};
-
-const onPage = async (event: any) => {
-  page.value = event.first;
-  await fetchData(false);
-};
-
-const onEditButton = (event: any, data: any) => {
-  if (props.emitEditOnly) {
-    return emit("editRow", data);
-  }
-  console.log(data);
-  console.log(props.primaryKey);
-  router.push({
-    name: "Single" + props.name,
-    params: { id: data[props.primaryKey] },
-  });
-};
-
-const onDelete = async ($event: Event, data: any) => {
-  confirm.require({
-    message: `Are you sure you want to delete the item?`,
-    header: "Confirmation",
-    icon: "pi pi-exclamation-triangle",
-    accept: async () => {
-      await service.delete(data[props.primaryKey]);
-      await fetchData(true);
-      toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: `Data deleted successfully Value with ${props.primaryKey}: ${data[props.primaryKey]
-          }`,
-        life: 3000,
-      });
+  const props = defineProps({
+    columns: {
+      type: Object as PropType<IMasterDataField[]>,
+      required: true,
+    },
+    resourceName: {
+      type: String,
+      required: true,
+    },
+    showRows: {
+      type: Number,
+      default: 20,
+    },
+    showMaxActiveFilter: {
+      type: Number,
+      default: 3,
+    },
+    allowEdit: {
+      type: Boolean,
+      default: false,
+    },
+    allowDelete: {
+      type: Boolean,
+      default: false,
+    },
+    primaryKey: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    optParams: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+    emitEditOnly: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   });
-};
 
-const onFilter = async (event: any) => {
-  const { filters } = event;
+  const service = new GenericService<TGenericService>(
+    props.resourceName as string,
+  );
 
-  Object.keys(filters).forEach((x) => {
-    console.log(filters[x].constraints[0].value);
+  const values = ref(new Array(props.showRows));
+  const rows = ref(props.showRows);
 
-    if (filters[x].constraints[0].value) {
-      filterOptions.value[x] = {};
-      if (filters[x].constraints[0].value instanceof Date) {
-        filters[x].constraints[0].value.setUTCHours(0, 0, 0, 0);
-      }
-      filterOptions.value[x][
-        convertFilterOperator(filters[x].constraints[0].matchMode)
-      ] = filters[x].constraints[0].value;
-    } else {
-      Object.prototype.hasOwnProperty.call(filterOptions.value, x)
-        ? delete filterOptions.value[x]
-        : null;
-    }
+  const activeFilters = computed(() => {
+    return Object.keys(filterOptions.value).slice(-props.showMaxActiveFilter);
   });
-  await fetchData(false);
-};
 
-const onSort = async (event: any) => {
-  const { multiSortMeta } = event;
-  console.log(multiSortMeta);
+  onMounted(async () => {
+    await fetchData(true);
+    createFilters(props.columns);
+  });
 
-  sortOptions.value = [
-    ...multiSortMeta.map((x: any) => {
-      const foo: any = {};
-      foo[x.field] = x.order > 0 ? "asc" : "desc";
-      return foo;
-    }),
-  ];
+  const createFilters = (columns: any) => {
+    const ret: any = {};
 
-  await fetchData(false);
-};
+    columns.forEach((col: any) => {
+      if (col.type === "text") {
+        ret[col.name] = {
+          operator: FilterOperator.AND,
+          constraints: [{ matchMode: FilterMatchMode.CONTAINS, value: null }],
+        };
+      }
+      if (col.type === "numeric") {
+        ret[col.name] = {
+          operator: FilterOperator.AND,
+          constraints: [{ matchMode: FilterMatchMode.EQUALS, value: null }],
+        };
+      }
+      if (col.type === "date") {
+        ret[col.name] = {
+          operator: FilterOperator.AND,
+          constraints: [{ matchMode: FilterMatchMode.DATE_IS, value: null }],
+        };
+      }
 
-const fetchData = async (isInitial: boolean) => {
-  try {
-    isLoading.value = true;
-    if (isInitial) {
-      const { data, count } = await service.listAndCount(
-        sortOptions.value,
-        filterOptions.value,
-        page.value,
-        rows.value,
-        props.optParams,
-      );
-      values.value = data.map((x) => flatten(x));
-      totalCount.value = count;
-    } else {
-      values.value = (
-        await service.list(
+      if (!Object.hasOwn(col, "type")) {
+        ret[col.name] = {
+          operator: FilterOperator.AND,
+          constraints: [{ matchMode: FilterMatchMode.CONTAINS, value: null }],
+        };
+      }
+    });
+
+    filters.value = ret;
+  };
+
+  const removeFilter = (filterKey: string) => {
+    delete filterOptions.value[filterKey];
+    filters.value[filterKey].constraints[0].value = null;
+    fetchData(true);
+  };
+
+  const onPage = async (event: any) => {
+    page.value = event.first;
+    await fetchData(false);
+  };
+
+  const onEditButton = (event: any, data: any) => {
+    if (props.emitEditOnly) {
+      return emit("editRow", data);
+    }
+    console.log(data);
+    console.log(props.primaryKey);
+    router.push({
+      name: "Single" + props.name,
+      params: { id: data[props.primaryKey] },
+    });
+  };
+
+  const onDelete = async ($event: Event, data: any) => {
+    confirm.require({
+      message: `Are you sure you want to delete the item?`,
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: async () => {
+        await service.delete(data[props.primaryKey]);
+        await fetchData(true);
+        toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: `Data deleted successfully Value with ${props.primaryKey}: ${data[props.primaryKey]
+            }`,
+          life: 3000,
+        });
+      },
+    });
+  };
+
+  const onFilter = async (event: any) => {
+    const { filters } = event;
+
+    Object.keys(filters).forEach((x) => {
+      console.log(filters[x].constraints[0].value);
+
+      if (filters[x].constraints[0].value) {
+        filterOptions.value[x] = {};
+        if (filters[x].constraints[0].value instanceof Date) {
+          filters[x].constraints[0].value.setUTCHours(0, 0, 0, 0);
+        }
+        filterOptions.value[x][
+          convertFilterOperator(filters[x].constraints[0].matchMode)
+        ] = filters[x].constraints[0].value;
+      } else {
+        Object.prototype.hasOwnProperty.call(filterOptions.value, x)
+          ? delete filterOptions.value[x]
+          : null;
+      }
+    });
+    await fetchData(false);
+  };
+
+  const onSort = async (event: any) => {
+    const { multiSortMeta } = event;
+    console.log(multiSortMeta);
+
+    sortOptions.value = [
+      ...multiSortMeta.map((x: any) => {
+        const foo: any = {};
+        foo[x.field] = x.order > 0 ? "asc" : "desc";
+        return foo;
+      }),
+    ];
+
+    await fetchData(false);
+  };
+
+  const fetchData = async (isInitial: boolean) => {
+    try {
+      isLoading.value = true;
+      if (isInitial) {
+        const { data, count } = await service.listAndCount(
           sortOptions.value,
           filterOptions.value,
           page.value,
           rows.value,
           props.optParams,
-        )
-      ).map((x) => flatten(x));
-    }
+        );
+        values.value = data.map((x) => flatten(x));
+        totalCount.value = count;
+      } else {
+        values.value = (
+          await service.list(
+            sortOptions.value,
+            filterOptions.value,
+            page.value,
+            rows.value,
+            props.optParams,
+          )
+        ).map((x) => flatten(x));
+      }
 
+      isLoading.value = false;
+    } catch (e) {
+      toast.add({
+        severity: "error",
+        summary: "Fehler beim Datenabruf",
+        detail: e,
+        life: 5000,
+      });
+      values.value = [];
+    }
     isLoading.value = false;
-  } catch (e) {
-    toast.add({
-      severity: "error",
-      summary: "Fehler beim Datenabruf",
-      detail: e,
-      life: 5000,
-    });
-    values.value = [];
-  }
-  isLoading.value = false;
-};
+  };
 </script>
 
 <style scoped>

@@ -2,10 +2,8 @@
     <div class="h-screen w-full bg-gradient-to-r from-blue-500 to-pink-700 flex justify-center items-center flex-col gap-y-12 justify-end">
         <div class="rounded-xl bg-white px-16 py-8 shadow-2xl  h-3/4 w-3/4 flex flex-col gap-y-8  justify-center ">
             <div v-if="!isLoading">
-                <h2
-                    class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent"
-                >
-                Trommelhelden DB
+                <h2 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
+                    Trommelhelden DB
                 </h2>
 
                 <div class="flex justify-end">
@@ -15,19 +13,19 @@
                         @click="createData"
                     />
                 </div>
-
             </div>
 
             <div
                 v-else
                 class="flex justify-center items-center flex-col"
             >
-
                 <ProgressSpinner aria-label="Basic ProgressSpinner" />
-                <h1
-                    class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
+
+                <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-4xl font-extrabold text-transparent">
                     Daten werden erstellt...
                 </h1>
+
+                Es wird empfohlen, die Konsolenausgaben zu beachten und die Seite sonst gelegentlich neuzuladen.
             </div>
         </div>
     </div>
@@ -44,7 +42,6 @@
     const store = useStore();
     const router = useRouter();
 
-    const first = ref(false);
     const isLoading = ref(false);
     const startUpService = new GenericService("startup");
 

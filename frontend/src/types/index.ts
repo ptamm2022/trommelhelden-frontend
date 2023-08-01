@@ -1,5 +1,3 @@
-// import { FilterMatchModeOptions } from "primevue/api";
-
 interface IAuftrag {
   Aufnr: number;
   MitID?: string;
@@ -10,7 +8,6 @@ interface IAuftrag {
   Dauer?: number;
   Anfahrt?: number;
   Beschreibung?: string;
-  Status?: string;
   Mitarbeiter?: IMitarbeiter;
   Montage?: IMontage[];
   Rechnung: IRechnung[];

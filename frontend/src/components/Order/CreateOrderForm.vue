@@ -1,9 +1,8 @@
 <template>
-  <div class="card mx-[20%] flex flex-1 flex-col justify-center rounded-xl bg-white p-6 shadow-2xl">
-    <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
-      1. Auftrag erstellen
-    </h1>
-    
+  <div
+    id="co"
+    ref="el"
+  >
     <Divider />
     
     <div class="my-4">
@@ -15,10 +14,15 @@
           rows="5"
           class="w-3/4"
         />
-        <label for="order-description">Auftragsbeschreibung (optional)</label>
+
+        <label for="order-description">
+          Auftragsbeschreibung (optional)
+        </label>
       </span>
 
-      <span class="ml-4 text-sm">{{ order.Beschreibung ? order.Beschreibung.length : 0 }}/500</span>
+      <span class="ml-4 text-sm">
+        {{ order.Beschreibung ? order.Beschreibung.length : 0 }}/500
+      </span>
     </div>
 
     <Divider />
@@ -37,10 +41,10 @@
         v-if="order.Kunde"
         class="grid grid-cols-2"
       >
-        <span>KunNr: </span>   <span>{{ order.Kunde.KunNr }}</span>
-        <span>Name: </span>    <span>{{ order.Kunde.KunName }}</span>
-        <span>Straße: </span>         <span>{{ order.Kunde.KunStrasse }}</span>
-        <span>Ort: </span>            <span>{{ order.Kunde.KunPLZ }} {{ order.Kunde.KunOrt }}</span>
+        <span>KunNr: </span>    <span>{{ order.Kunde.KunNr }}</span>
+        <span>Name: </span>     <span>{{ order.Kunde.KunName }}</span>
+        <span>Straße: </span>   <span>{{ order.Kunde.KunStrasse }}</span>
+        <span>Ort: </span>      <span>{{ order.Kunde.KunPLZ }} {{ order.Kunde.KunOrt }}</span>
     </div>
 
     <div>
@@ -79,33 +83,22 @@
     </div>
 
     <Divider />
-    
-    <div class="flex justify-between">
-      <Button
-        style="background-color: #d92979"
-        label="Zurück"
-        icon="pi pi-backward"
-        @click="$router.go(-1)"
-      />
       
-      <Button
-        type="submit"
-        icon="pi pi-check"
-        label="Auftrag erstellen"
-        class="ml-auto"
-        :disabled="!order.Kunde || !order.AufDat"
-        @click="createOrder"
-      />
-    </div>
-
+    <Button
+      type="submit"
+      icon="pi pi-check"
+      label="Auftrag erstellen"
+      class="w-full"
+      :disabled="!order.Kunde || !order.AufDat"
+      @click="createOrder"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
   import EntityTable from "@/components/Entity/EntityTable.vue";
   import Calendar from "primevue/calendar";
-  import CustomerService from "@/api/services/Customers";
-  import { IKunde, IAuftrag, IEntityTableColumns, IMasterDataField } from "@/types";
+  import { IKunde, IAuftrag, IMasterDataField } from "@/types";
   import { ref } from "vue";
   import { useToast } from "primevue/usetoast";
   import { useRouter } from "vue-router";
@@ -114,7 +107,6 @@
   const router = useRouter();
   const toast = useToast();
 
-  const customerService = new CustomerService();
   const orderService = new OrderService();
   const op = ref();
   const order = ref<IAuftrag>({

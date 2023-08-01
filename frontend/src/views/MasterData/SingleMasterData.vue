@@ -15,23 +15,28 @@
         class="w-full"
       >
         <div>{{ field.label }}</div>
+        
         <InputText
           v-if="field.type === 'text'"
           v-model="data[field.name]"
           class="w-full"
           :placeholder="field.name"
         ></InputText>
+
         <InputNumber
           v-if="field.type === 'numeric'"
           v-model="data[field.name]"
           class="w-full"
           :placeholder="field.name"
         ></InputNumber>
+
         <Calendar
           v-if="field.type === 'date'"
           v-model="data[field.name]"
           date-format="dd.mm.yy"
+          :show-icon="true"
         ></Calendar>
+
         <div v-if="field.type === 'relation'">
           <EntityDropdown
             v-model="data[field.name]"
@@ -42,102 +47,56 @@
         </div>
       </span>
     </div>
+
     <div class="flex justify-between">
       <Button
-        style="background-color: #61a5fa"
+        style="background-color: #d92979"
         label="Zurück"
         icon="pi pi-backward"
         @click="$router.go(-1)"
       />
-      <Button
-        label="Delete"
-        icon="pi pi-trash"
-        class="p-button-danger"
-        @click="onDelete"
-      />
-      <Button
-        label="Update"
-        icon="pi pi-refresh"
-        @click="onUpdate"
-      />
-
     </div>
+    
     <ConfirmDialog></ConfirmDialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import ConfirmDialog from "primevue/confirmdialog";
+  import ConfirmDialog from "primevue/confirmdialog";
+  import EntityDropdown from "@/components/Entity/EntityDropdown.vue";
+  import Calendar from "primevue/calendar";
+  import { useConfirm } from "primevue/useconfirm";
+  import GenericService from "@/api/services/Generic";
+  import { router } from "@/router";
+  import { TGenericService } from "@/types";
+  import { useToast } from "primevue/usetoast";
+  import { onMounted, ref } from "vue";
+  import { useRoute } from "vue-router";
 
-import EntityDropdown from "@/components/Entity/EntityDropdown.vue";
-import Calendar from "primevue/calendar";
-import { useConfirm } from "primevue/useconfirm";
+  const isLoading = ref(false);
+  const data: any = ref({});
+  const route = useRoute();
+  const props = defineProps([
+    "resourceName",
+    "fields",
+    "label",
+    "labelSingular",
+    "name",
+    "primaryKey",
+  ]);
 
-import GenericService from "@/api/services/Generic";
-import { router } from "@/router";
-import { TGenericService } from "@/types";
-import { useToast } from "primevue/usetoast";
-import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+  const service = new GenericService<TGenericService>(
+    props.resourceName as string,
+  );
 
-const confirm = useConfirm();
-
-const isLoading = ref(false);
-const data: any = ref({});
-const route = useRoute();
-const toast = useToast();
-const props = defineProps([
-  "resourceName",
-  "fields",
-  "label",
-  "labelSingular",
-  "name",
-  "primaryKey",
-]);
-
-const service = new GenericService<TGenericService>(
-  props.resourceName as string,
-);
-
-onMounted(async () => {
-  isLoading.value = true;
-  data.value = await service.get(route.params.id as string);
-  if (data.value === null) {
-    router.push({ name: "404" });
-  }
-  isLoading.value = false;
-});
-
-const onUpdate = async () => {
-  delete data.value[props.primaryKey];
-
-  await service.update(route.params.id as string, data.value);
-  router.push({ name: props.name });
-  toast.add({
-    severity: "success",
-    summary: "Success",
-    detail: `${props.label} mit ${props.primaryKey} ${route.params.id} erfolgreich gelöscht.`,
-    life: 5000,
+  onMounted(async () => {
+    isLoading.value = true;
+    data.value = await service.get(route.params.id as string);
+    if (data.value === null) {
+      router.push({ name: "404" });
+    }
+    isLoading.value = false;
   });
-};
-
-const onDelete = async () => {
-  confirm.require({
-    message: `Möchten Sie die Daten wirklich löschen?`,
-    header: "Confirmation",
-    icon: "pi pi-exclamation-triangle",
-    accept: async () => {
-      await service.delete(route.params.id as string);
-      toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: `${props.label} mit ${props.primaryKey} ${route.params.id} erfolgreich gelöscht.`,
-        life: 5000,
-      });
-      router.push({ name: props.name });
-    },
-  });
-};
 </script>
 
 <style scoped>

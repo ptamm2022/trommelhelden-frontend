@@ -192,7 +192,7 @@ function createRandomAuftrag(
   let ErlDat;
   let Dauer;
   let Anfahrt;
-  let Status = "Erstellt";
+  // let Status = "Erstellt";
 
   if (Math.random() >= 0.06) {
     // === 2. Auftrag planen ===
@@ -200,7 +200,7 @@ function createRandomAuftrag(
 
     const maxErlDat = new Date(AufDat.getTime() + 50 * 24 * 60 * 60 * 1000);  // 1 Tag in Millisekunden
     const minErlDat = new Date(AufDat.getTime() + 1 * 24 * 60 * 60 * 1000);   // 50 Tage in Millisekunden
-    Status = "Geplant";
+    // Status = "Geplant";
 
     ErlDat = faker.date.between(
       minErlDat,
@@ -211,11 +211,24 @@ function createRandomAuftrag(
       // === 3. Auftrag erledigen ===
       Dauer = new Prisma.Decimal(faker.datatype.number({ min: 1, max: 20 }));
       Anfahrt = faker.datatype.number({ min: 1, max: 100 });
-      Status = "Erledigt";
+      // Status = "Erledigt";
+
+      const anzahlErsatzteile = faker.datatype.number({ min: 1, max: 3 });
+
+      const montagen = [];
+      for (let i = 0; i < anzahlErsatzteile; i++) {
+        montagen.push({
+          Anzahl: faker.datatype.number({ min: 1, max: 3 }),
+          Ersatzteil: {
+            connect: {
+              EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
+            },
+          },
+        });
+      }
 
       return {
         Beschreibung,
-        Status,
         ErlDat,
         AufDat,
         Dauer,
@@ -231,14 +244,7 @@ function createRandomAuftrag(
           },
         },
         Montage: {
-          create: {
-            Anzahl: faker.datatype.number({ min: 1, max: 3 }),
-            Ersatzteil: {
-              connect: {
-                EtID: faker.helpers.arrayElement(Ersatzteil).EtID,
-              },
-            },
-          },
+          create: montagen,
         },
       };
 
@@ -246,7 +252,6 @@ function createRandomAuftrag(
       
       return {
         Beschreibung,
-        Status,
         ErlDat,
         AufDat,
         Kunde: {
@@ -266,7 +271,6 @@ function createRandomAuftrag(
     
     return {
       Beschreibung,
-      Status,
       AufDat,
       Kunde: {
         connect: {

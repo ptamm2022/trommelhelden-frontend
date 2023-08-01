@@ -5,10 +5,26 @@
   >
     <Divider />
 
+    <div class="my-4">
+      <span class="p-float-label flex flex-row">
+        <Textarea
+          id="order-description"
+          v-model="order.Beschreibung"
+          :auto-resize="true"
+          rows="5"
+          class="w-3/4"
+        />
+        <label for="order-description">Auftragsbeschreibung (optional)</label>
+      </span>
+
+      <span class="ml-4 text-sm">{{ order.Beschreibung ? order.Beschreibung.length : 0 }}/500</span>
+    </div>
+
+    <Divider />
+
     <div class="grid grid-cols-2">
       <span>Auftragsnummer: </span>   <span>{{ order?.Aufnr }}</span>
       <span>Auftragsdatum: </span>    <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
-      <span>Beschreibung: </span>     <span>{{ order?.Beschreibung }}</span>
     </div>
 
     <Divider />
@@ -34,9 +50,10 @@
       v-if="order.MitID"
       class="grid grid-cols-2"
     >
-        <span>Mitarbeiternummer: </span>  <span> {{ employee.MitID }} </span>
-        <span>Mitarbeiter-Name: </span>   <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
-        <span>Mitarbeiter-Beruf: </span>  <span> {{ employee?.MitJob }} </span>
+        <span>MitID: </span>  <span> {{ employee.MitID }} </span>
+        <span>Name: </span>   <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
+        <span>Job: </span>  <span> {{ employee?.MitJob }} </span>
+        <span>Stundensatz: </span>  <span> {{ employee?.MitStundensatz }} €/h</span>
     </div>
 
     <OverlayPanel
@@ -99,7 +116,7 @@
   import { unflatten } from "flat";
 
   const order = ref<IAuftrag>({
-    ErlDat: new Date() // Setze das aktuelle Datum
+    ErlDat: new Date()
   } as IAuftrag);
 
   const dialogRef: any = inject("dialogRef");
@@ -113,7 +130,7 @@
 
   const columns: IMasterDataField[] = [
     {
-      label: "ID",
+      label: "MitID",
       name: "MitID",
       type: "text",
       allowCreate: false,
@@ -135,7 +152,7 @@
       allowUpdate: false,
     },
     {
-      label: "Stelle",
+      label: "Job",
       name: "MitJob",
       type: "text",
       allowCreate: false,
@@ -143,13 +160,13 @@
     },
     {
       label: "Niederlassung",
-      name: "NLNr",
+      name: "NlNr",
       type: "text",
       allowCreate: false,
       allowUpdate: false,
     },
     {
-      label: "Stundensatz",
+      label: "Stundensatz (in €/h)",
       name: "MitStundensatz",
       type: "numeric",
       allowCreate: false,
@@ -158,14 +175,12 @@
   ];
 
   const toggle = async (event: Event) => {
-    // customers.value = await customerService.list();
     op.value.toggle(event);
   };
 
-  onMounted(() => {
+  onMounted(async () => {
     order.value = dialogRef.value.data.order;
     order.value.ErlDat = new Date();
-    order.value.Status = "Geplant";
   });
 
   const onSelectEmployee = (employeeP: IMitarbeiter) => {
@@ -175,7 +190,6 @@
   };
 
   const planOrder = async () => {
-    // TODO IMPLEMENT
     try {
       let { Aufnr, MitID, Kunde, Mitarbeiter, Rechnung, ...x }: any = unflatten(
         order.value,

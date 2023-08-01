@@ -25,7 +25,6 @@ model Auftrag {
   Dauer        Decimal?     @db.Decimal(5, 1)
   Anfahrt      Int?
   Beschreibung String?      @db.VarChar(200)
-  Status       String?      @default("Erstellt") @db.VarChar(10)
   Montage      Montage[]
   Rechnung     Rechnung[]   
   Kunde        Kunde        @relation(fields: [KunNr], references: [KunNr], onUpdate: NoAction, map: "FK__Auftrag__KunNr__30F848ED")

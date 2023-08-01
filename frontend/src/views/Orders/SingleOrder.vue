@@ -12,12 +12,12 @@
                 <div class="flex grid grid-cols-2 card rounded-xl bg-white p-6 shadow-xl">
                     <!-- <span class="text-xl font-bold"> Auftragsdatum </span><span> {{useDateFormat(order.AufDat, "DD.MM.YYYY", {locales: "de-DE",}).value}}</span> -->
                     
-                    <span class="text-xl font-bold"> 
+                    <!-- <span class="text-xl font-bold"> 
                         Status:
                     </span>
                     <span>
                         {{ order.Status }}
-                    </span>
+                    </span> -->
 
                     <span class="text-xl font-bold"> 
                         Beschreibung:

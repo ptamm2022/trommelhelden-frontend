@@ -47,7 +47,7 @@ CREATE TABLE [dbo].[Auftrag]
     [Dauer] [decimal](5, 1) NULL,
     [Anfahrt] [int] NULL,
     [Beschreibung] [varchar](200) NULL,
-    [Status] [varchar](10) NULL,
+    -- [Status] [varchar](10) NULL,
     CONSTRAINT [PK__Auftrag__D56A0E13A096AE56] PRIMARY KEY CLUSTERED 
 (
 	[Aufnr] ASC
