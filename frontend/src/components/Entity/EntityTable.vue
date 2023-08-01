@@ -97,7 +97,9 @@
                 : ""
               }}
             </div>
-            <div v-if="cols.type === 'money'">{{ data[cols.name] }} €</div>
+            <div v-if="cols.type === 'money'">
+              {{ data[cols.name] }} €
+            </div>
             <div v-if="cols.type === 'numeric'">
               {{ data[cols.name] }}
             </div>
@@ -155,7 +157,6 @@
 
 <script setup lang="ts">
   import ConfirmDialog from "primevue/confirmdialog";
-
   import Chip from "primevue/chip";
   import Calendar from "primevue/calendar";
   import { computed, onMounted, PropType, ref } from "vue";

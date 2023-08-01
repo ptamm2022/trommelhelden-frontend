@@ -1,25 +1,26 @@
 <template>
-
-  <!-- <Load v-if="!store.firstStartUp"></Load> -->
-
   <div
     v-if="!store.firstStartUp && !isLoading"
     class="flex max-h-full min-h-screen flex-col bg-[#ffffffe7] "
   >
     <Header v-if="store.showHeader" />
+
     <SidebarMenu />
+
     <div class="container m-auto my-8 flex h-full flex-1 justify-center">
       <router-view :key="$route.fullPath" />
     </div>
+
     <DebugBar v-if="store.showDebugBar" />
+    
     <Toast />
+
     <ScrollTop />
   </div>
 
   <Load v-else-if="isLoading"></Load>
 
   <Start v-else></Start>
-
 </template>
 
 <script setup lang="ts">
@@ -28,28 +29,20 @@
   import { onMounted, ref } from "vue";
   import SidebarMenu from "./components/Menu/SidebarMenu.vue";
   import { useStore } from "./store";
-  import { useRouter } from 'vue-router';
   import Start from "./views/Startup/Start.vue";
   import Load from "./views/Startup/Load.vue";
 
   const isLoading = ref(false);
-
-  const router = useRouter();
-  
   const store = useStore();
   
   onMounted(async () => {
     try {
-
       isLoading.value = true;
       await store.startUp(); 
       isLoading.value = false;
       window.localStorage.setItem("loadingScreen", "false");
-
     } catch (error) {
-
       console.error(error);
-
     }
   });
 </script>
