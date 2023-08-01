@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex h-fit flex-1 flex-col items-stretch justify-center rounded-xl bg-white p-6 shadow-2xl">
+  <div class="my-8 h-fit card justify-center rounded-xl bg-white p-6 shadow-2xl">
     <div class="flex items-center justify-between ">
       <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
         {{ props.label }}
@@ -10,6 +10,7 @@
           icon="pi pi-plus"
           class="mr-2 mb-2 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
           :label="`${props.label} erstellen`"
+          style="margin-left: 4rem;"
           @click="openDialog = true"
         />
       </RouterLink>
