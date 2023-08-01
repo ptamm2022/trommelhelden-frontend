@@ -26,7 +26,6 @@
       <span>Auftragsnummer: </span>     <span>{{ order?.Aufnr }}</span>
       <span>Auftragsdatum: </span>      <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
       <span>Erledigungsdatum: </span>   <span>{{ useDateFormat(order?.ErlDat, "DD.MM.YYYY").value }}</span>
-      <span>Beschreibung: </span>       <span>{{ order?.Beschreibung }}</span>
     </div>
 
     <Divider />
@@ -74,20 +73,19 @@
         @change="onSparePartsSelectionChange"
       >
         <template #option="slotProps">
-
           <div class="flex justify-between">
-            <!-- <Chip>
-              {{ slotProps.option?.EtPreis }} €
-            </Chip> -->
             <span>
                {{ slotProps.option?.EtBezeichnung }}
             </span>
              
             <span>
+              &nbsp; á {{ slotProps.option?.EtPreis }} €
+            </span>
+
+            <span>
               &nbsp;({{ slotProps.option?.EtHersteller }})
             </span>
           </div>
-
         </template>
       </MultiSelect>
 
@@ -98,7 +96,6 @@
               class="w-3 h-3 text-xs text-center items-center justify-center"
               style="margin-right: 0.5rem; margin-top: 0.1rem; margin-bottom: 0.1rem; font-size: 0.75rem" 
               @click="incrementQuantity(sparePartData.EtID)" 
-              
             >+</Button>
             
             <Chip class="w-8 flex items-center justify-center">
@@ -109,7 +106,6 @@
               class="w-3 h-3 text-xs text-center items-center justify-center" 
               style="margin-left: 0.5rem; margin-right: 0.5rem; margin-top: 0.1rem; margin-bottom: 0.1rem; font-size: 0.75rem" 
               @click="decrementQuantity(sparePartData.EtID)" 
-              
             >-</Button>
 
             {{ sparePartData.EtBezeichnung }}
@@ -159,12 +155,7 @@
   const selectedSparePartsData = ref<{ EtID: string; EtBezeichnung: string; Anzahl: number }[]>([]);
   selectedSparePartsData.value = [];
 
-  // Funktion, um ausgewählte Ersatzteile und deren Anzahl zu aktualisieren
   const updateSelectedSpareParts = (sparePart: IErsatzteil) => {
-    // Prüfen, ob das Ersatzteil bereits ausgewählt wurde
-    // const existingSparePart = selectedSparePartsData.value.find(
-    //   (item) => item.EtID === sparePart.EtID
-    // );
     const existingSparePartIndex = selectedSparePartsData.value.findIndex(
     (item) => item.EtID === sparePart.EtID
     );
@@ -180,10 +171,6 @@
   };
 
   const onSparePartsSelectionChange = () => {
-    // Entfernen Sie alle vorhandenen Daten aus der Datenstruktur
-    // selectedSparePartsData.value = [];
-
-    // Aktualisieren Sie die Datenstruktur für jedes ausgewählte Ersatzteil
     selectedSpareParts.value.forEach((sparePart: IErsatzteil) => {
       updateSelectedSpareParts(sparePart);
     });
@@ -196,7 +183,6 @@
     return existingSparePart.Anzahl;
   }
 
-  // Funktion, um die Anzahl zu erhöhen
   const incrementQuantity = (index: string) => {
     const existingSparePart = selectedSparePartsData.value.find(
       (item) => item.EtID === index
@@ -204,7 +190,6 @@
     existingSparePart.Anzahl++;
   };
 
-  // Funktion, um die Anzahl zu verringern
   const decrementQuantity = (index: string) => {
     const existingSparePart = selectedSparePartsData.value.find(
       (item) => item.EtID === index

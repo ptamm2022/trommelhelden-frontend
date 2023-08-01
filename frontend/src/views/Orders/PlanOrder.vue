@@ -7,14 +7,13 @@
         </h1>
 
         <div>
-          <router-link to="/orders/create">
-              <Button
-                icon="pi pi-plus"
-                class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
-                style="margin-right: 5rem;"
-                label="1. Auftrag erstellen"
-              />
-          </router-link>
+          <Button
+            icon="pi pi-plus"
+            class="mr-2 mb-2 w-56 h-14 rounded-lg !border-none text-center text-2xl font-medium text-white shadow-lg hover:scale-105 hover:transform"
+            style="margin-right: 5rem;"
+            label="1. Auftrag erstellen"
+            @click="onButtonClickCreateOrder"
+          />
 
           <router-link to="/orders">
               <Button
@@ -62,17 +61,44 @@
 
 <script setup lang="ts">
   import EntityTable from "@/components/Entity/EntityTable.vue";
-  
   import { IAuftrag, IMasterDataField } from "@/types";
   import { onMounted, ref } from "vue";
   import { useDialog } from "primevue/usedialog";
   import PlanOrderForm from "@/components/Order/PlanOrderForm.vue";
+  import CreateOrderForm from "@/components/Order/CreateOrderForm.vue";
   import disableScroll from "disable-scroll";
   
   const reRender = ref(0);
   const dialog = useDialog();
   const isLoading = ref(false);
   
+  const onButtonClickCreateOrder = (order: IAuftrag) => {
+    console.log(order);
+  
+    disableScroll.on(document.body);
+    
+    dialog.open(CreateOrderForm, {
+      props: {
+        header: "Auftrag erstellen",
+        style: {
+          width: "40vw",
+        },
+        breakpoints: {
+          "960px": "75vw",
+          "640px": "90vw",
+        },
+        modal: true,
+      },
+      data: {
+        order,
+      },
+      onClose: () => {
+        disableScroll.off();
+        reRender.value++;
+      },
+    });
+  };
+
   const onButtonClick = (order: IAuftrag) => {
     console.log(order);
   
@@ -80,7 +106,7 @@
     
     dialog.open(PlanOrderForm, {
       props: {
-        header: "Auftrag: " + order.Aufnr,
+        header: "Auftrag " + order.Aufnr + " planen",
         style: {
           width: "40vw",
         },
@@ -107,13 +133,6 @@
   });
   
   const columns: IMasterDataField[] = [
-    // {
-    //   name: "Status",
-    //   label: "Status",
-    //   type: "text",
-    //   allowCreate: false,
-    //   allowUpdate: false,
-    // },
     {
       name: "Aufnr",
       label: "AufNr",
