@@ -9,15 +9,11 @@ If changes were made run `docker-compose up --build` instead.
 
 !! IMPORTANT !! Check that the files `entrypoint.sh` and `run-initialisiton.sh` in the folder backend/Docker have the end-of-line-sequence LF
 
-## Restart Application
+## End Application
 
-1. In root folder run in cmd: `docker-compose down`.
+In order to restart the database, it is necessary to first shut down the application.
 
-2. In root folder run in cmd: `docker-compose up`.
-
-If changes were made run `docker-compose up --build` instead.
-
-!! IMPORTANT !! Check that the files `entrypoint.sh` and `run-initialisiton.sh` in the folder backend/Docker have the end-of-line-sequence LF
+1. In root folder run in cmd: `docker-compose down`. All data in the database will be deleted.
 
 ## DB-Schema
 
