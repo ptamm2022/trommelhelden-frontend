@@ -42,6 +42,7 @@
             removable
             @remove="removeFilter(filter)"
           />
+
           <Chip
             v-if="Object.keys(filterOptions).length > props.showMaxActiveFilter"
             :label="`+ ${Object.keys(filterOptions).length - props.showMaxActiveFilter
@@ -49,7 +50,11 @@
           />
         </div>
       </template>
-      <template #empty> No records found </template>
+
+      <template #empty> 
+        No records found 
+      </template>
+
       <Column
         v-for="cols in props.columns"
         :key="cols.name"
@@ -58,7 +63,7 @@
         :show-add-button="false"
         :show-filter-operator="false"
         :data-type="cols.type"
-        sortable
+        :sortable="cols.type != 'relation'"
       >
         <template #filter="{ filterModel }">
           <InputText
@@ -67,6 +72,7 @@
             class="p-column-filter"
             :placeholder="`Search by s${cols.label}`"
           />
+
           <Calendar
             v-if="cols.type === 'date'"
             v-model="filterModel.value"
@@ -74,6 +80,7 @@
             date-format="dd.mm.yy"
             :placeholder="`Search by ${cols.label}`"
           />
+
           <InputNumber
             v-if="cols.type != 'date' && cols.type != 'text'"
             v-model="filterModel.value"
@@ -83,10 +90,12 @@
             :placeholder="`Search by ${cols.label}`"
           />
         </template>
+
         <template #body="{ data }">
           <div v-if="isLoading">
             <Skeleton />
           </div>
+
           <div v-else-if="!isLoading && data">
             <div v-if="cols.type === 'date'">
               {{
@@ -97,17 +106,21 @@
                 : ""
               }}
             </div>
+
             <div v-if="cols.type === 'money'">
               {{ data[cols.name] }} €
             </div>
+
             <div v-if="cols.type === 'numeric'">
               {{ data[cols.name] }}
             </div>
+
             <div v-if="cols.type === 'relation'">
               <RouterLink :to="`/${cols.relation?.resourceName}/${data[cols.relation?.primaryKey as string]}`">
                 <Chip>{{ data[cols.name] }}</Chip>
               </RouterLink>
             </div>
+
             <div
               v-if="cols.type === 'text'"
               class="truncate"
@@ -117,6 +130,7 @@
           </div>
         </template>
       </Column>
+      
       <Column
         v-if="props.allowEdit || props.allowDelete"
         field="edit"
@@ -127,8 +141,10 @@
             class="flex justify-around gap-x-4"
           >
             <Skeleton size="3rem" />
+
             <Skeleton size="3rem" />
           </div>
+
           <div
             v-else
             class="flex justify-around gap-x-4"
@@ -140,6 +156,7 @@
               class="p-button-warning"
               @click="onEditButton($event, slotProps.data)"
             />
+
             <Button
               v-if="props.allowDelete"
               type="button"
