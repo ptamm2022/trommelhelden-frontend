@@ -9,12 +9,8 @@ If changes were made run `docker-compose up --build` instead.
 
 !! IMPORTANT !! Check that the files `entrypoint.sh` and `run-initialisiton.sh` in the folder backend/Docker have the end-of-line-sequence LF
 
-## End Application
+## Stop Application
 
 In order to restart the database, it is necessary to first shut down the application.
 
 1. In root folder run in cmd: `docker-compose down`. All data in the database will be deleted.
-
-## DB-Schema
-
-![Trommelhelden Schema](db_schema.png)
