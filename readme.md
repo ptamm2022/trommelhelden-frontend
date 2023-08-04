@@ -14,3 +14,9 @@ If changes were made run `docker-compose up --build` instead.
 In order to restart the database, it is necessary to first shut down the application.
 
 1. In root folder run in cmd: `docker-compose down`. All data in the database will be deleted.
+
+## Settings
+- The "Configuration" page can be accessed via the sidebar.
+- You can choose which method to use to create invoices and how to retrieve business data.
+- You can choose whether calculations are carried out with the backend or with SQL. It is noted that the SQL queries are much faster than backend calculations.
+- In order to see loading times, the debug bar can also be displayed.
