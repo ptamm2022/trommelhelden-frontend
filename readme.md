@@ -1,4 +1,4 @@
-# trommelhelden-web-frontend
+# Trommelhelden Web-Frontend
 <img width="1397" alt="Bildschirmfoto 2023-08-01 um 23 08 29" src="https://github.com/ptamm2022/trommelhelden-frontend/assets/109551602/b6273744-503b-4cc4-86ff-3745a47d5b35">
 
 ## Start Application
