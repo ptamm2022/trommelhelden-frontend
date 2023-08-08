@@ -197,34 +197,34 @@ CREATE TABLE [dbo].[Rechnung]
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Auftrag] ADD  CONSTRAINT [df_Auftragsdatum]  DEFAULT (CONVERT([date],getdate())) FOR [AufDat]
+ALTER TABLE [dbo].[Auftrag] ADD CONSTRAINT [df_Auftragsdatum] DEFAULT (CONVERT([date],getdate())) FOR [AufDat]
 GO
 
-ALTER TABLE [dbo].[Mitarbeiter] ADD  CONSTRAINT [df_MitJob]  DEFAULT ('Monteur') FOR [MitJob]
+ALTER TABLE [dbo].[Mitarbeiter] ADD CONSTRAINT [df_MitJob] DEFAULT ('Monteur') FOR [MitJob]
 GO
 
-ALTER TABLE [dbo].[Gebiet]  WITH CHECK ADD  CONSTRAINT [FK__Gebiet__NLNr__08B54D69] FOREIGN KEY([NLNr])
+ALTER TABLE [dbo].[Gebiet] WITH CHECK ADD CONSTRAINT [FK__Gebiet__NLNr__08B54D69] FOREIGN KEY([NLNr])
 REFERENCES [dbo].[Niederlassung] ([NLNr])
 GO
 
 ALTER TABLE [dbo].[Gebiet] CHECK CONSTRAINT [FK__Gebiet__NLNr__08B54D69]
 GO
 
-ALTER TABLE [dbo].[Mitarbeiter]  WITH CHECK ADD  CONSTRAINT [FK__Mitarbeite__NLNr__09A971A2] FOREIGN KEY([NLNr])
+ALTER TABLE [dbo].[Mitarbeiter] WITH CHECK ADD CONSTRAINT [FK__Mitarbeite__NLNr__09A971A2] FOREIGN KEY([NLNr])
 REFERENCES [dbo].[Niederlassung] ([NLNr])
 GO
 
 ALTER TABLE [dbo].[Mitarbeiter] CHECK CONSTRAINT [FK__Mitarbeite__NLNr__09A971A2]
 GO
 
-ALTER TABLE [dbo].[Montage]  WITH CHECK ADD  CONSTRAINT [FK__Montage__EtID__32E0915F] FOREIGN KEY([EtID])
+ALTER TABLE [dbo].[Montage] WITH CHECK ADD CONSTRAINT [FK__Montage__EtID__32E0915F] FOREIGN KEY([EtID])
 REFERENCES [dbo].[Ersatzteil] ([EtID])
 GO
 
 ALTER TABLE [dbo].[Montage] CHECK CONSTRAINT [FK__Montage__EtID__32E0915F]
 GO
 
-ALTER TABLE [dbo].[Montage]  WITH CHECK ADD  CONSTRAINT [FK_Montage_Auftrag] FOREIGN KEY([AufNr])
+ALTER TABLE [dbo].[Montage] WITH CHECK ADD CONSTRAINT [FK_Montage_Auftrag] FOREIGN KEY([AufNr])
 REFERENCES [dbo].[Auftrag] ([Aufnr])
 ON DELETE CASCADE
 GO
@@ -232,14 +232,14 @@ GO
 ALTER TABLE [dbo].[Montage] CHECK CONSTRAINT [FK_Montage_Auftrag]
 GO
 
-ALTER TABLE [dbo].[Rechnung]  WITH CHECK ADD  CONSTRAINT [FK__Rechnung__KunNr__0C85DE4D] FOREIGN KEY([KunNr])
+ALTER TABLE [dbo].[Rechnung] WITH CHECK ADD CONSTRAINT [FK__Rechnung__KunNr__0C85DE4D] FOREIGN KEY([KunNr])
 REFERENCES [dbo].[Kunde] ([KunNr])
 GO
 
 ALTER TABLE [dbo].[Rechnung] CHECK CONSTRAINT [FK__Rechnung__KunNr__0C85DE4D]
 GO
 
-ALTER TABLE [dbo].[Rechnung]  WITH CHECK ADD  CONSTRAINT [FK_Aufnr] FOREIGN KEY([AufNr])
+ALTER TABLE [dbo].[Rechnung] WITH CHECK ADD CONSTRAINT [FK_Aufnr] FOREIGN KEY([AufNr])
 REFERENCES [dbo].[Auftrag] ([Aufnr])
 ON DELETE CASCADE
 GO

@@ -141,18 +141,17 @@
       allowUpdate: false,
     },
     {
-      name: "KunNr",
-      label: "KunNr",
-      type: "text",
+      name: "Kunde.KunName", 
+      label: "Kunde", 
+      type: "relation", 
       allowCreate: false,
       allowUpdate: false,
-    },
-    {
-      name: "Kunde.KunName",
-      label: "Kundenname",
-      type: "text",
-      allowCreate: false,
-      allowUpdate: false,
+      relation: {
+        label: "Kunde",
+        name: "Kunde",
+        resourceName: "masterdata/customers",
+        primaryKey: "KunNr",
+      },
     },
     {
       name: "AufDat",
