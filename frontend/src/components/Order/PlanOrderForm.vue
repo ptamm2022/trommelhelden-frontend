@@ -23,15 +23,17 @@
     <Divider />
 
     <div class="grid grid-cols-2">
-      <span>Auftragsnummer: </span>   <span>{{ order?.Aufnr }}</span>
-      <span>Auftragsdatum: </span>    <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
+      <span>AufNr: </span>    <span>{{ order?.Aufnr }}</span>
+      <span>AufDat: </span>   <span>{{ useDateFormat(order?.AufDat, "DD.MM.YYYY").value }}</span>
     </div>
 
     <Divider />
 
     <div class="grid grid-cols-2">
-      <span>Kundennummer: </span>     <span>{{ order?.KunNr }}</span>
-      <!-- <span>Kunden-Name: </span>      <span>{{ order.Kunde.KunName }}</span> -->
+      <span>KunNr: </span>    <span>{{ order?.KunNr }}</span>
+      <!-- <span>Name: </span>     <span>{{ order?.Kunde.KunName }}</span>
+      <span>Straße: </span>   <span>{{ order?.Kunde.KunStrasse }}</span>
+      <span>Ort: </span>      <span>{{ order?.Kunde.KunPLZ }} {{ order?.Kunde.KunOrt }}</span> -->
     </div>
 
     <Divider />
@@ -50,9 +52,9 @@
       v-if="order.MitID"
       class="grid grid-cols-2"
     >
-        <span>MitID: </span>  <span> {{ employee.MitID }} </span>
-        <span>Name: </span>   <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
-        <span>Job: </span>  <span> {{ employee?.MitJob }} </span>
+        <span>MitID: </span>        <span> {{ employee.MitID }} </span>
+        <span>Name: </span>         <span> {{ employee?.MitVorname }} {{ employee?.MitName }} </span>
+        <span>Job: </span>          <span> {{ employee?.MitJob }} </span>
         <span>Stundensatz: </span>  <span> {{ employee?.MitStundensatz }} €/h</span>
     </div>
 
@@ -80,7 +82,7 @@
     <Divider />
 
     <div>
-      <span class="p-float-label my-8">
+      <span class="p-float-label my-12">
         <Calendar
             id="plan-order-calendar"
             v-model="order.ErlDat"
