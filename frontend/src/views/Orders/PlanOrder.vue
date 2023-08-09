@@ -40,7 +40,7 @@
         :key="reRender"
         name="Aufträge"
         primary-key="Aufnr"
-        :show-rows="50"
+        :show-rows="25"
         :columns="columns"
         resource-name="orders"
         :allow-edit="true"
