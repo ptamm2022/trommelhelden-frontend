@@ -33,6 +33,7 @@ export class CustomersController {
 
     return res.status(200).json({ data: allCustomers, count });
   }
+
   async get(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
 
@@ -44,6 +45,7 @@ export class CustomersController {
 
     return res.json(customer);
   }
+
   async delete(
     req: Request,
     res: Response,
@@ -70,6 +72,7 @@ export class CustomersController {
     }
     return res.sendStatus(200);
   }
+
   async update(
     req: Request,
     res: Response,
@@ -89,6 +92,7 @@ export class CustomersController {
 
     return res.sendStatus(200);
   }
+  
   async create(
     req: Request,
     res: Response,

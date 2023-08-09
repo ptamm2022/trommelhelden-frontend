@@ -10,6 +10,7 @@ export class SettingsController {
       await prisma.$queryRaw`SELECT is_disabled FROM sys.triggers WHERE name = 'create_invoice'`;
 
     console.log(trigger);
+    
     const settings = {
       useTrigger: !trigger[0].is_disabled,
     };

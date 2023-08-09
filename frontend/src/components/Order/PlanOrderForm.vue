@@ -75,6 +75,7 @@
           resource-name="employees"
           :allow-edit="false"
           :allow-delete="false"
+          :opt-params="{ filterJob: 'montage' }"
           @onRowSelect="onSelectEmployee"
         />
     </OverlayPanel>

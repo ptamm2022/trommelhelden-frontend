@@ -30,6 +30,7 @@ export class BranchesController {
     });
     return res.status(200).json({ data: alleBranches, count });
   }
+
   async get(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
 
@@ -41,6 +42,7 @@ export class BranchesController {
 
     return res.json(branch);
   }
+
   async delete(
     req: Request,
     res: Response,
@@ -85,6 +87,7 @@ export class BranchesController {
 
     return res.sendStatus(200);
   }
+  
   async create(
     req: Request,
     res: Response,
