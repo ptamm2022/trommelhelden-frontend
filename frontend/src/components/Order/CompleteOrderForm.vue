@@ -81,7 +81,7 @@
             </span>
              
             <span>
-              &nbsp; á {{ slotProps.option?.EtPreis }} €
+              &nbsp;á {{ slotProps.option?.EtPreis }} €
             </span>
 
             <span>

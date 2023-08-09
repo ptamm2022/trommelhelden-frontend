@@ -82,7 +82,7 @@
     <Divider />
 
     <div>
-      <span class="p-float-label my-12">
+      <span class="p-float-label my-8">
         <Calendar
             id="plan-order-calendar"
             v-model="order.ErlDat"
