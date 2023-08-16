@@ -67,11 +67,10 @@
         spareparts: 26          // 26
     })
 
-    // autonmatisch Daten erstellen
+    // automatisch Daten erstellen
     onMounted(() => {
         createData();
     });
-
 </script>
 
 <style >
