@@ -12,7 +12,17 @@ If changes were made run `docker-compose up --build` instead.
 ## Change the number of records created
 When starting the application, data for master data as well as orders are created. 
 
-In ``Start.vue`` the code
+In 
+
+```
+frontend
+└── src
+    └── views
+        └── Startup
+            └── Start.vue
+```
+
+the code
 
 ```
 const settings = ref({
