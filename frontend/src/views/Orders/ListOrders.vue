@@ -39,7 +39,7 @@
       <EntityTable
         name="Aufträge"
         primary-key="Aufnr"
-        :show-rows="50"
+        :show-rows="25"
         :columns="columns"
         resource-name="orders"
         :allow-edit="false"
@@ -47,6 +47,12 @@
         @onRowSelect="(event)=>router.push({name: 'singleOrder', params: {id: event.Aufnr}})"
         >
       </EntityTable>
+
+      <DynamicDialog
+        id="test"
+        :draggable="false"
+        content-class="test"
+      />
     </div>
   </div>
 </template>

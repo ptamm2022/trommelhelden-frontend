@@ -42,7 +42,7 @@
         :key="reRender"
         name="Aufträge"
         primary-key="Aufnr"
-        :show-rows="50"
+        :show-rows="25"
         :columns="columns"
         resource-name="orders"
         :allow-edit="true"
@@ -51,6 +51,7 @@
         :emit-edit-only="true"
         @edit-row="onButtonClick"
       />
+
       <DynamicDialog
         id="test"
         :draggable="false"
@@ -63,7 +64,7 @@
 <script setup lang="ts">
   import EntityTable from "@/components/Entity/EntityTable.vue";
   import { IAuftrag, IMasterDataField } from "@/types";
-  import { ref, onMounted } from "vue";
+  import { ref } from "vue";
   import { useDialog } from "primevue/usedialog";
   import disableScroll from "disable-scroll";
   import CompleteOrderForm from "@/components/Order/CompleteOrderForm.vue";
@@ -73,31 +74,29 @@
   const dialog = useDialog();
 
   const onButtonClickCreateOrder = (order: IAuftrag) => {
-      console.log(order);
-
-      disableScroll.on(document.body);
-
-      dialog.open(CreateOrderForm, {
-        props: {
-          header: "Auftrag erstellen",
-          style: {
-            width: "40vw",
-          },
-          breakpoints: {
-            "960px": "75vw",
-            "640px": "90vw",
-          },
-          modal: true,
+    console.log(order);
+    disableScroll.on(document.body);
+    dialog.open(CreateOrderForm, {
+      props: {
+        header: "Auftrag erstellen",
+        style: {
+          width: "40vw",
         },
-        data: {
-          order,
+        breakpoints: {
+          "960px": "75vw",
+          "640px": "90vw",
         },
-        onClose: () => {
-          disableScroll.off();
-          reRender.value++;
-        },
-      });
-    };
+        modal: true,
+      },
+      data: {
+        order,
+      },
+      onClose: () => {
+        disableScroll.off();
+        reRender.value++;
+      },
+    });
+  };
 
   const onButtonClick = (order: IAuftrag) => {
     console.log(order);
@@ -134,32 +133,30 @@
       allowUpdate: false,
     },
     {
-      name: "KunNr",
-      label: "KunNr",
-      type: "text",
+      name: "Kunde.KunName", 
+      label: "Kunde", 
+      type: "relation", 
       allowCreate: false,
       allowUpdate: false,
-    },
-    {
-      name: "Kunde.KunName",
-      label: "Kundenname",
-      type: "text",
-      allowCreate: false,
-      allowUpdate: false,
-    },
-    {
-      name: "Mitarbeiter.MitID",
-      label: "MitID",
-      type: "text",
-      allowCreate: false,
-      allowUpdate: false,
+      relation: {
+        label: "Kunde",
+        name: "Kunde",
+        resourceName: "masterdata/customers",
+        primaryKey: "KunNr",
+      },
     },
     {
       name: "Mitarbeiter.MitName",
-      label: "Mitarbeitername",
-      type: "text",
+      label: "Mitarbeiter",
+      type: "relation",
       allowCreate: false,
       allowUpdate: false,
+      relation: {
+        label: "Mitarbeiter",
+        name: "Mitarbeiter",
+        resourceName: "masterdata/employees",
+        primaryKey: "MitID",
+      },
     },
     {
       name: "AufDat",

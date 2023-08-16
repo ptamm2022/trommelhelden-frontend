@@ -11,8 +11,37 @@ const prisma = new PrismaClient({
 export class EmployeesController {
   async list(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { sort, filter, page, rows } = req.body;
-    const { getCount } = req.query;
+    const { getCount, filterJob } = req.query;
     let count;
+
+    let query: any = {
+      take: rows,
+      skip: page,
+      where: {
+        ...filter,
+      },
+      orderBy: [...sort],
+    };
+
+    if (!rows) {
+      delete query.take;
+    }
+
+    switch (filterJob) {
+      case "all":
+        query.where = {
+          ...filter,
+        };
+        break;
+      case "montage":
+        query.where = {
+          ...filter,
+          MitJob: {
+            in: ["Monteur", "Azubi", "Meister"],
+          },
+        };
+        break;
+    }
 
     if (getCount) {
       count = await prisma.mitarbeiter.count({
@@ -21,19 +50,14 @@ export class EmployeesController {
         },
       });
     }
-    const allEmployees = await prisma.mitarbeiter.findMany({
-      take: rows,
-      skip: page,
-      where: {
-        ...filter,
-      },
-      orderBy: [...sort],
-    });
+
+    const allEmployees = await prisma.mitarbeiter.findMany(query);
+
     return res.status(200).json({ data: allEmployees, count });
   }
+
   async get(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
-
     const employee = await prisma.mitarbeiter.findUnique({
       where: {
         MitID: Number(id),
@@ -42,6 +66,7 @@ export class EmployeesController {
 
     return res.json(employee);
   }
+
   async delete(
     req: Request,
     res: Response,
@@ -49,7 +74,6 @@ export class EmployeesController {
   ): Promise<Response | void> {
     const { id } = req.params;
     const { ids } = req.body;
-
     if (id) {
       await prisma.mitarbeiter.delete({
         where: {
@@ -66,8 +90,10 @@ export class EmployeesController {
         },
       });
     }
+
     return res.sendStatus(200);
   }
+
   async update(
     req: Request,
     res: Response,
@@ -75,7 +101,6 @@ export class EmployeesController {
   ): Promise<Response | void> {
     const { id } = req.params;
     const { data }: { data: Prisma.MitarbeiterUpdateInput } = req.body;
-
     const employee = await prisma.mitarbeiter.updateMany({
       data,
       where: {
@@ -85,15 +110,18 @@ export class EmployeesController {
 
     return res.sendStatus(200);
   }
+
   async create(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     const { data } = req.body;
+
     if (!data) {
       return res.sendStatus(400);
     }
+
     let nlnr = data.NLNr;
     delete data.NLNr;
 

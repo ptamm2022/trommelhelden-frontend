@@ -93,6 +93,7 @@ export class BusinessDataController {
 
     return res.json(data);
   }
+
   async getSalesBranches(
     req: Request,
     res: Response,
@@ -163,6 +164,7 @@ export class BusinessDataController {
 
     return res.json(data);
   }
+
   async getSalesCustomers(
     req: Request,
     res: Response,
@@ -232,6 +234,7 @@ export class BusinessDataController {
 
     return res.json(data);
   }
+
   async getTrip(
     req: Request,
     res: Response,
@@ -262,6 +265,7 @@ export class BusinessDataController {
 
     return res.json(data);
   }
+
   async getSpareparts(
     req: Request,
     res: Response,
@@ -292,6 +296,7 @@ export class BusinessDataController {
 
     return res.json(data);
   }
+  
   async getSales(
     req: Request,
     res: Response,

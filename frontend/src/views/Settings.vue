@@ -3,7 +3,7 @@
     <Card>
       <template #content>
         <h1 class="bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text py-4 text-6xl font-extrabold text-transparent">
-          Settings
+          Konfiguration
         </h1>
 
         <div class="mb-2 flex flex-col">

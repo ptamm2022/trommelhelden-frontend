@@ -68,23 +68,6 @@ export class InvoicesController {
 
     return res.status(200).json(invoice);
   }
-  //   async delete(
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<Response | void> {
-  //     const { KunNr, AufNr } = req.query;
-
-  //     if (id) {
-  //       await prisma.rechnung.delete({
-  //         where: {
-  //           NLNr: Number(id),
-  //         },
-  //       });
-  //     }
-
-  //     return res.sendStatus(200);
-  //   }
 
   async update(
     req: Request,
@@ -117,22 +100,6 @@ export class InvoicesController {
       return res.sendStatus(400);
     }
     console.log(data);
-
-    // Berechne die Summe aus Montage.Anzahl * Ersatzteil.Preis
-    // const montageItems = await prisma.montage.findMany({
-    //   where: {
-    //     AufNr: data.Aufnr,
-    //   },
-    //   include: {
-    //     Ersatzteil: true,
-    //   },
-    // });
-
-    // let betragErsatzteile = 100;
-    // montageItems.forEach((montageItem) => {
-    //   const { Anzahl, Ersatzteil } = montageItem;
-    //   betragErsatzteile += Anzahl * Ersatzteil.EtPreis;
-    // });
 
     const { AufNr, KunNr } = await prisma.rechnung.create({
       data: {

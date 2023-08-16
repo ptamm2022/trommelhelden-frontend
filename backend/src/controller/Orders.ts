@@ -54,21 +54,21 @@ export class OrdersController {
           Anfahrt: null,
         };
         break;
+
       case "planned":
         query.where = {
           ...filter,
           MitID: {
             not: null,
           },
-
           ErlDat: {
             not: null,
           },
-
           Dauer: null,
           Anfahrt: null,
         };
         break;
+        
       case "finished":
         query.where = {
           ...filter,

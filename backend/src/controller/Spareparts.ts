@@ -22,6 +22,7 @@ export class SparepartsController {
         },
       });
     }
+    
     const allSpareparts = await prisma.ersatzteil.findMany({
       take: rows,
       skip: page,
@@ -30,8 +31,10 @@ export class SparepartsController {
       },
       orderBy: [...sort],
     });
+    
     return res.status(200).json({ data: allSpareparts, count });
   }
+
   async get(
     req: Request,
     res: Response,
@@ -47,6 +50,7 @@ export class SparepartsController {
 
     return res.json(branch);
   }
+
   async delete(
     req: Request,
     res: Response,
@@ -62,6 +66,7 @@ export class SparepartsController {
         },
       });
     }
+
     if (ids) {
       await prisma.ersatzteil.deleteMany({
         where: {
@@ -71,8 +76,10 @@ export class SparepartsController {
         },
       });
     }
+
     return res.sendStatus(200);
   }
+
   async update(
     req: Request,
     res: Response,
@@ -90,15 +97,18 @@ export class SparepartsController {
 
     return res.sendStatus(200);
   }
+
   async create(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> {
     const { data } = req.body;
+    
     if (!data) {
       return res.sendStatus(400);
     }
+
     const { EtID } = await prisma.ersatzteil.create({
       data,
     });
