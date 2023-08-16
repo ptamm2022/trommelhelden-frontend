@@ -6,7 +6,7 @@
           Konfiguration
         </h1>
 
-        <div class="mb-2 flex flex-col">
+        <div class="mb-4 flex flex-col">
           <div class="mb-2">
             Mit welcher Methode sollen Rechnungen erstellt werden?
           </div>
@@ -22,7 +22,7 @@
           />
         </div>
 
-        <div class="mb-2 flex flex-col">
+        <div class="mb-4 flex flex-col">
           <div class="mb-2">
             Welche Methode soll zum Abrufen von Geschäftsdaten verwendet werden?
           </div>
@@ -38,7 +38,8 @@
           />
         </div>
 
-        <div class="card flex flex-wrap justify-content-center align-items-center">
+        <!-- card flex flex-wrap justify-content-center align-items-center items-center -->
+        <div class="card flex flex-wrap justify-content-center align-items-center items-center">
           <Checkbox
             v-model="store.showDebugBar"
             inputId="debugBar"
@@ -51,13 +52,13 @@
 
         <Divider />
 
-        <span> 
-          Erstellt im Rahmen des Projektseminars 2022 an der HTWD <Chip><a href="https://github.com/htw-dresden-ps23/trommelhelden-web-frontend"><i class="pi pi-github"></i> siehe GitHub-Projekt</a></Chip>. 
+        <span class="mb-2"> 
+          Erstellt im Rahmen des Projektseminars 2022 an der HTWD. <Chip><a href="https://github.com/htw-dresden-ps23/trommelhelden-web-frontend"><i class="pi pi-github"></i> GitHub-Projekt</a></Chip>
           <br>
         </span>
 
         <span>
-          Weiterentwickelt im Rahmen einer studentischen Hilfskraftstätigkeit von Paulus Tamm <Chip><a href="https://github.com/ptamm2022/trommelhelden-frontend"><i class="pi pi-github"></i> siehe GitHub-Projekt</a></Chip>.
+          Weiterentwickelt im Rahmen einer studentischen Hilfskraftstätigkeit von Paulus Tamm. <Chip><a href="https://github.com/ptamm2022/trommelhelden-frontend"><i class="pi pi-github"></i> GitHub-Projekt</a></Chip>
         </span>
       </template>
     </Card>
