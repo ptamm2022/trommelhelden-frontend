@@ -15,10 +15,10 @@ When starting the application, data for master data as well as orders are create
 In 
 
 ```
-frontend
-└── src
-    └── views
-        └── Startup
+(frontend)
+└── (src)
+    └── (views)
+        └── (Startup)
             └── Start.vue
 ```
 
