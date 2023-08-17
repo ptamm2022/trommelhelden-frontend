@@ -75,7 +75,9 @@
 
   const onButtonClickCreateOrder = (order: IAuftrag) => {
     console.log(order);
+
     disableScroll.on(document.body);
+    
     dialog.open(CreateOrderForm, {
       props: {
         header: "Auftrag erstellen",
@@ -93,6 +95,7 @@
       },
       onClose: () => {
         disableScroll.off();
+
         reRender.value++;
       },
     });
@@ -102,6 +105,7 @@
     console.log(order);
 
     disableScroll.on(document.body);
+
     dialog.open(CompleteOrderForm, {
       props: {
         header: "Auftrag " + order.Aufnr + " erledigen",

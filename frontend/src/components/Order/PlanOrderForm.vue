@@ -98,13 +98,12 @@
 
     <Button
       type="submit"
-      icon="pi pi-check"
+      icon="pi pi-map"
       label="Auftrag planen"
       :disabled="!order.ErlDat || !employee.MitJob"
       class="w-full"
       @click="planOrder"
     />
-
   </div>
 </template>
 
@@ -113,7 +112,7 @@
   import { useDateFormat } from "@vueuse/core";
   import { inject, onMounted, ref } from "vue";
   import EntityTable from "@/components/Entity/EntityTable.vue";
-  import { IAuftrag, IEntityTableColumns, IMasterDataField, IMitarbeiter, IKunde } from "@/types";
+  import { IAuftrag, IMasterDataField, IMitarbeiter } from "@/types";
   import OrderService from "@/api/services/Order";
   import { useToast } from "primevue/usetoast";
   import { unflatten } from "flat";
@@ -138,7 +137,6 @@
       type: "text",
       allowCreate: false,
       allowUpdate: false,
-
     },
     {
       label: "Vorname",
@@ -203,12 +201,14 @@
         ...x,
         MitID,
       });
+
       toast.add({
         severity: "success",
         summary: "Auftrag geplant.",
         detail: "Der Auftrag wurde erfolgreich geplant.",
         life: 3000,
       });
+
       dialogRef.value.close();
     } catch (e) {
       toast.add({

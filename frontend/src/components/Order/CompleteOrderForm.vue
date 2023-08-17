@@ -115,8 +115,7 @@
         </ul>
       </div>
     </div>
-    
-    <div />
+
     <Button
       type="submit"
       icon="pi pi-check"

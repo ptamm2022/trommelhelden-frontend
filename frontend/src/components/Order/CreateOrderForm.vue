@@ -86,7 +86,7 @@
       
     <Button
       type="submit"
-      icon="pi pi-check"
+      icon="pi pi-plus"
       label="Auftrag erstellen"
       class="w-full"
       :disabled="!order.Kunde || !order.AufDat"
@@ -99,14 +99,14 @@
   import EntityTable from "@/components/Entity/EntityTable.vue";
   import Calendar from "primevue/calendar";
   import { IKunde, IAuftrag, IMasterDataField } from "@/types";
-  import { ref } from "vue";
+  import { ref, inject } from "vue";
   import { useToast } from "primevue/usetoast";
   import { useRouter } from "vue-router";
   import OrderService from "@/api/services/Order";
 
+  const dialogRef: any = inject("dialogRef");
   const router = useRouter();
   const toast = useToast();
-
   const orderService = new OrderService();
   const op = ref();
   const order = ref<IAuftrag>({
@@ -128,13 +128,15 @@
     try {
       if (order.value) {
         await orderService.create(order.value);
+
         toast.add({
           severity: "success",
           summary: "Auftrag erstellt.",
           detail: "Der Auftrag wurde erfolgreich erstellt.",
           life: 5000,
         });
-        router.push("/orders");
+        
+        dialogRef.value.close();
       }
     } catch (e) {
       toast.add({
